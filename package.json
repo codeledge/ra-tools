@@ -1,0 +1,26 @@
+{
+  "name": "root",
+  "version": "0.1.0",
+  "private": true,
+  "description": "",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeledge/ra-data-prisma.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codeledge/ra-data-prisma/issues"
+  },
+  "homepage": "https://github.com/codeledge/ra-data-prisma#readme",
+  "devDependencies": {
+    "turbo": "latest"
+  }
+}
