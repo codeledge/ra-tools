@@ -12,12 +12,13 @@ import { getListHandler } from "./getListHandler";
 import { getManyHandler } from "./getManyHandler";
 import { getOneHandler } from "./getOneHandler";
 import { updateHandler } from "./updateHandler";
-import { deleteHandler } from "./deleteHandler";
+import { deleteHandler, DeleteOptions } from "./deleteHandler";
 
 export const defaultHandler = async (
   req: Request,
   res: Response,
-  prisma: PrismaClient
+  prisma: PrismaClient,
+  options?: DeleteOptions
 ) => {
   switch (req.body.method) {
     case "getList": {
@@ -58,7 +59,8 @@ export const defaultHandler = async (
       return await deleteHandler(
         req as DeleteRequest,
         res,
-        prisma[req.body.model || req.body.resource]
+        prisma[req.body.model || req.body.resource],
+        options
       );
     }
     case "deleteMany": {
