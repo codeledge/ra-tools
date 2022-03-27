@@ -1,7 +1,7 @@
 import { Response, UpdateRequest } from "./Http";
 import { isObject } from "./lib/isObject";
 
-export const updateAction = async <T extends { update: Function }>(
+export const updateHandler = async <T extends { update: Function }>(
   req: UpdateRequest,
   res: Response,
   table: T,

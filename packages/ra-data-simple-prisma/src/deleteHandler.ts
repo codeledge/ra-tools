@@ -1,6 +1,6 @@
 import { DeleteRequest, Response } from "./Http";
 
-export const deleteAction = async <
+export const deleteHandler = async <
   T extends { update: Function; delete: Function }
 >(
   req: DeleteRequest,

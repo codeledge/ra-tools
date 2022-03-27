@@ -1,6 +1,6 @@
 import { GetListRequest, Response } from "./Http";
 
-export const getListAction = async <
+export const getListHandler = async <
   W extends {
     include?: object | null;
     orderBy?: object | null;

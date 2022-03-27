@@ -1,6 +1,6 @@
 import { GetManyRequest, Response } from "./Http";
 
-export const getManyAction = async (
+export const getManyHandler = async (
   req: GetManyRequest,
   res: Response,
   table: { findMany: Function }

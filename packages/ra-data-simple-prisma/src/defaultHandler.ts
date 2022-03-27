@@ -1,4 +1,5 @@
 import {
+  DeleteRequest,
   GetListRequest,
   GetManyRequest,
   GetOneRequest,
@@ -7,33 +8,34 @@ import {
   UpdateRequest,
 } from "./Http";
 import { PrismaClient } from "@prisma/client";
-import { getListAction } from "./getListAction";
-import { getManyAction } from "./getManyAction";
-import { getOneAction } from "./getOneAction";
-import { updateAction } from "./updateAction";
+import { getListHandler } from "./getListHandler";
+import { getManyHandler } from "./getManyHandler";
+import { getOneHandler } from "./getOneHandler";
+import { updateHandler } from "./updateHandler";
+import { deleteHandler } from "./deleteHandler";
 
-export const actionHandler = async (
+export const defaultHandler = async (
   req: Request,
   res: Response,
   prisma: PrismaClient
 ) => {
-  switch (req.body.action) {
+  switch (req.body.method) {
     case "getList": {
-      return await getListAction(
+      return await getListHandler(
         req as GetListRequest,
         res,
         prisma[req.body.model || req.body.resource]
       );
     }
     case "getOne": {
-      return await getOneAction(
+      return await getOneHandler(
         req as GetOneRequest,
         res,
         prisma[req.body.model || req.body.resource]
       );
     }
     case "getMany": {
-      return await getManyAction(
+      return await getManyHandler(
         req as GetManyRequest,
         res,
         prisma[req.body.model || req.body.resource]
@@ -46,13 +48,23 @@ export const actionHandler = async (
       throw new Error("Not implemented yet");
     }
     case "update": {
-      return await updateAction(
+      return await updateHandler(
         req as UpdateRequest,
         res,
         prisma[req.body.model || req.body.resource]
       );
     }
+    case "delete": {
+      return await deleteHandler(
+        req as DeleteRequest,
+        res,
+        prisma[req.body.model || req.body.resource]
+      );
+    }
+    case "deleteMany": {
+      throw new Error("Not implemented yet");
+    }
     default:
-      throw new Error("wrong action");
+      throw new Error("Invalid method");
   }
 };

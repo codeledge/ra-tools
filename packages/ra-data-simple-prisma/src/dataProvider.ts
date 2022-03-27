@@ -1,5 +1,6 @@
 import { DataProvider } from "react-admin";
 import axios from "axios";
+import { GetListRequest } from "./Http";
 
 export const dataProvider = (
   endpoint: string,
@@ -15,9 +16,8 @@ export const dataProvider = (
 
   return {
     getList: (resource, params) => {
-      console.log({ params });
       return apiService.post(resource, {
-        action: "getList",
+        method: "getList",
         resource,
         params,
         model: options?.resourceToModelMap?.[resource] ?? undefined,
@@ -25,7 +25,7 @@ export const dataProvider = (
     },
     getOne: (resource, params) => {
       return apiService.post(resource, {
-        action: "getOne",
+        method: "getOne",
         resource,
         params,
         model: options?.resourceToModelMap?.[resource] ?? undefined,
@@ -33,7 +33,7 @@ export const dataProvider = (
     },
     getMany: (resource, params) => {
       return apiService.post(resource, {
-        action: "getMany",
+        method: "getMany",
         resource,
         params,
         model: options?.resourceToModelMap?.[resource] ?? undefined,
@@ -41,7 +41,7 @@ export const dataProvider = (
     },
     getManyReference: (resource, params) => {
       return apiService.post(resource, {
-        action: "getManyReference",
+        method: "getManyReference",
         resource,
         params,
         model: options?.resourceToModelMap?.[resource] ?? undefined,
@@ -49,7 +49,7 @@ export const dataProvider = (
     },
     create: (resource, params) => {
       return apiService.post(resource, {
-        action: "create",
+        method: "create",
         resource,
         params,
         model: options?.resourceToModelMap?.[resource] ?? undefined,
@@ -57,7 +57,7 @@ export const dataProvider = (
     },
     update: (resource, params) => {
       return apiService.post(resource, {
-        action: "update",
+        method: "update",
         resource,
         params,
         model: options?.resourceToModelMap?.[resource] ?? undefined,
@@ -65,7 +65,7 @@ export const dataProvider = (
     },
     updateMany: (resource, params) => {
       return apiService.post(resource, {
-        action: "updateMany",
+        method: "updateMany",
         resource,
         params,
         model: options?.resourceToModelMap?.[resource] ?? undefined,
@@ -73,7 +73,7 @@ export const dataProvider = (
     },
     delete: (resource, params) => {
       return apiService.post(resource, {
-        action: "delete",
+        method: "delete",
         resource,
         params,
         model: options?.resourceToModelMap?.[resource] ?? undefined,
@@ -81,7 +81,7 @@ export const dataProvider = (
     },
     deleteMany: (resource, params) => {
       return apiService.post(resource, {
-        action: "deleteMany",
+        method: "deleteMany",
         resource,
         params,
         model: options?.resourceToModelMap?.[resource] ?? undefined,

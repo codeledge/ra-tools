@@ -11,7 +11,7 @@ export type Request =
 
 export type GetListRequest = {
   body: {
-    action: "getList";
+    method: "getList";
     filter: object;
     params: {
       pagination: { page: number; perPage: number };
@@ -25,7 +25,7 @@ export type GetListRequest = {
 
 export type GetOneRequest = {
   body: {
-    action: "getOne";
+    method: "getOne";
     params: {
       id: any;
     };
@@ -36,7 +36,7 @@ export type GetOneRequest = {
 
 export type GetManyRequest = {
   body: {
-    action: "getMany";
+    method: "getMany";
     params: {
       ids: any[];
     };
@@ -47,7 +47,7 @@ export type GetManyRequest = {
 
 export type GetManyReferenceRequest = {
   body: {
-    action: "getManyReference";
+    method: "getManyReference";
     params: {
       target: string;
       id: any;
@@ -62,7 +62,7 @@ export type GetManyReferenceRequest = {
 
 export type CreateRequest = {
   body: {
-    action: "create";
+    method: "create";
     params: {
       data: object;
     };
@@ -73,7 +73,7 @@ export type CreateRequest = {
 
 export type UpdateRequest = {
   body: {
-    action: "update";
+    method: "update";
     params: {
       id: any;
       data: object;
@@ -86,7 +86,7 @@ export type UpdateRequest = {
 
 export type UpdateManyRequest = {
   body: {
-    action: "updateMany";
+    method: "updateMany";
     params: {
       ids: any[];
       data: object;
@@ -98,7 +98,7 @@ export type UpdateManyRequest = {
 
 export type DeleteRequest = {
   body: {
-    action: "delete";
+    method: "delete";
     params: {
       id: any;
       previousData: object;
@@ -110,7 +110,7 @@ export type DeleteRequest = {
 
 export type DeleteManyRequest = {
   body: {
-    action: "deleteMany";
+    method: "deleteMany";
     params: {
       ids: any[];
     };

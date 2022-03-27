@@ -1,6 +1,6 @@
 import { GetOneRequest, Response } from "./Http";
 
-export const getOneAction = async <
+export const getOneHandler = async <
   W extends {
     include?: object | null;
     select?: object | null;
