@@ -2,13 +2,15 @@
   "name": "root",
   "version": "0.1.0",
   "private": true,
-  "description": "",
+  "description": "Simple yet overrideable prisma data handlers for react-admin",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "turbo run test",
+    "dev": "turbo run dev --parallel --no-cache",
+    "build": "turbo run build"
   },
   "repository": {
     "type": "git",
