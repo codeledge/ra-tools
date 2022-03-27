@@ -1,7 +1,7 @@
 import { DataProvider } from "react-admin";
 import axios from "axios";
 
-const dataProvider = (
+export const dataProvider = (
   endpoint: string,
   options?: {
     resourceToModelMap?: Record<string, string>;
@@ -89,5 +89,3 @@ const dataProvider = (
     },
   };
 };
-
-export default dataProvider;
