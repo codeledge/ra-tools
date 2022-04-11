@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -14,6 +14,11 @@
   },
   "files": [
     "/dist"
+  ],
+  "keywords": [
+    "prisma",
+    "react-admin",
+    "dataprovider"
   ],
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",
   "license": "MIT",

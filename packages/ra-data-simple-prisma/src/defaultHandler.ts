@@ -1,4 +1,5 @@
 import {
+  CreateRequest,
   DeleteRequest,
   GetListRequest,
   GetManyRequest,
@@ -13,6 +14,7 @@ import { getManyHandler } from "./getManyHandler";
 import { getOneHandler } from "./getOneHandler";
 import { updateHandler } from "./updateHandler";
 import { deleteHandler, DeleteOptions } from "./deleteHandler";
+import { createHandler } from "./createHandler";
 
 export const defaultHandler = async (
   req: Request,
@@ -46,7 +48,11 @@ export const defaultHandler = async (
       throw new Error("Not implemented yet");
     }
     case "create": {
-      throw new Error("Not implemented yet");
+      return await createHandler(
+        req as CreateRequest,
+        res,
+        prisma[req.body.model || req.body.resource]
+      );
     }
     case "update": {
       return await updateHandler(

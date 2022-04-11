@@ -16,8 +16,8 @@
     "type": "git",
     "url": "git+https://github.com/codeledge/ra-data-prisma.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "ogroppo <orlando.groppo@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/codeledge/ra-data-prisma/issues"
   },

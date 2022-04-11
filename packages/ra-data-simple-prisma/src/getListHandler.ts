@@ -16,6 +16,7 @@ export const getListHandler = async <
   arg?: W,
   options?: {
     noNullsOnSort?: string[];
+    debug?: boolean;
     hydrationFunction?: (data: any) => any;
   }
 ) => {
@@ -101,6 +102,10 @@ export const getListHandler = async <
       queryArgs.findManyArg.where = { [field]: { not: null } };
       queryArgs.countArg.where = { [field]: { not: null } };
     }
+  }
+
+  if (options?.debug) {
+    console.log("queryArgs", JSON.stringify(queryArgs, null, 2));
   }
 
   const [data, total] = await Promise.all([

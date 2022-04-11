@@ -6,7 +6,7 @@ export const updateHandler = async <T extends { update: Function }>(
   res: Response,
   table: T,
   options?: {
-    skipFields?: string[]; //i.e. Json fields throw error if null is used in update
+    skipFields?: string[]; //i.e. Json fields throw error if null is used in update, they would expect {} instead
   }
 ) => {
   //Remove relations, allow nested updates one day
