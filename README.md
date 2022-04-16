@@ -16,6 +16,6 @@ just do `pnpm install` and `pnpm dev` to see it in action
 
 ### TODOs
 
-- [] Better README
-- [] All handlers
-- [] add next-auth
+- [ ] Better README
+- [ ] All handlers
+- [ ] add next-auth
