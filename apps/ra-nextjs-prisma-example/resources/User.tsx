@@ -9,6 +9,7 @@ import {
   DateInput,
   SimpleForm,
   TextInput,
+  NumberInput,
 } from "react-admin";
 
 export const UserCreate = (props: CreateProps) => (
@@ -19,8 +20,13 @@ export const UserCreate = (props: CreateProps) => (
   </Create>
 );
 
+const postFilters = [
+  <NumberInput key="1" label="Id (exact)" source="id" alwaysOn />,
+  <TextInput key="2" label="Name (contains)" source="name" alwaysOn />,
+];
+
 export const UserList = (props: ListProps) => (
-  <List {...props}>
+  <List {...props} filters={postFilters}>
     <Datagrid>
       <TextField source="id" />
       <TextField source="name" />

@@ -1,6 +1,5 @@
 import { DataProvider } from "react-admin";
 import axios from "axios";
-import { GetListRequest } from "./Http";
 
 export const dataProvider = (
   endpoint: string,
