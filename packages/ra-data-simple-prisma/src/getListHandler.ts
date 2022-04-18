@@ -1,3 +1,6 @@
+import { extractGetListSkipTake } from "./extractGetListSkipTake";
+import { extractGetListOrderBy } from "./extractGetListOrderBy";
+import { extractGetListWhere } from "./extractGetListWhere";
 import { GetListRequest, Response } from "./Http";
 
 export const getListHandler = async <
@@ -45,60 +48,20 @@ export const getListHandler = async <
     },
   };
 
-  if (filter) {
-    Object.entries(filter).forEach(([colName, value]) => {
-      //ignore underscored fields (_count, _sum, _avg, _min, _max and _helpers)
-      if (colName.startsWith("_")) return;
+  const where = extractGetListWhere(req);
+  queryArgs.findManyArg.where = where;
+  queryArgs.countArg.where = where;
 
-      if (
-        colName === "id" ||
-        colName === "uuid" ||
-        colName === "cuid" ||
-        colName.endsWith("_id") ||
-        typeof value === "number" ||
-        typeof value === "boolean"
-      ) {
-        queryArgs.findManyArg.where[colName] = value;
-        queryArgs.countArg.where[colName] = value;
-      } else if (Array.isArray(value)) {
-        queryArgs.findManyArg.where[colName] = { in: value };
-        queryArgs.countArg.where[colName] = { in: value };
-      } else if (typeof value === "string") {
-        queryArgs.findManyArg.where[colName] = { contains: value };
-        queryArgs.countArg.where[colName] = { contains: value };
-      }
-    });
-  }
-
-  if (pagination) {
-    const { page, perPage } = pagination;
-
-    const first = (page - 1) * perPage;
-    const last = page * perPage - 1;
-
-    if (first === 0 && last === 999) {
-      // Hack: do nothing
-      // This is when the export button is hit, the free version only allows 1000 records :)
-    } else {
-      queryArgs.findManyArg.skip = first;
-      queryArgs.findManyArg.take = last - first + 1;
-    }
-  }
+  const { skip, take } = extractGetListSkipTake(req);
+  queryArgs.findManyArg.skip = skip;
+  queryArgs.findManyArg.take = take;
 
   if (sort) {
-    const { field, order } = sort;
-    if (field && order) {
-      if (field.includes(".")) {
-        const [relation, subfield] = field.split(".");
-        queryArgs.findManyArg.orderBy = {
-          [relation]: { [subfield]: order.toLowerCase() },
-        };
-      } else {
-        queryArgs.findManyArg.orderBy = { [field]: order.toLowerCase() };
-      }
-    }
+    queryArgs.findManyArg.orderBy = extractGetListOrderBy(req);
 
-    if (options?.noNullsOnSort?.includes(field)) {
+    const { field } = sort;
+
+    if (field && options?.noNullsOnSort?.includes(field)) {
       queryArgs.findManyArg.where = { [field]: { not: null } };
       queryArgs.countArg.where = { [field]: { not: null } };
     }

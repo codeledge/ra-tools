@@ -1,6 +1,6 @@
 {
-  "name": "root",
-  "version": "0.1.0",
+  "name": "ra-prisma",
+  "version": "0.0.0",
   "private": true,
   "description": "Simple yet overrideable prisma data handlers for react-admin",
   "workspaces": [
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codeledge/ra-data-prisma.git"
+    "url": "git+https://github.com/codeledge/ra-prisma.git"
   },
   "author": "ogroppo <orlando.groppo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/codeledge/ra-data-prisma/issues"
+    "url": "https://github.com/codeledge/ra-prisma/issues"
   },
-  "homepage": "https://github.com/codeledge/ra-data-prisma#readme",
+  "homepage": "https://github.com/codeledge/ra-prisma#readme",
   "devDependencies": {
     "turbo": "latest"
   }
