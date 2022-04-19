@@ -1,5 +1,6 @@
 import {
   CreateRequest,
+  DeleteManyRequest,
   DeleteRequest,
   GetListRequest,
   GetManyRequest,
@@ -15,6 +16,7 @@ import { getOneHandler } from "./getOneHandler";
 import { updateHandler } from "./updateHandler";
 import { deleteHandler, DeleteOptions } from "./deleteHandler";
 import { createHandler } from "./createHandler";
+import { deleteManyHandler } from "./deleteManyHandler";
 
 export const defaultHandler = async (
   req: Request,
@@ -70,7 +72,12 @@ export const defaultHandler = async (
       );
     }
     case "deleteMany": {
-      throw new Error("Not implemented yet");
+      return await deleteManyHandler(
+        req as DeleteManyRequest,
+        res,
+        prisma[req.body.model || req.body.resource],
+        options
+      );
     }
     default:
       throw new Error("Invalid method");
