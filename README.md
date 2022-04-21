@@ -1,6 +1,6 @@
 # React Admin & Prisma!
 
-Create a fullstack react admin app in no time. Just create ONE file on the server!
+Create a fullstack react admin app adding just one file on the server!
 
 Check the example app to see common usages or use it as a boilerplate.
 

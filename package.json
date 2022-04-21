@@ -1,8 +1,7 @@
 {
-  "name": "ra-prisma",
+  "name": "ra-prisma-nextjs",
   "version": "0.0.0",
   "private": true,
-  "description": "Simple yet overrideable prisma data handlers for react-admin",
   "workspaces": [
     "apps/*",
     "packages/*"
