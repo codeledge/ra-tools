@@ -1,6 +1,8 @@
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import setObjectProp from "set-value";
 
+const logicalOperators = ["gte", "lte", "lt", "gt"];
+
 export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
   const { filter } = req.body.params;
 
@@ -12,8 +14,17 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
       if (colName.startsWith("_")) return;
 
       if (value === "")
-        //react-admin does send empty strings in empty filters
+        //react-admin does send empty strings in empty filters :(
         return;
+
+      const hasOperator = logicalOperators.some((operator) => {
+        if (colName.endsWith(`_${operator}`)) {
+          [colName] = colName.split(`_${operator}`);
+          setObjectProp(where, colName, { [operator]: value });
+          return true;
+        }
+      });
+      if (hasOperator) return;
 
       if (colName === "q") {
         //WHAT THE HECK IS q?
@@ -28,7 +39,6 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
         setObjectProp(where, colName, value);
       } else if (Array.isArray(value)) {
         setObjectProp(where, colName, { in: value });
-        where[colName] = { in: value };
       } else if (typeof value === "string") {
         setObjectProp(where, colName, { contains: value });
       }
