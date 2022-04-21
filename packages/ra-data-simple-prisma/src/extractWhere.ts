@@ -1,5 +1,5 @@
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
-import { setProperty } from "dot-prop";
+import setObjectProp from "set-value";
 
 export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
   const { filter } = req.body.params;
@@ -21,12 +21,12 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
         typeof value === "number" ||
         typeof value === "boolean"
       ) {
-        setProperty(where, colName, value);
+        setObjectProp(where, colName, value);
       } else if (Array.isArray(value)) {
-        setProperty(where, colName, { in: value });
+        setObjectProp(where, colName, { in: value });
         where[colName] = { in: value };
       } else if (typeof value === "string") {
-        setProperty(where, colName, { contains: value });
+        setObjectProp(where, colName, { contains: value });
       }
     });
   }

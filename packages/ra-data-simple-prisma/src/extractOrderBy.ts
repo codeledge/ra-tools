@@ -1,5 +1,5 @@
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
-import { setProperty } from "dot-prop";
+import setObjectProp from "set-value";
 
 export const extractOrderBy = (
   req: GetListRequest | GetManyReferenceRequest
@@ -11,7 +11,7 @@ export const extractOrderBy = (
   if (sort) {
     const { field, order } = sort;
     if (field && order) {
-      setProperty(orderBy, field, order.toLowerCase());
+      setObjectProp(orderBy, field, order.toLowerCase());
     }
   }
 
