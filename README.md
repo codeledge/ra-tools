@@ -10,7 +10,7 @@ Check the example app to see common usages or use it as a boilerplate.
 
 NPM Package link: https://www.npmjs.com/package/ra-data-simple-prisma
 
-This package does not have a graphql dependency in comparison to (weakky/ra-data-prisma & panter/ra-data-prisma) and
+This package does not have a graphql dependency in comparison to (weakky/ra-data-prisma & panter/ra-data-prisma)
 
 ### Installation
 
