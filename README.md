@@ -1,7 +1,8 @@
 # React Admin & Prisma!
 
-This monorepo is formed by the following parts:
-Check the demo app to see its usage.
+Create a fullstack react admin app in no time. Just create ONE file on the server!
+
+Check the example app to see common usages or use it as a boilerplate.
 
 # Packages
 
@@ -9,11 +10,7 @@ Check the demo app to see its usage.
 
 NPM Package link: https://www.npmjs.com/package/ra-data-simple-prisma
 
-This package does not have a graphql dependency in comparison to (weakky/ra-data-prisma & panter/ra-data-prisma)
-
-## React Admin & Prisma!
-
-A DataProvider implementation optimised for prisma!
+This package does not have a graphql dependency in comparison to (weakky/ra-data-prisma & panter/ra-data-prisma) and
 
 ### Installation
 
@@ -27,7 +24,13 @@ or
 npm i ra-data-simple-prisma
 ```
 
-### Frontend: use the DataProvider
+or
+
+```
+pnpm i ra-data-simple-prisma
+```
+
+### Frontend: import the DataProvider
 
 ```
 import { Admin, Resource } from "react-admin";
@@ -44,9 +47,13 @@ const ReactAdmin = () => {
 export default ReactAdmin;
 ```
 
-### Backend: Pass the request to Prisma
+### Backend: import the request handlers
+
+Simplest implementation ever:
 
 ```
+// /api/[resource].ts
+
 import { defaultHandler } from "ra-data-simple-prisma";";
 import { prismaClient } from "../prisma/client"; <= Your prisma client instance
 
@@ -57,19 +64,33 @@ export default function handler(req, res) {
 
 ## Examples
 
-### demo nextjs app: ra-nextjs-prisma-example
+### demo nextjs app
 
 just do
 
 ```bash
-cd apps/ra-nextjs-prisma-example/
-pnpm install
-npx prisma generate
+cd apps/example-app
+pnpm install  //this will also generate the prisma client
 pnpm dev
 ```
 
+### Development
+
+Use the example app to test the changes.
+
+In root folder run
+
+```
+pnpm dev
+```
+
+this will spin both example app and package in dev mode
+
+#### Common issues
+
+- If there is an error in the backend regarding prisma not finding a table, run `npx prisma generate`
+
 ### TODOs
 
-- [ ] Better README
-- [ ] All handlers
+- [ ] Add all combos in README
 - [ ] add next-auth

@@ -1,7 +1,7 @@
-import { GetListRequest } from "./Http";
+import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import { setProperty } from "dot-prop";
 
-export const extractGetListWhere = (req: GetListRequest) => {
+export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
   const { filter } = req.body.params;
 
   const where = {};
@@ -11,7 +11,9 @@ export const extractGetListWhere = (req: GetListRequest) => {
       //ignore underscored fields (_count, _sum, _avg, _min, _max and _helpers)
       if (colName.startsWith("_")) return;
 
-      if (
+      if (colName === "q") {
+        //WHAT THE HECK IS q?
+      } else if (
         colName === "id" ||
         colName === "uuid" ||
         colName === "cuid" ||

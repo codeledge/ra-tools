@@ -1,7 +1,9 @@
-import { GetListRequest } from "./Http";
+import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import { setProperty } from "dot-prop";
 
-export const extractGetListOrderBy = (req: GetListRequest) => {
+export const extractOrderBy = (
+  req: GetListRequest | GetManyReferenceRequest
+) => {
   const { sort } = req.body.params;
 
   let orderBy = {};

@@ -1,13 +1,13 @@
 {
-  "name": "ra-nextjs-prisma-example",
-  "version": "0.1.0",
+  "name": "ra-prisma-nextjs-example-app",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3020",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "link": "yarn link ra-data-simple-prisma"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@babel/core": "7.17.9",
