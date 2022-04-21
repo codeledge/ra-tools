@@ -21,6 +21,11 @@
     "react-admin",
     "dataprovider"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codeledge/ra-prisma-nextjs.git",
+    "directory": "packages/ra-data-simple-prisma"
+  },
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",
   "license": "MIT",
   "dependencies": {

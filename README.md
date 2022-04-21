@@ -90,6 +90,18 @@ this will spin both example app and package in dev mode
 
 - If there is an error in the backend regarding prisma not finding a table, run `npx prisma generate`
 
+### Publish
+
+Use the example app to test the changes.
+
+In root folder run
+
+```
+pnpm publish
+```
+
+this will spin both example app and package in dev mode
+
 ### TODOs
 
 - [ ] Add all combos in README
