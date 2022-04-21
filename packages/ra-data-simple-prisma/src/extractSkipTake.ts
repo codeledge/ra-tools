@@ -1,6 +1,8 @@
-import { GetListRequest } from "./Http";
+import { GetListRequest, GetManyReferenceRequest } from "./Http";
 
-export const extractGetListSkipTake = (req: GetListRequest) => {
+export const extractSkipTake = (
+  req: GetListRequest | GetManyReferenceRequest
+) => {
   const { pagination } = req.body.params;
 
   let skip;

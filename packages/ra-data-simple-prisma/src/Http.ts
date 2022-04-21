@@ -9,13 +9,17 @@ export type Request =
   | DeleteRequest
   | DeleteManyRequest;
 
+export type SortRequest = { field: string; order: "ASC" | "DESC" };
+
+export type PaginationRequest = { page: number; perPage: number };
+
 export type GetListRequest = {
   body: {
     method: "getList";
     filter: object;
     params: {
-      pagination: { page: number; perPage: number };
-      sort: { field: string; order: "ASC" | "DESC" };
+      pagination: PaginationRequest;
+      sort: SortRequest;
       filter: object;
     };
     resource: string;
@@ -51,8 +55,8 @@ export type GetManyReferenceRequest = {
     params: {
       target: string;
       id: any;
-      pagination: { page: number; perPage: number };
-      sort: { field: string; order: "ASC" | "DESC" };
+      pagination: PaginationRequest;
+      sort: SortRequest;
       filter: object;
     };
     resource: string;
@@ -64,7 +68,7 @@ export type CreateRequest = {
   body: {
     method: "create";
     params: {
-      data: object;
+      data: Record<string, any>;
     };
     resource: string;
     model?: string;

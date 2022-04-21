@@ -8,7 +8,7 @@ importers:
     devDependencies:
       turbo: 1.2.4
 
-  apps/ra-nextjs-prisma-example:
+  apps/example-app:
     specifiers:
       '@babel/core': 7.17.9
       '@prisma/client': ^3.12.0

@@ -1,6 +1,6 @@
-import { extractGetListSkipTake } from "./extractGetListSkipTake";
-import { extractGetListOrderBy } from "./extractGetListOrderBy";
-import { extractGetListWhere } from "./extractGetListWhere";
+import { extractSkipTake } from "./extractSkipTake";
+import { extractOrderBy } from "./extractOrderBy";
+import { extractWhere } from "./extractWhere";
 import { GetListRequest, Response } from "./Http";
 
 export const getListHandler = async <
@@ -16,11 +16,13 @@ export const getListHandler = async <
   req: GetListRequest,
   res: Response,
   table: { findMany: Function; count: Function },
-  arg?: W,
   options?: {
+    select: W["select"];
+    include: W["include"];
+    where: W["where"];
     noNullsOnSort?: string[];
     debug?: boolean;
-    hydrationFunction?: (data: any) => any;
+    transform?: (data: any) => any;
   }
 ) => {
   const { pagination, sort, filter } = req.body.params;
@@ -39,25 +41,27 @@ export const getListHandler = async <
     };
   } = {
     findManyArg: {
-      select: arg?.select ?? undefined,
-      include: arg?.include ?? undefined,
-      where: arg?.where ?? {},
+      select: options?.select ?? undefined,
+      include: options?.include ?? undefined,
+      where: options?.where ?? {},
     },
     countArg: {
-      where: arg?.where ?? {},
+      where: options?.where ?? {},
     },
   };
 
-  const where = extractGetListWhere(req);
+  if (!table) throw new Error(`missing table in getListHandler`);
+
+  const where = extractWhere(req);
   queryArgs.findManyArg.where = where;
   queryArgs.countArg.where = where;
 
-  const { skip, take } = extractGetListSkipTake(req);
+  const { skip, take } = extractSkipTake(req);
   queryArgs.findManyArg.skip = skip;
   queryArgs.findManyArg.take = take;
 
   if (sort) {
-    queryArgs.findManyArg.orderBy = extractGetListOrderBy(req);
+    queryArgs.findManyArg.orderBy = extractOrderBy(req);
 
     const { field } = sort;
 
@@ -76,7 +80,7 @@ export const getListHandler = async <
     table.count(queryArgs.countArg),
   ]);
 
-  await options?.hydrationFunction?.(data);
+  await options?.transform?.(data);
 
   res.json({
     data,

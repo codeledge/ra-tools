@@ -3,6 +3,7 @@ import {
   DeleteManyRequest,
   DeleteRequest,
   GetListRequest,
+  GetManyReferenceRequest,
   GetManyRequest,
   GetOneRequest,
   Request,
@@ -17,6 +18,7 @@ import { updateHandler } from "./updateHandler";
 import { deleteHandler, DeleteOptions } from "./deleteHandler";
 import { createHandler } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
+import { getManyReferenceHandler } from "./getManyReferenceHandler";
 
 export const defaultHandler = async (
   req: Request,
@@ -24,50 +26,43 @@ export const defaultHandler = async (
   prisma: PrismaClient,
   options?: DeleteOptions
 ) => {
+  const tableName = req.body.model || req.body.resource;
+  if (!tableName) throw new Error(`table name is empty`);
+
+  const prismaDelegate = prisma[tableName];
+  if (!prismaDelegate)
+    throw new Error(
+      `No table/collection found for ${req.body.model || req.body.resource}`
+    );
+
   switch (req.body.method) {
     case "getList": {
-      return await getListHandler(
-        req as GetListRequest,
-        res,
-        prisma[req.body.model || req.body.resource]
-      );
+      return await getListHandler(req as GetListRequest, res, prismaDelegate);
     }
     case "getOne": {
-      return await getOneHandler(
-        req as GetOneRequest,
-        res,
-        prisma[req.body.model || req.body.resource]
-      );
+      return await getOneHandler(req as GetOneRequest, res, prismaDelegate);
     }
     case "getMany": {
-      return await getManyHandler(
-        req as GetManyRequest,
-        res,
-        prisma[req.body.model || req.body.resource]
-      );
+      return await getManyHandler(req as GetManyRequest, res, prismaDelegate);
     }
     case "getManyReference": {
-      throw new Error("Not implemented yet");
+      throw await getManyReferenceHandler(
+        req as GetManyReferenceRequest,
+        res,
+        prismaDelegate
+      );
     }
     case "create": {
-      return await createHandler(
-        req as CreateRequest,
-        res,
-        prisma[req.body.model || req.body.resource]
-      );
+      return await createHandler(req as CreateRequest, res, prismaDelegate);
     }
     case "update": {
-      return await updateHandler(
-        req as UpdateRequest,
-        res,
-        prisma[req.body.model || req.body.resource]
-      );
+      return await updateHandler(req as UpdateRequest, res, prismaDelegate);
     }
     case "delete": {
       return await deleteHandler(
         req as DeleteRequest,
         res,
-        prisma[req.body.model || req.body.resource],
+        prismaDelegate,
         options
       );
     }
@@ -75,7 +70,7 @@ export const defaultHandler = async (
       return await deleteManyHandler(
         req as DeleteManyRequest,
         res,
-        prisma[req.body.model || req.body.resource],
+        prismaDelegate,
         options
       );
     }

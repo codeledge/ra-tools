@@ -1,8 +1,7 @@
 {
-  "name": "ra-prisma",
+  "name": "ra-prisma-nextjs",
   "version": "0.0.0",
   "private": true,
-  "description": "Simple yet overrideable prisma data handlers for react-admin",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -12,16 +11,6 @@
     "dev": "turbo run dev --parallel --no-cache",
     "build": "turbo run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/codeledge/ra-prisma.git"
-  },
-  "author": "ogroppo <orlando.groppo@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/codeledge/ra-prisma/issues"
-  },
-  "homepage": "https://github.com/codeledge/ra-prisma#readme",
   "devDependencies": {
     "turbo": "latest"
   }

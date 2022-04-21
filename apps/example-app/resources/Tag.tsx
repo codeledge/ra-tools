@@ -6,28 +6,21 @@ import {
   ListProps,
   CreateProps,
   Create,
-  DateInput,
   SimpleForm,
   TextInput,
-  NumberInput,
 } from "react-admin";
 
-export const UserCreate = (props: CreateProps) => (
-  <Create {...props}>
+export const TagCreate = (props: CreateProps) => (
+  <Create title="New tag" {...props}>
     <SimpleForm>
       <TextInput source="name" />
     </SimpleForm>
   </Create>
 );
 
-const postFilters = [
-  <NumberInput key="1" label="Id (exact)" source="id" alwaysOn />,
-  <TextInput key="2" label="Name (contains)" source="name" alwaysOn />,
-];
-
-export const UserList = (props: ListProps) => (
-  <List {...props} filters={postFilters}>
-    <Datagrid>
+export const TagList = (props: ListProps) => (
+  <List {...props}>
+    <Datagrid rowClick={"show"}>
       <TextField source="id" />
       <TextField source="name" />
       <DateField source="createdAt" />
