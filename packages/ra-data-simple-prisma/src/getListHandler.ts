@@ -17,9 +17,9 @@ export const getListHandler = async <
   res: Response,
   table: { findMany: Function; count: Function },
   options?: {
-    select: W["select"];
-    include: W["include"];
-    where: W["where"];
+    select?: W["select"];
+    include?: W["include"];
+    where?: W["where"];
     noNullsOnSort?: string[];
     debug?: boolean;
     transform?: (data: any) => any;
