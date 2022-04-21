@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create a fullstack react admin app adding just one file",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -23,8 +23,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/codeledge/ra-prisma-nextjs.git",
-    "directory": "packages/ra-data-simple-prisma"
+    "url": "https://github.com/codeledge/ra-prisma-nextjs.git"
   },
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",
   "license": "MIT",
