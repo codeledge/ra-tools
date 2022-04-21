@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Create a fullstack react admin app adding just one file",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

@@ -53,8 +53,15 @@ export const getListHandler = async <
   if (!table) throw new Error(`missing table in getListHandler`);
 
   const where = extractWhere(req);
-  queryArgs.findManyArg.where = where;
-  queryArgs.countArg.where = where;
+  //TODO this is only shallow merge
+  queryArgs.findManyArg.where = {
+    ...queryArgs.findManyArg.where,
+    ...where,
+  };
+  queryArgs.countArg.where = {
+    ...queryArgs.countArg.where,
+    ...where,
+  };
 
   const { skip, take } = extractSkipTake(req);
   queryArgs.findManyArg.skip = skip;
