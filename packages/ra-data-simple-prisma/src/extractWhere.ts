@@ -11,6 +11,10 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
       //ignore underscored fields (_count, _sum, _avg, _min, _max and _helpers)
       if (colName.startsWith("_")) return;
 
+      if (value === "")
+        //react-admin does send empty strings in empty filters
+        return;
+
       if (colName === "q") {
         //WHAT THE HECK IS q?
       } else if (
