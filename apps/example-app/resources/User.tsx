@@ -1,20 +1,21 @@
 import {
-  List,
-  Datagrid,
-  TextField,
-  DateField,
-  ListProps,
-  CreateProps,
-  Create,
-  DateInput,
-  SimpleForm,
-  TextInput,
-  NumberInput,
-  Show,
-  SimpleShowLayout,
   ChipField,
+  Create,
+  CreateProps,
+  Datagrid,
+  DateField,
+  Edit,
+  EditProps,
+  List,
+  ListProps,
+  NumberInput,
   ReferenceManyField,
+  Show,
+  SimpleForm,
+  SimpleShowLayout,
   SingleFieldList,
+  TextField,
+  TextInput,
 } from "react-admin";
 
 export const UserCreate = (props: CreateProps) => (
@@ -32,7 +33,7 @@ const userFilters = [
 
 export const UserList = (props: ListProps) => (
   <List {...props} filters={userFilters}>
-    <Datagrid rowClick={"show"}>
+    <Datagrid rowClick="show">
       <TextField source="id" />
       <TextField source="name" />
       <DateField source="createdAt" />
@@ -44,6 +45,14 @@ export const UserList = (props: ListProps) => (
       </ReferenceManyField>
     </Datagrid>
   </List>
+);
+
+export const UserEdit = (props: EditProps) => (
+  <Edit {...props}>
+    <SimpleForm>
+      <TextInput source="name" />
+    </SimpleForm>
+  </Edit>
 );
 
 export const UserShow = () => (
