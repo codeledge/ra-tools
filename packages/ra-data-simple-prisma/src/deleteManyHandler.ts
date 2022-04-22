@@ -1,6 +1,6 @@
 import { DeleteManyRequest, DeleteRequest, Response } from "./Http";
 
-export type DeleteOptions = {
+export type DeleteManyOptions = {
   softDeleteField?: string;
 };
 
@@ -10,7 +10,7 @@ export const deleteManyHandler = async <
   req: DeleteManyRequest,
   res: Response,
   table: T,
-  options?: DeleteOptions
+  options?: DeleteManyOptions
 ) => {
   const deleted = options?.softDeleteField
     ? await table.updateMany({

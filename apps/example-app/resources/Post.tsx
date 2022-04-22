@@ -40,11 +40,7 @@ export const PostCreate = (props: CreateProps) => (
         <AutocompleteInput optionText="name" />
       </ReferenceInput>
       <TextInput source="text" />
-      <ReferenceArrayInput
-        label="Tags"
-        reference="tag"
-        source="tags.connect.id"
-      >
+      <ReferenceArrayInput label="Tags" reference="tag" source="tags">
         <AutocompleteArrayInput />
       </ReferenceArrayInput>
     </SimpleForm>
