@@ -1,8 +1,9 @@
 import { Admin, Resource } from "react-admin";
-import { dataProvider } from "ra-data-simple-prisma";
-import { UserCreate, UserList, UserShow } from "./resources/User";
 import { PostCreate, PostList } from "./resources/Post";
 import { TagCreate, TagList } from "./resources/Tag";
+import { UserCreate, UserEdit, UserList, UserShow } from "./resources/User";
+
+import { dataProvider } from "ra-data-simple-prisma";
 
 const ReactAdmin = () => {
   return (
@@ -11,6 +12,7 @@ const ReactAdmin = () => {
         name="user"
         list={UserList}
         create={UserCreate}
+        edit={UserEdit}
         show={UserShow}
       />
       <Resource name="post" list={PostList} create={PostCreate} />
