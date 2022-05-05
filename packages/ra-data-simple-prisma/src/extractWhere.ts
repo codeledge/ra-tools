@@ -20,7 +20,7 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
       const hasOperator = logicalOperators.some((operator) => {
         if (colName.endsWith(`_${operator}`)) {
           [colName] = colName.split(`_${operator}`);
-          setObjectProp(where, colName, { [operator]: value });
+          setObjectProp(where, colName, { [operator]: value }, { merge: true });
           return true;
         }
       });
