@@ -1,7 +1,7 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "0.2.8",
-  "description": "Create a fullstack react admin app adding just one file",
+  "version": "0.2.9",
+  "description": "Create a fullstack react-admin app adding just one file",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -18,6 +18,8 @@
   ],
   "keywords": [
     "prisma",
+    "rest",
+    "marmelab",
     "react-admin",
     "dataprovider"
   ],

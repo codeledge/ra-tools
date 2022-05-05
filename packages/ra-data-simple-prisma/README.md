@@ -61,3 +61,7 @@ In root folder run
 ```
 pnpm publish
 ```
+
+### License
+
+MIT
