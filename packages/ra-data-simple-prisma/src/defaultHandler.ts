@@ -63,7 +63,7 @@ export const defaultHandler = async (
         req as UpdateRequest,
         res,
         prismaDelegate,
-        options.update
+        options?.update
       );
     }
     case "delete": {
