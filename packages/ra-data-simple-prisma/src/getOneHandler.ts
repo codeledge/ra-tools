@@ -9,12 +9,20 @@ export const getOneHandler = async <
   req: GetOneRequest,
   res: Response,
   table: { findUnique: Function },
-  arg?: W
+  options?: {
+    select?: W["select"];
+    include?: W["include"];
+    debug?: boolean;
+    transform?: (row: any) => any;
+  }
 ) => {
   const row = await table.findUnique({
     where: { id: +req.body.params.id },
-    select: arg?.select ?? undefined,
-    include: arg?.include ?? undefined,
+    select: options?.select ?? undefined,
+    include: options?.include ?? undefined,
   });
+
+  await options?.transform?.(row);
+
   return res.json({ data: row });
 };
