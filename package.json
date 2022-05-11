@@ -9,7 +9,8 @@
   "scripts": {
     "test": "turbo run test",
     "dev": "turbo run dev --parallel --no-cache",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "kill": "pnpm run kill --filter {'apps'}"
   },
   "devDependencies": {
     "turbo": "latest"
