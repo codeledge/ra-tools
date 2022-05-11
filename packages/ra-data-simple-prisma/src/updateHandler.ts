@@ -17,7 +17,7 @@ export const updateHandler = async <T extends { update: Function }>(
     (fields, [key, value]) => {
       if (
         (!isObject(value) && !options?.skipFields?.includes(key)) ||
-        options?.allowFields.includes(key)
+        options?.allowFields?.includes(key)
       )
         fields[key] = value;
 
