@@ -299,7 +299,7 @@ var isObject = (arg) => Object.prototype.toString.call(arg) === "[object Object]
 var updateHandler = async (req, res, table, options) => {
   const data = Object.entries(req.body.params.data).reduce((fields, [key, value]) => {
     var _a;
-    if (!isObject(value) && !((_a = options == null ? void 0 : options.skipFields) == null ? void 0 : _a.includes(key)))
+    if (!isObject(value) && !((_a = options == null ? void 0 : options.skipFields) == null ? void 0 : _a.includes(key)) || (options == null ? void 0 : options.allowFields.includes(key)))
       fields[key] = value;
     return fields;
   }, {});

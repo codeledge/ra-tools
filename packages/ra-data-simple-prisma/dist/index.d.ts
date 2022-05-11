@@ -132,6 +132,7 @@ declare const dataProvider: (endpoint: string, options?: {
 
 declare type UpdateOptions = {
     skipFields?: string[];
+    allowFields?: string[];
 };
 declare const updateHandler: <T extends {
     update: Function;
