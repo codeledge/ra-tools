@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "0.2.13",
+  "version": "0.3.0",
   "description": "Create a fullstack react-admin app adding just one file",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -31,15 +31,15 @@
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^3.11.1",
-    "@types/node": "^17.0.21",
-    "axios": "^0.26.1",
-    "set-value": "^4.1.0",
-    "react-admin": "^3.19.10"
+    "@prisma/client": "^3.14.0",
+    "@types/node": "^17.0.32",
+    "axios": "^0.27.2",
+    "react-admin": "^4.0.3",
+    "set-value": "^4.1.0"
   },
   "devDependencies": {
-    "jest": "^27.5.1",
-    "tsup": "^5.12.1",
-    "typescript": "^4.6.3"
+    "jest": "^28.1.0",
+    "tsup": "^5.12.7",
+    "typescript": "^4.6.4"
   }
 }
