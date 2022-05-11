@@ -1,13 +1,15 @@
 import { Response, UpdateRequest } from "./Http";
 import { isObject } from "./lib/isObject";
 
+export type UpdateOptions = {
+  skipFields?: string[]; //i.e. Json fields throw error if null is used in update, they would expect {} instead
+};
+
 export const updateHandler = async <T extends { update: Function }>(
   req: UpdateRequest,
   res: Response,
   table: T,
-  options?: {
-    skipFields?: string[]; //i.e. Json fields throw error if null is used in update, they would expect {} instead
-  }
+  options?: UpdateOptions
 ) => {
   //Remove relations, allow nested updates one day
   const data = Object.entries(req.body.params.data).reduce(
