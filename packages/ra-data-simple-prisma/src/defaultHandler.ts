@@ -14,7 +14,7 @@ import { PrismaClient } from "@prisma/client";
 import { getListHandler } from "./getListHandler";
 import { getManyHandler } from "./getManyHandler";
 import { getOneHandler } from "./getOneHandler";
-import { updateHandler } from "./updateHandler";
+import { updateHandler, UpdateOptions } from "./updateHandler";
 import { deleteHandler, DeleteOptions } from "./deleteHandler";
 import { createHandler } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
@@ -24,7 +24,10 @@ export const defaultHandler = async (
   req: Request,
   res: Response,
   prisma: PrismaClient,
-  options?: DeleteOptions
+  options?: {
+    delete?: DeleteOptions;
+    update?: UpdateOptions;
+  }
 ) => {
   const tableName = req.body.model || req.body.resource;
   if (!tableName) throw new Error(`table name is empty`);
@@ -56,14 +59,19 @@ export const defaultHandler = async (
       return await createHandler(req as CreateRequest, res, prismaDelegate);
     }
     case "update": {
-      return await updateHandler(req as UpdateRequest, res, prismaDelegate);
+      return await updateHandler(
+        req as UpdateRequest,
+        res,
+        prismaDelegate,
+        options?.update
+      );
     }
     case "delete": {
       return await deleteHandler(
         req as DeleteRequest,
         res,
         prismaDelegate,
-        options
+        options?.delete
       );
     }
     case "deleteMany": {
@@ -71,7 +79,7 @@ export const defaultHandler = async (
         req as DeleteManyRequest,
         res,
         prismaDelegate,
-        options
+        options?.delete
       );
     }
     default:
