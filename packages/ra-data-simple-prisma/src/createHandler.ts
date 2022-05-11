@@ -12,6 +12,13 @@ export const createHandler = async <T extends { create: Function }>(
 ) => {
   const { data } = req.body.params;
 
+  // remove empty strings
+  Object.entries(data).forEach(([prop, value]) => {
+    if (value === "") {
+      delete data[prop];
+    }
+  });
+
   // transfor an array to a connect (many-to-many)
   Object.entries(data).forEach(([prop, value]) => {
     const foreignConnectKey = options?.connect?.[prop];

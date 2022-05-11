@@ -18,9 +18,20 @@ export const TagCreate = (props: CreateProps) => (
   </Create>
 );
 
+export const TagChild = (props: CreateProps) => (
+  <List {...props} filter={{ name: "Gino" }}>
+    <Datagrid>
+      <TextField source="id" />
+      <TextField source="name" />
+      <DateField source="createdAt" />
+      <DateField source="updatedAt" />
+    </Datagrid>
+  </List>
+);
+
 export const TagList = (props: ListProps) => (
   <List {...props}>
-    <Datagrid rowClick={"show"}>
+    <Datagrid rowClick={"show"} expand={TagChild} expandSingle>
       <TextField source="id" />
       <TextField source="name" />
       <DateField source="createdAt" />
