@@ -1,5 +1,5 @@
 {
-  "name": "ra-prisma-nextjs",
+  "name": "ra-data-simple-prisma-root",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
