@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "kill": "kill -9 $(lsof -t -i:3020)"
   },
   "dependencies": {
     "@babel/core": "7.17.9",
