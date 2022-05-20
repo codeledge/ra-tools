@@ -12,6 +12,7 @@ export const updateHandler = async <T extends { update: Function }>(
   table: T,
   options?: UpdateOptions
 ) => {
+  //TODO: remove underscored fields
   //Remove relations, allow nested updates one day
   const data = Object.entries(req.body.params.data).reduce(
     (fields, [key, value]) => {

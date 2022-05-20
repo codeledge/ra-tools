@@ -35,7 +35,7 @@ export const defaultHandler = async (
   const prismaDelegate = prisma[tableName];
   if (!prismaDelegate)
     throw new Error(
-      `No table/collection found for ${req.body.model || req.body.resource}`
+      `No model found for "${req.body.model || req.body.resource}"`
     );
 
   switch (req.body.method) {
