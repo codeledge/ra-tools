@@ -1,8 +1,8 @@
 import { Admin, ListGuesser, Resource } from "react-admin";
-import { PostCreate, PostList } from "./resources/Post";
+import { PostCreate, PostEdit, PostList } from "./resources/Post";
 import { TagCreate, TagList } from "./resources/Tag";
 import { UserCreate, UserEdit, UserList, UserShow } from "./resources/User";
-import { AdminCreate, AdminList } from "./resources/Admin";
+import { AdminCreate, AdminList, AdminShow } from "./resources/Admin";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { authProvider } from "./providers/authProvider";
 import { dataProvider } from "./providers/dataProvider";
@@ -26,9 +26,19 @@ const ReactAdmin = () => {
         edit={UserEdit}
         show={UserShow}
       />
-      <Resource name="post" list={PostList} create={PostCreate} />
+      <Resource
+        name="post"
+        list={PostList}
+        create={PostCreate}
+        edit={PostEdit}
+      />
       <Resource name="tag" list={TagList} create={TagCreate} />
-      <Resource name="admin" list={AdminList} create={AdminCreate} />
+      <Resource
+        name="admin"
+        list={AdminList}
+        create={AdminCreate}
+        show={AdminShow}
+      />
     </Admin>
   );
 };

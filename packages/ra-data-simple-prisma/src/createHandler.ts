@@ -12,7 +12,14 @@ export const createHandler = async <T extends { create: Function }>(
 ) => {
   const { data } = req.body.params;
 
-  // transfor an array to a connect (many-to-many)
+  // transform array to a connect (many-to-many)
+  // e.g. (handler)
+  // createHandler(req, res, prismaClient.post, {
+  //      connect: {
+  //        tags: "id",
+  //      },
+  //    });
+  // (data) tags: [1, 2, 3] => tags: { connect: {id: [1, 2, 3]} }
   Object.entries(data).forEach(([prop, value]) => {
     const foreignConnectKey = options?.connect?.[prop];
     if (foreignConnectKey) {

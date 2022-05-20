@@ -37,3 +37,11 @@ export const AdminList = (props: ListProps) => (
     </Datagrid>
   </List>
 );
+
+export const AdminShow = () => (
+  <Show>
+    <SimpleShowLayout>
+      <TextField source="name" />
+    </SimpleShowLayout>
+  </Show>
+);

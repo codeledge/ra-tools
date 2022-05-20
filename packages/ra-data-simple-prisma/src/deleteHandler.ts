@@ -12,15 +12,17 @@ export const deleteHandler = async <
   table: T,
   options?: DeleteOptions
 ) => {
+  const { id } = req.body.params;
+
   const deleted = options?.softDeleteField
     ? await table.update({
-        where: { id: +req.body.params.id },
+        where: { id },
         data: {
           [options?.softDeleteField]: new Date(),
         },
       })
     : await table.delete({
-        where: { id: +req.body.params.id },
+        where: { id },
       });
 
   return res.json({ data: deleted });

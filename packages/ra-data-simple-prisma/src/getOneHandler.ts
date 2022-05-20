@@ -16,8 +16,10 @@ export const getOneHandler = async <
     transform?: (row: any) => any;
   }
 ) => {
+  const { id } = req.body.params;
+
   const row = await table.findUnique({
-    where: { id: +req.body.params.id },
+    where: { id },
     select: options?.select ?? undefined,
     include: options?.include ?? undefined,
   });

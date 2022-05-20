@@ -25,6 +25,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           transform: (posts: any[]) => {
             posts.forEach((post: any) => {
               post.tags = post.tags.map((tag: any) => tag.id);
+              post._tags_count = post.tags.length;
             });
           },
         }

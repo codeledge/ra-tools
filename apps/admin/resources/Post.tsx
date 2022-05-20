@@ -15,6 +15,9 @@ import {
   ReferenceArrayField,
   SingleFieldList,
   ChipField,
+  Edit,
+  EditProps,
+  NumberInput,
 } from "react-admin";
 
 export const PostList = (props: ListProps) => (
@@ -45,4 +48,13 @@ export const PostCreate = (props: CreateProps) => (
       </ReferenceArrayInput>
     </SimpleForm>
   </Create>
+);
+
+export const PostEdit = (props: EditProps) => (
+  <Edit {...props}>
+    <SimpleForm>
+      <TextInput source="text" />
+      <NumberInput disabled source="_tags_count" />
+    </SimpleForm>
+  </Edit>
 );

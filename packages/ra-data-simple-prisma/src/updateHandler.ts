@@ -1,4 +1,5 @@
 import { Response, UpdateRequest } from "./Http";
+import { isNotField } from "./lib/isNotField";
 import { isObject } from "./lib/isObject";
 
 export type UpdateOptions = {
@@ -12,10 +13,12 @@ export const updateHandler = async <T extends { update: Function }>(
   table: T,
   options?: UpdateOptions
 ) => {
-  //TODO: remove underscored fields
-  //Remove relations, allow nested updates one day
   const data = Object.entries(req.body.params.data).reduce(
     (fields, [key, value]) => {
+      if (isNotField(key)) return fields;
+
+      //TODO: move this into `isNotField`
+      //Remove relations, allow nested updates one day
       if (
         (!isObject(value) && !options?.skipFields?.includes(key)) ||
         options?.allowFields?.includes(key)
