@@ -89,7 +89,7 @@ export const getListHandler = async <
 
   await options?.transform?.(data);
 
-  res.json({
+  return res.json({
     data,
     total,
   });

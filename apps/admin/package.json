@@ -1,5 +1,5 @@
 {
-  "name": "ra-prisma-nextjs-example-app",
+  "name": "ra-prisma-nextjs-admin",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -17,6 +17,7 @@
     "@mui/styles": "^5.6.2",
     "@next-auth/prisma-adapter": "^1.0.3",
     "@prisma/client": "^3.12.0",
+    "axios": "^0.27.2",
     "next": "12.1.5",
     "next-auth": "^4.3.4",
     "ra-data-simple-prisma": "workspace:*",

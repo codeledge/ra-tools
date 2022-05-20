@@ -11,5 +11,5 @@ export const getManyHandler = async (
     where: { id: { in: ids } },
   });
 
-  res.json({ data: list });
+  return res.json({ data: list });
 };
