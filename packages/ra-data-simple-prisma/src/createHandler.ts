@@ -12,6 +12,13 @@ export const createHandler = async <T extends { create: Function }>(
 ) => {
   const { data } = req.body.params;
 
+  // Filter out any fields that are not in the schema
+  Object.entries(data).forEach(([prop, value]) => {
+    if (value === "") {
+      delete data[prop];
+    }
+  });
+
   // transfor an array to a connect (many-to-many)
   Object.entries(data).forEach(([prop, value]) => {
     const foreignConnectKey = options?.connect?.[prop];
