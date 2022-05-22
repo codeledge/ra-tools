@@ -65,6 +65,10 @@ export const dataProvider = (
         .catch(reactAdminAxiosErrorHandler);
     },
     getOne: (resource, params) => {
+      // https://github.com/marmelab/react-admin/issues/7728#issuecomment-1133959466
+      // getOne will get the id from url so if the id is number it will be sent as string
+      if (/^\d+$/.test(params.id)) params.id = +params.id;
+
       return apiService
         .post(resource, {
           method: "getOne",
