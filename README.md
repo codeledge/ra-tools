@@ -1,6 +1,7 @@
-# React Admin & Prisma & Next.js
+# React Admin & Prisma (& Next.js)
 
-Check the example app to see common usages or use it as a boilerplate.
+Check the example apps to see common usages or use them as a boilerplate.
+Data is stored in local sqlite file!
 
 # Packages
 
@@ -8,7 +9,8 @@ Check the example app to see common usages or use it as a boilerplate.
 
 # Examples
 
-[example app](./apps/example-app/)
+[example admin app](./apps/admin/) Debug, test, and develop the package, but also use it as the admin of the website!
+[example website](./apps/website/) A nextjs boilerplate to show the data (very much under construction yet)
 
 ### Development
 
@@ -20,7 +22,7 @@ In root folder run
 pnpm dev
 ```
 
-this will spin both example app and package in dev mode
+this will spin both the apps and package in dev mode!
 
 #### Common issues
 
@@ -29,4 +31,5 @@ this will spin both example app and package in dev mode
 ### TODOs
 
 - [ ] Add all combos in README
-- [ ] add next-auth
+- [ ] create an amazing website showing all the data
+- [ ] Merge admin db with website db
