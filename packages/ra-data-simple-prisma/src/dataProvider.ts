@@ -1,10 +1,30 @@
 import { DataProvider } from "react-admin";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import type {
+  AxiosError,
+  AxiosInterceptorOptions,
+  AxiosResponse,
+  AxiosRequestConfig,
+} from "axios";
 
 export const dataProvider = (
   endpoint: string,
   options?: {
     resourceToModelMap?: Record<string, string>;
+    axiosInterceptors?: {
+      response?: {
+        onFulfilled?: (value: AxiosResponse<any, any>) => any;
+        onRejected?: (error: any) => any;
+        options?: AxiosInterceptorOptions;
+      }[];
+      request?: {
+        onFulfilled?: (
+          value: AxiosRequestConfig<any>
+        ) => AxiosRequestConfig<any> | Promise<AxiosRequestConfig<any>>;
+        onRejected?: (error: any) => any;
+        options?: AxiosInterceptorOptions;
+      }[];
+    };
   }
 ): DataProvider => {
   const apiService = axios.create({
@@ -12,6 +32,26 @@ export const dataProvider = (
   });
 
   apiService.interceptors.response.use((res) => res.data);
+
+  if (options && options.axiosInterceptors) {
+    if (options.axiosInterceptors.request)
+      options.axiosInterceptors.request.forEach((value) =>
+        apiService.interceptors.request.use(
+          value.onFulfilled,
+          value.onRejected,
+          value.options
+        )
+      );
+
+    if (options.axiosInterceptors.response)
+      options.axiosInterceptors.response.forEach((value) =>
+        apiService.interceptors.response.use(
+          value.onFulfilled,
+          value.onRejected,
+          value.options
+        )
+      );
+  }
 
   return {
     getList: (resource, params) => {

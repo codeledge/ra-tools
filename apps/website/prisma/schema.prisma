@@ -20,13 +20,15 @@ model User {
 }
 
 model Post {
-  id        Int       @id @default(autoincrement())
-  userId    Int
-  text      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tags      Tag[]
+  id         Int       @id @default(autoincrement())
+  categoryId Int?
+  userId     Int
+  text       String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+  user       User      @relation(fields: [userId], references: [id])
+  tags       Tag[]
+  category   Category? @relation(fields: [categoryId], references: [id])
 }
 
 model Tag {
@@ -35,4 +37,15 @@ model Tag {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
   posts     Post[]
+}
+
+model Category {
+  id                 Int        @id @default(autoincrement())
+  name               String
+  parentCategoryId   Int?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime?  @updatedAt
+  childrenCategories Category[] @relation("SubCategories")
+  parentCategory     Category?  @relation("SubCategories", fields: [parentCategoryId], references: [id])
+  Post               Post[]
 }

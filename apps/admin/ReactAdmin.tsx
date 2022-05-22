@@ -7,6 +7,11 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { authProvider } from "./providers/authProvider";
 import { dataProvider } from "./providers/dataProvider";
 import LoginPage from "./custom-pages/LoginPage";
+import {
+  CategoryList,
+  CategoryCreate,
+  CategoryEdit,
+} from "./resources/Category";
 
 const ReactAdmin = () => {
   const { data: session, status } = useSession();
@@ -38,6 +43,12 @@ const ReactAdmin = () => {
         list={AdminList}
         create={AdminCreate}
         show={AdminShow}
+      />
+      <Resource
+        name="category"
+        list={CategoryList}
+        create={CategoryCreate}
+        edit={CategoryEdit}
       />
     </Admin>
   );
