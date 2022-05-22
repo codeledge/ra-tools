@@ -55,6 +55,9 @@ export const PostEdit = (props: EditProps) => (
     <SimpleForm>
       <TextInput source="text" />
       <NumberInput disabled source="_tags_count" />
+      <ReferenceArrayInput label="Tags" reference="tag" source="tags">
+        <AutocompleteArrayInput />
+      </ReferenceArrayInput>
     </SimpleForm>
   </Edit>
 );

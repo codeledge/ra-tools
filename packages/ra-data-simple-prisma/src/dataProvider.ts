@@ -6,6 +6,7 @@ import type {
   AxiosResponse,
   AxiosRequestConfig,
 } from "axios";
+import { isNumericId } from "./lib/isNumericId";
 
 export const dataProvider = (
   endpoint: string,
@@ -65,9 +66,7 @@ export const dataProvider = (
         .catch(reactAdminAxiosErrorHandler);
     },
     getOne: (resource, params) => {
-      // https://github.com/marmelab/react-admin/issues/7728#issuecomment-1133959466
-      // getOne will get the id from url so if the id is number it will be sent as string
-      if (/^\d+$/.test(params.id)) params.id = +params.id;
+      castIdToOriginalType(params);
 
       return apiService
         .post(resource, {
@@ -109,6 +108,8 @@ export const dataProvider = (
         .catch(reactAdminAxiosErrorHandler);
     },
     update: (resource, params) => {
+      castIdToOriginalType(params);
+
       return apiService
         .post(resource, {
           method: "update",
@@ -129,6 +130,8 @@ export const dataProvider = (
         .catch(reactAdminAxiosErrorHandler);
     },
     delete: (resource, params) => {
+      castIdToOriginalType(params);
+
       return apiService
         .post(resource, {
           method: "delete",
@@ -149,6 +152,12 @@ export const dataProvider = (
         .catch(reactAdminAxiosErrorHandler);
     },
   };
+};
+
+// https://github.com/marmelab/react-admin/issues/7728#issuecomment-1133959466
+// getOne will get the id from url so if the id is number it will be sent as string
+const castIdToOriginalType = (params) => {
+  if (isNumericId(params.id)) params.id = +params.id;
 };
 
 // react-admin expects the error to be thrown
