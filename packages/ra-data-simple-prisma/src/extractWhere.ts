@@ -1,5 +1,6 @@
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import setObjectProp from "set-value";
+import { isNotField } from "./lib/isNotField";
 
 const logicalOperators = ["gte", "lte", "lt", "gt"];
 
@@ -10,9 +11,9 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
 
   if (filter) {
     Object.entries(filter).forEach(([colName, value]) => {
-      //ignore underscored fields (_count, _sum, _avg, _min, _max and _helpers)
-      if (colName.startsWith("_")) return;
+      if (isNotField(colName)) return;
 
+      //TODO: *consider* to move into `isNotField` (but maybe to reset dates is the only way to do it)
       if (value === "")
         //react-admin does send empty strings in empty filters :(
         return;

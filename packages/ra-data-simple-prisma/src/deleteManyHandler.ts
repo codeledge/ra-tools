@@ -12,17 +12,20 @@ export const deleteManyHandler = async <
   table: T,
   options?: DeleteManyOptions
 ) => {
+  const { ids } = req.body.params;
+
   const deleted = options?.softDeleteField
     ? await table.updateMany({
-        where: { id: { in: req.body.params.ids } },
+        where: { id: { in: ids } },
         data: {
           [options?.softDeleteField]: new Date(),
         },
       })
     : await table.deleteMany({
-        where: { id: { in: req.body.params.ids } },
+        where: { id: { in: ids } },
       });
 
-  //it expects the ids of the deleted rows, but only the count is returned from the deleteMany method
-  return res.json({ data: req.body.params.ids });
+  // react-admin expects the ids of the deleted rows
+  // but only the count is returned from prisma deleteMany method, so...
+  return res.json({ data: ids });
 };

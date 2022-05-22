@@ -125,6 +125,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         {
           skipFields: ...
           allowFields: ...
+          set: {
+            tags: "id",
+          },
         }
       );
     default: // <= fall back on default handler
