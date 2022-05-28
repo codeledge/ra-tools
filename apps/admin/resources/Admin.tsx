@@ -32,6 +32,7 @@ export const AdminList = (props: ListProps) => (
       <TextField source="id" />
       <TextField source="name" />
       <TextField source="email" />
+      <TextField source="role" />
       <DateField source="emailVerified" />
       <TextField source="image" />
     </Datagrid>

@@ -3,6 +3,6 @@ import { dataProvider as prismaDataProvider } from "ra-data-simple-prisma";
 
 export const dataProvider: DataProvider = prismaDataProvider("/api", {
   resourceToModelMap: {
-    admin: "user",
+    admin: "adminUser",
   },
 });

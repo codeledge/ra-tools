@@ -6,11 +6,12 @@ Data is stored in local sqlite file!
 # Packages
 
 [ra-data-simple-prisma](./packages/ra-data-simple-prisma/)
+[next-auth-prisma](./packages/next-auth-prisma/)
 
 # Examples
 
-[example admin app](./apps/admin/) Debug, test, and develop the package, but also use it as the admin of the website!
-[example website](./apps/website/) A nextjs boilerplate to show the data (very much under construction yet)
+[example admin app](./apps/admin/) Debug, test, and develop the packages, but also use it as the admin/CMS for the website!
+[example website](./apps/website/) A nextjs/mui boilerplate to show the data (very much under construction yet)
 
 ### Development
 
@@ -32,4 +33,3 @@ this will spin both the apps and package in dev mode!
 
 - [ ] Add all combos in README
 - [ ] create an amazing website showing all the data
-- [ ] Merge admin db with website db

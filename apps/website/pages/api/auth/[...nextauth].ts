@@ -1,12 +1,11 @@
 import NextAuth, { Session, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prismaWebClient } from "../../../prisma/prismaWebClient";
+import prismaClient from "db";
 
 export default async function auth(req: any, res: any) {
   return await NextAuth(req, res, {
     //debug: true,
-    // adapter: PrismaAdapter(prismaWebClient),
+    adapter: PrismaAdapter(prismaClient),
     providers: [
       GoogleProvider({
         clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -37,4 +36,9 @@ export default async function auth(req: any, res: any) {
     //   },
     // },
   });
+}
+function PrismaAdapter(
+  prismaWebClient: any
+): import("next-auth/adapters").Adapter | undefined {
+  throw new Error("Function not implemented.");
 }
