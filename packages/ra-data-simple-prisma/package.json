@@ -31,12 +31,12 @@
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "@prisma/client": "^3.14.0",
-    "react-admin": "^4.0.2"
+    "@prisma/client": "^3.14.0"
   },
   "dependencies": {
     "@types/node": "^17.0.32",
     "axios": "^0.27.2",
+    "react-admin": "^4.0.2",
     "set-value": "^4.1.0"
   },
   "devDependencies": {
