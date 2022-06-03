@@ -31,7 +31,9 @@ export const createHandler = async <T extends { create: Function }>(
     const foreignConnectKey = options?.connect?.[prop];
     if (foreignConnectKey) {
       data[prop] = {
-        connect: value.map((key) => ({ [foreignConnectKey]: key })),
+        connect: Array.isArray(value)
+          ? value.map((key) => ({ [foreignConnectKey]: key }))
+          : { [foreignConnectKey]: value },
       };
     }
   });
