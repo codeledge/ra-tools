@@ -41,7 +41,7 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
       } else if (Array.isArray(value)) {
         setObjectProp(where, colName, { in: value });
       } else if (typeof value === "string") {
-        setObjectProp(where, colName, { contains: value });
+        setObjectProp(where, colName, { contains: value, mode: "insensitive" });
       }
     });
   }
