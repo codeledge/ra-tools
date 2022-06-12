@@ -2,6 +2,7 @@ import { DeleteRequest, Response } from "./Http";
 
 export type DeleteOptions = {
   softDeleteField?: string;
+  debug?: boolean;
 };
 
 export const deleteHandler = async <

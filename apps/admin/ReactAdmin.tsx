@@ -1,9 +1,9 @@
-import { Admin, ListGuesser, Resource } from "react-admin";
+import { Admin, Resource } from "react-admin";
 import { PostCreate, PostEdit, PostList } from "./resources/Post";
 import { TagCreate, TagList } from "./resources/Tag";
 import { UserCreate, UserEdit, UserList, UserShow } from "./resources/User";
 import { AdminCreate, AdminList, AdminShow } from "./resources/Admin";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { authProvider } from "./providers/authProvider";
 import { dataProvider } from "./providers/dataProvider";
 import LoginPage from "./custom-pages/LoginPage";
@@ -12,6 +12,7 @@ import {
   CategoryCreate,
   CategoryEdit,
 } from "./resources/Category";
+import { LogList } from "./resources/Log";
 
 const ReactAdmin = () => {
   const { data: session, status } = useSession();
@@ -50,6 +51,7 @@ const ReactAdmin = () => {
         create={CategoryCreate}
         edit={CategoryEdit}
       />
+      <Resource name="log" list={LogList} />
     </Admin>
   );
 };
