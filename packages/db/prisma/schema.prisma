@@ -6,7 +6,9 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["filterJson"]
+
 }
 
 model Post {
@@ -132,6 +134,12 @@ model AdminVerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  payload   Json
 }
 
 enum Role {
