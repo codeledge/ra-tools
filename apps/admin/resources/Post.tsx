@@ -15,12 +15,31 @@ import {
   ReferenceArrayField,
   SingleFieldList,
   ChipField,
+  Edit,
+  EditProps,
+  NumberInput,
+  ReferenceField,
 } from "react-admin";
+import { AutocompleteFilter } from "../filters/AutocompleteFilter";
 
 export const PostList = (props: ListProps) => (
-  <List {...props}>
+  <List
+    {...props}
+    filters={[
+      <AutocompleteFilter
+        key={`1`}
+        source={"userId"}
+        reference={"user"}
+        field={"name"}
+        alwaysOn
+      />,
+    ]}
+  >
     <Datagrid rowClick={"show"}>
       <TextField source="id" />
+      <ReferenceField source="userId" reference="user" label="User name">
+        <TextField source="name" />
+      </ReferenceField>
       <TextField source="text" />
       <DateField source="createdAt" />
       <DateField source="updatedAt" />
@@ -45,4 +64,16 @@ export const PostCreate = (props: CreateProps) => (
       </ReferenceArrayInput>
     </SimpleForm>
   </Create>
+);
+
+export const PostEdit = (props: EditProps) => (
+  <Edit {...props}>
+    <SimpleForm>
+      <TextInput source="text" />
+      <NumberInput disabled source="_tags_count" />
+      <ReferenceArrayInput label="Tags" reference="tag" source="tags">
+        <AutocompleteArrayInput />
+      </ReferenceArrayInput>
+    </SimpleForm>
+  </Edit>
 );

@@ -3,6 +3,12 @@ import { extractOrderBy } from "./extractOrderBy";
 import { extractWhere } from "./extractWhere";
 import { GetListRequest, Response } from "./Http";
 
+export type GetListOptions = {
+  noNullsOnSort?: string[];
+  debug?: boolean;
+  transform?: (data: any) => any;
+};
+
 export const getListHandler = async <
   W extends {
     include?: object | null;
@@ -53,6 +59,9 @@ export const getListHandler = async <
   if (!table) throw new Error(`missing table in getListHandler`);
 
   const where = extractWhere(req);
+  if (options?.debug) {
+    console.log("getListHandler:where", JSON.stringify(where, null, 2));
+  }
   //TODO this is only shallow merge
   queryArgs.findManyArg.where = {
     ...queryArgs.findManyArg.where,
@@ -79,7 +88,7 @@ export const getListHandler = async <
   }
 
   if (options?.debug) {
-    console.log("queryArgs", JSON.stringify(queryArgs, null, 2));
+    console.log("getListHandler:queryArgs", JSON.stringify(queryArgs, null, 2));
   }
 
   const [data, total] = await Promise.all([

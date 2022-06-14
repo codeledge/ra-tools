@@ -1,12 +1,12 @@
-import { Post } from "@prisma/webClient";
 import { GetServerSideProps, NextPage } from "next/types";
-import { prismaWebClient } from "../prisma/prismaWebClient";
+import { Post } from "@prisma/client";
+import prismaClient from "db";
 
 const HomePage: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (
     <>
-      <h1>Home</h1>
-      <h2>Posts</h2>
+      <h1>Welcome to the website</h1>
+      <h2>There a currently {posts.length} posts</h2>
       {posts?.map((post) => (
         <p key={post.id}>{post.text}</p>
       ))}
@@ -17,7 +17,7 @@ const HomePage: NextPage<{ posts: Post[] }> = ({ posts }) => {
 export default HomePage;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const posts = await prismaWebClient.post.findMany();
+  const posts = await prismaClient.post.findMany();
 
   return {
     props: {

@@ -11,7 +11,7 @@ import {
   UpdateRequest,
 } from "./Http";
 import { PrismaClient } from "@prisma/client";
-import { getListHandler } from "./getListHandler";
+import { getListHandler, GetListOptions } from "./getListHandler";
 import { getManyHandler } from "./getManyHandler";
 import { getOneHandler } from "./getOneHandler";
 import { updateHandler, UpdateOptions } from "./updateHandler";
@@ -27,6 +27,7 @@ export const defaultHandler = async (
   options?: {
     delete?: DeleteOptions;
     update?: UpdateOptions;
+    getList?: GetListOptions;
   }
 ) => {
   const tableName = req.body.model || req.body.resource;
@@ -40,7 +41,12 @@ export const defaultHandler = async (
 
   switch (req.body.method) {
     case "getList": {
-      return await getListHandler(req as GetListRequest, res, prismaDelegate);
+      return await getListHandler(
+        req as GetListRequest,
+        res,
+        prismaDelegate,
+        options?.getList
+      );
     }
     case "getOne": {
       return await getOneHandler(req as GetOneRequest, res, prismaDelegate);

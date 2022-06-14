@@ -1,7 +1,7 @@
 {
-  "name": "ra-data-simple-prisma",
-  "version": "0.4.0",
-  "description": "Create a fullstack react-admin app adding just one file",
+  "name": "next-auth-prisma-adapter",
+  "version": "0.1.0",
+  "description": "Configurable models names for next-auth's Prisma Adapter",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -18,30 +18,20 @@
   ],
   "keywords": [
     "prisma",
-    "rest",
-    "marmelab",
-    "react-admin",
-    "dataprovider"
+    "next-auth",
+    "adapter",
+    "models",
+    "config"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/codeledge/ra-prisma-nextjs.git",
-    "directory": "packages/ra-data-simple-prisma"
-  },
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "@prisma/client": "^3.14.0"
-  },
-  "dependencies": {
-    "@types/node": "^17.0.32",
-    "axios": "^0.27.2",
-    "react-admin": "^4.0.2",
-    "set-value": "^4.1.0"
+    "next-auth": ">=4",
+    "@prisma/client": ">3"
   },
   "devDependencies": {
     "jest": "^28.1.0",
-    "tsup": "^5.12.7",
-    "typescript": "^4.6.4"
+    "tsup": "^5.12.8",
+    "typescript": "^4.7.2"
   }
 }

@@ -1,10 +1,31 @@
 import { DataProvider } from "react-admin";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import type {
+  AxiosError,
+  AxiosInterceptorOptions,
+  AxiosResponse,
+  AxiosRequestConfig,
+} from "axios";
+import { isNumericId } from "./lib/isNumericId";
 
 export const dataProvider = (
   endpoint: string,
   options?: {
     resourceToModelMap?: Record<string, string>;
+    axiosInterceptors?: {
+      response?: {
+        onFulfilled?: (value: AxiosResponse<any, any>) => any;
+        onRejected?: (error: any) => any;
+        options?: AxiosInterceptorOptions;
+      }[];
+      request?: {
+        onFulfilled?: (
+          value: AxiosRequestConfig<any>
+        ) => AxiosRequestConfig<any> | Promise<AxiosRequestConfig<any>>;
+        onRejected?: (error: any) => any;
+        options?: AxiosInterceptorOptions;
+      }[];
+    };
   }
 ): DataProvider => {
   const apiService = axios.create({
@@ -12,6 +33,26 @@ export const dataProvider = (
   });
 
   apiService.interceptors.response.use((res) => res.data);
+
+  if (options && options.axiosInterceptors) {
+    if (options.axiosInterceptors.request)
+      options.axiosInterceptors.request.forEach((value) =>
+        apiService.interceptors.request.use(
+          value.onFulfilled,
+          value.onRejected,
+          value.options
+        )
+      );
+
+    if (options.axiosInterceptors.response)
+      options.axiosInterceptors.response.forEach((value) =>
+        apiService.interceptors.response.use(
+          value.onFulfilled,
+          value.onRejected,
+          value.options
+        )
+      );
+  }
 
   return {
     getList: (resource, params) => {
@@ -25,6 +66,8 @@ export const dataProvider = (
         .catch(reactAdminAxiosErrorHandler);
     },
     getOne: (resource, params) => {
+      castIdToOriginalType(params);
+
       return apiService
         .post(resource, {
           method: "getOne",
@@ -65,6 +108,8 @@ export const dataProvider = (
         .catch(reactAdminAxiosErrorHandler);
     },
     update: (resource, params) => {
+      castIdToOriginalType(params);
+
       return apiService
         .post(resource, {
           method: "update",
@@ -85,6 +130,8 @@ export const dataProvider = (
         .catch(reactAdminAxiosErrorHandler);
     },
     delete: (resource, params) => {
+      castIdToOriginalType(params);
+
       return apiService
         .post(resource, {
           method: "delete",
@@ -105,6 +152,12 @@ export const dataProvider = (
         .catch(reactAdminAxiosErrorHandler);
     },
   };
+};
+
+// https://github.com/marmelab/react-admin/issues/7728#issuecomment-1133959466
+// getOne will get the id from url so if the id is number it will be sent as string
+const castIdToOriginalType = (params) => {
+  if (isNumericId(params.id)) params.id = +params.id;
 };
 
 // react-admin expects the error to be thrown

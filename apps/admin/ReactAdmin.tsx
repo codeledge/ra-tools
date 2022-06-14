@@ -1,13 +1,19 @@
-import { Admin, ListGuesser, Resource } from "react-admin";
-import { PostCreate, PostList } from "./resources/Post";
+import { Admin, Resource } from "react-admin";
+import { PostCreate, PostEdit, PostList } from "./resources/Post";
 import { TagCreate, TagList } from "./resources/Tag";
 import { UserCreate, UserEdit, UserList, UserShow } from "./resources/User";
-import { AdminCreate, AdminList } from "./resources/Admin";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { AdminCreate, AdminList, AdminShow } from "./resources/Admin";
+import { useSession } from "next-auth/react";
 import { authProvider } from "./providers/authProvider";
 import { dataProvider } from "./providers/dataProvider";
 import LoginPage from "./custom-pages/LoginPage";
 import { ScriptList } from "./resources/Script";
+import {
+  CategoryList,
+  CategoryCreate,
+  CategoryEdit,
+} from "./resources/Category";
+import { LogList } from "./resources/Log";
 
 const ReactAdmin = () => {
   const { data: session, status } = useSession();
@@ -27,10 +33,28 @@ const ReactAdmin = () => {
         edit={UserEdit}
         show={UserShow}
       />
-      <Resource name="post" list={PostList} create={PostCreate} />
+      <Resource
+        name="post"
+        list={PostList}
+        create={PostCreate}
+        edit={PostEdit}
+      />
       <Resource name="tag" list={TagList} create={TagCreate} />
       <Resource name="admin" list={AdminList} create={AdminCreate} />
       <Resource name="script" list={ScriptList} />
+      <Resource
+        name="admin"
+        list={AdminList}
+        create={AdminCreate}
+        show={AdminShow}
+      />
+      <Resource
+        name="category"
+        list={CategoryList}
+        create={CategoryCreate}
+        edit={CategoryEdit}
+      />
+      <Resource name="log" list={LogList} />
     </Admin>
   );
 };

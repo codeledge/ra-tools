@@ -1,5 +1,7 @@
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import setObjectProp from "set-value";
+import { isNotField } from "./lib/isNotField";
+import { isObject } from "./lib/isObject";
 
 const logicalOperators = ["gte", "lte", "lt", "gt"];
 
@@ -10,9 +12,9 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
 
   if (filter) {
     Object.entries(filter).forEach(([colName, value]) => {
-      //ignore underscored fields (_count, _sum, _avg, _min, _max and _helpers)
-      if (colName.startsWith("_")) return;
+      if (isNotField(colName)) return;
 
+      //TODO: *consider* to move into `isNotField` (but maybe to reset dates is the only way to do it)
       if (value === "")
         //react-admin does send empty strings in empty filters :(
         return;
@@ -40,10 +42,35 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
       } else if (Array.isArray(value)) {
         setObjectProp(where, colName, { in: value });
       } else if (typeof value === "string") {
-        setObjectProp(where, colName, { contains: value });
+        setObjectProp(where, colName, { contains: value, mode: "insensitive" });
+      } else if (isObject(value)) {
+        // if object then it's a Json field, this is EXPERIMENTAL and works only for Postgres
+        // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filter-on-object-property
+        const { path, equals } = getPostgresJsonFilter(value);
+        if (path.length && equals) {
+          setObjectProp(where, colName, { path, equals });
+        }
+      } else {
+        console.info("Filter not handled:", colName, value);
       }
     });
   }
 
   return where;
+};
+
+const getPostgresJsonFilter = (obj: any) => {
+  const path = Object.keys(obj);
+  const val = obj[path[0]];
+  let equals;
+  if (isObject(val)) {
+    const { path: returnedPath, equals: returnedEquals } =
+      getPostgresJsonFilter(val);
+    equals = returnedEquals;
+    path.push(...returnedPath);
+  } else {
+    equals = val;
+  }
+
+  return { path, equals };
 };
