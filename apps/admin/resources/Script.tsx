@@ -14,12 +14,6 @@ export const ScriptList = (props: ListProps) => {
     <List {...props}>
       <Datagrid rowClick={"show"}>
         <TextField source="id" />
-        <WrapperField label="Actions">
-          <FunctionField
-            render={(record: any) => <StartButton record={record} />}
-          />
-          <Button variant="contained" label="Stop" />
-        </WrapperField>
       </Datagrid>
     </List>
   );

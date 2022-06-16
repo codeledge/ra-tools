@@ -14,6 +14,7 @@ import {
   CategoryEdit,
 } from "./resources/Category";
 import { LogList } from "./resources/Log";
+import { ProcessCreate, ProcessList } from "./resources/Process";
 
 const ReactAdmin = () => {
   const { data: session, status } = useSession();
@@ -41,7 +42,6 @@ const ReactAdmin = () => {
       />
       <Resource name="tag" list={TagList} create={TagCreate} />
       <Resource name="admin" list={AdminList} create={AdminCreate} />
-      <Resource name="script" list={ScriptList} />
       <Resource
         name="admin"
         list={AdminList}
@@ -55,6 +55,8 @@ const ReactAdmin = () => {
         edit={CategoryEdit}
       />
       <Resource name="log" list={LogList} />
+      <Resource name="script" list={ScriptList} />
+      <Resource name="process" list={ProcessList} create={ProcessCreate} />
     </Admin>
   );
 };
