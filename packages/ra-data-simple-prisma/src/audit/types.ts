@@ -9,7 +9,7 @@
 // }
 
 export type AuditOptions = {
-  tableName?: string; //defaults to "audit_logs"
+  table?: any;
   tableColumns?: {
     id?: string;
     date?: string;
@@ -24,6 +24,22 @@ export type AuditOptions = {
     delete?: boolean;
   };
   enabledResources?: string[];
+};
+
+export const defaultAuditOptions: AuditOptions = {
+  tableColumns: {
+    id: "id",
+    date: "date",
+    resource: "resource",
+    action: "action",
+    payload: "payload",
+    author: "author",
+  },
+  enabledFor: {
+    create: true,
+    update: true,
+    delete: true,
+  },
 };
 
 export type AuditActions = "create" | "update" | "delete";

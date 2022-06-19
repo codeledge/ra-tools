@@ -1,9 +1,15 @@
 import { prisma } from "@prisma/client";
-import { AuditActions, AuditOptions } from "./types";
+import { AuditOptions, defaultAuditOptions } from "./types";
 import { Request } from "../Http";
 
-export const auditHandler = async (options: AuditOptions, request: Request) => {
+export const auditHandler = async (
+  options: AuditOptions,
+  request: Request,
+  created?: any
+) => {
   const action = request.body.method.split(/(?=[A-Z])/)[0];
+  options = { ...options, ...defaultAuditOptions };
+
   if (action === "get") {
     return;
   }
@@ -12,27 +18,35 @@ export const auditHandler = async (options: AuditOptions, request: Request) => {
     request.body.method === "deleteMany"
   ) {
     for (const id of request.body.params.ids) {
-      //todo
+      await createAuditEntry(options, request, id);
     }
-  } else {
-    createAuditEntry(options, request);
+  } else if ("id" in request.body.params) {
+    await createAuditEntry(options, request, request.body.params.id);
+  } else if (created) {
+    await createAuditEntry(options, request, created.id);
   }
 
   return true;
 };
 
-const createAuditEntry = async (options: AuditOptions, request: Request) => {
-  const table = prisma[options.tableName];
+const createAuditEntry = async (
+  options: AuditOptions,
+  request: Request,
+  id: any
+) => {
   let data = {
     [options.tableColumns.action]: request.body.method.split(/(?=[A-Z])/)[0], //createMany => create
     [options.tableColumns.resource]: request.body.resource,
+    [options.tableColumns.payload]: JSON.stringify({
+      id: id.toString(),
+    }),
     // [options.tableColumns.date]: new Date(),
-    // [options.tableColumns.user]: options.user,
+    // [options.tableColumns.author]: {
+    //   connect: { id: request.body. },
+    // },
   };
-  if ("id" in request.body.params) {
-    data[options.tableColumns.id] = request.body.params.id.toString();
-  }
-  const created = await table.create({
+
+  const created = await options.table.create({
     data,
   });
   return created;

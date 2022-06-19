@@ -28,6 +28,8 @@ export const LogList = (props: ListProps) => (
       <TextField source="id" />
       <ExtendedJsonField source="payload" />
       <DateField source="createdAt" />
+      <TextField source="action" />
+      <TextField source="resource" />
     </Datagrid>
   </List>
 );

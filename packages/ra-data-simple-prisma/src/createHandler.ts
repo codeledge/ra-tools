@@ -1,3 +1,5 @@
+import { auditHandler } from "./audit/auditHandler";
+import { AuditOptions } from "./audit/types";
 import { CreateRequest, Response } from "./Http";
 
 export const createHandler = async <T extends { create: Function }>(
@@ -8,7 +10,8 @@ export const createHandler = async <T extends { create: Function }>(
     connect?: {
       [key: string]: string;
     };
-  }
+  },
+  audit?: AuditOptions
 ) => {
   const { data } = req.body.params;
 
@@ -41,6 +44,11 @@ export const createHandler = async <T extends { create: Function }>(
   const created = await table.create({
     data,
   });
+
+  if (audit) {
+    console.log("yes is audot");
+    await auditHandler(audit, req, created);
+  }
 
   return res.json({ data: created });
 };

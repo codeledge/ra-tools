@@ -64,14 +64,21 @@ export const defaultHandler = async (
       );
     }
     case "create": {
-      return await createHandler(req as CreateRequest, res, prismaDelegate);
+      return await createHandler(
+        req as CreateRequest,
+        res,
+        prismaDelegate,
+        null,
+        options?.auditLog
+      );
     }
     case "update": {
       return await updateHandler(
         req as UpdateRequest,
         res,
         prismaDelegate,
-        options?.update
+        options?.update,
+        options?.auditLog
       );
     }
     case "delete": {
@@ -88,7 +95,8 @@ export const defaultHandler = async (
         req as DeleteManyRequest,
         res,
         prismaDelegate,
-        options?.delete
+        options?.delete,
+        options?.auditLog
       );
     }
     default:

@@ -1,3 +1,5 @@
+import { auditHandler } from "./audit/auditHandler";
+import { AuditOptions } from "./audit/types";
 import { Response, UpdateRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
 import { isObject } from "./lib/isObject";
@@ -14,7 +16,8 @@ export const updateHandler = async <T extends { update: Function }>(
   req: UpdateRequest,
   res: Response,
   table: T,
-  options?: UpdateOptions
+  options?: UpdateOptions,
+  audit?: AuditOptions
 ) => {
   const { id } = req.body.params;
 
@@ -56,6 +59,10 @@ export const updateHandler = async <T extends { update: Function }>(
     where: { id },
     data,
   });
+
+  if (audit) {
+    await auditHandler(audit, req);
+  }
 
   return res.json({ data: updated });
 };
