@@ -19,6 +19,7 @@ import { deleteHandler, DeleteOptions } from "./deleteHandler";
 import { createHandler } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
 import { getManyReferenceHandler } from "./getManyReferenceHandler";
+import { AuditOptions } from "./audit/types";
 
 export const defaultHandler = async (
   req: Request,
@@ -28,6 +29,7 @@ export const defaultHandler = async (
     delete?: DeleteOptions;
     update?: UpdateOptions;
     getList?: GetListOptions;
+    auditLog?: AuditOptions;
   }
 ) => {
   const tableName = req.body.model || req.body.resource;
@@ -77,7 +79,8 @@ export const defaultHandler = async (
         req as DeleteRequest,
         res,
         prismaDelegate,
-        options?.delete
+        options?.delete,
+        options?.auditLog
       );
     }
     case "deleteMany": {
