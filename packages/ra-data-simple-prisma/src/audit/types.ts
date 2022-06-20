@@ -9,7 +9,7 @@
 // }
 
 export type AuditOptions = {
-  table?: any;
+  table?: { create: Function }
   tableColumns?: {
     id?: string;
     date?: string;
