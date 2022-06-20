@@ -26,5 +26,5 @@ export const deleteHandler = async <
         where: { id },
       });
 
-  return res.json({ data: deleted });
+  res.json({ data: deleted });
 };

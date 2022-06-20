@@ -27,5 +27,5 @@ export const deleteManyHandler = async <
 
   // react-admin expects the ids of the deleted rows
   // but only the count is returned from prisma deleteMany method, so...
-  return res.json({ data: ids });
+  res.json({ data: ids });
 };

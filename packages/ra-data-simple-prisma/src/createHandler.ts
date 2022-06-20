@@ -42,5 +42,5 @@ export const createHandler = async <T extends { create: Function }>(
     data,
   });
 
-  return res.json({ data: created });
+  res.json({ data: created });
 };

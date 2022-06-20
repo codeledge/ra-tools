@@ -6,11 +6,12 @@
   "module": "./dist/prismaClient.mjs",
   "types": "./dist/prismaClient.d.ts",
   "scripts": {
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "dev": "tsup prisma/prismaClient.ts --format esm,cjs --watch --dts",
     "lint": "TIMING=1 eslint src --fix",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "test": "jest",
-    "postinstall": "prisma generate"
+    "migrate:dev": "prisma migrate dev",
+    "postinstall": "prisma generate",
+    "test": "jest"
   },
   "dependencies": {
     "@prisma/client": "^3.15.1"

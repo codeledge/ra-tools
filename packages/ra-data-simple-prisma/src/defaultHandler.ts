@@ -30,61 +30,48 @@ export const defaultHandler = async (
     getList?: GetListOptions;
   }
 ) => {
-  const tableName = req.body.model || req.body.resource;
-  if (!tableName) throw new Error(`table name is empty`);
+  const modelName = req.body.model || req.body.resource;
+  if (!modelName) throw new Error(`model name is empty`);
 
-  const prismaDelegate = prisma[tableName];
-  if (!prismaDelegate)
-    throw new Error(
-      `No model found for "${req.body.model || req.body.resource}"`
-    );
+  const model = prisma[modelName];
+  if (!model) throw new Error(`No model found for "${modelName}"`);
 
   switch (req.body.method) {
     case "getList": {
-      return await getListHandler(
+      return getListHandler(
         req as GetListRequest,
         res,
-        prismaDelegate,
+        model,
         options?.getList
       );
     }
     case "getOne": {
-      return await getOneHandler(req as GetOneRequest, res, prismaDelegate);
+      return getOneHandler(req as GetOneRequest, res, model);
     }
     case "getMany": {
-      return await getManyHandler(req as GetManyRequest, res, prismaDelegate);
+      return getManyHandler(req as GetManyRequest, res, model);
     }
     case "getManyReference": {
-      throw await getManyReferenceHandler(
+      return getManyReferenceHandler(
         req as GetManyReferenceRequest,
         res,
-        prismaDelegate
+        model
       );
     }
     case "create": {
-      return await createHandler(req as CreateRequest, res, prismaDelegate);
+      return createHandler(req as CreateRequest, res, model);
     }
     case "update": {
-      return await updateHandler(
-        req as UpdateRequest,
-        res,
-        prismaDelegate,
-        options?.update
-      );
+      return updateHandler(req as UpdateRequest, res, model, options?.update);
     }
     case "delete": {
-      return await deleteHandler(
-        req as DeleteRequest,
-        res,
-        prismaDelegate,
-        options?.delete
-      );
+      return deleteHandler(req as DeleteRequest, res, model, options?.delete);
     }
     case "deleteMany": {
-      return await deleteManyHandler(
+      return deleteManyHandler(
         req as DeleteManyRequest,
         res,
-        prismaDelegate,
+        model,
         options?.delete
       );
     }
