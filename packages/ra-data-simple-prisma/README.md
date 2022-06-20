@@ -123,8 +123,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         res,
         prismaClient.post,
         {
-          skipFields: ...
-          allowFields: ...
+          skipFields: {
+            computedField: true
+          },
           set: {
             tags: "id",
           },
