@@ -1,6 +1,6 @@
-import { auditHandler } from "./audit/auditHandler";
 import { AuditOptions } from "./audit/types";
 import { CreateRequest, Response } from "./Http";
+import { auditHandler } from "./audit/auditHandler";
 
 export const createHandler = async <T extends { create: Function }>(
   req: CreateRequest,
@@ -46,7 +46,6 @@ export const createHandler = async <T extends { create: Function }>(
   });
 
   if (audit) {
-    console.log("yes is audot");
     await auditHandler(audit, req, created);
   }
 

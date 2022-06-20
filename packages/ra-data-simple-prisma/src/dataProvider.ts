@@ -1,12 +1,12 @@
 import { DataProvider } from "react-admin";
+import { isNumericId } from "./lib/isNumericId";
 import axios from "axios";
 import type {
   AxiosError,
   AxiosInterceptorOptions,
-  AxiosResponse,
   AxiosRequestConfig,
+  AxiosResponse,
 } from "axios";
-import { isNumericId } from "./lib/isNumericId";
 
 export const dataProvider = (
   endpoint: string,
@@ -34,7 +34,7 @@ export const dataProvider = (
 
   apiService.interceptors.response.use((res) => res.data);
 
-  if (options && options.axiosInterceptors) {
+  if (options?.axiosInterceptors) {
     if (options.axiosInterceptors.request)
       options.axiosInterceptors.request.forEach((value) =>
         apiService.interceptors.request.use(
@@ -156,12 +156,12 @@ export const dataProvider = (
 
 // https://github.com/marmelab/react-admin/issues/7728#issuecomment-1133959466
 // getOne will get the id from url so if the id is number it will be sent as string
-const castIdToOriginalType = (params) => {
+const castIdToOriginalType = (params: any) => {
   if (isNumericId(params.id)) params.id = +params.id;
 };
 
 // react-admin expects the error to be thrown
 // https://marmelab.com/admin-on-rest/RestClients.html#writing-your-own-rest-client
 const reactAdminAxiosErrorHandler = (error: AxiosError) => {
-  throw error.response.data;
+  throw error?.response?.data;
 };

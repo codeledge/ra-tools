@@ -1,6 +1,6 @@
-import { extractSkipTake } from "./extractSkipTake";
+import { GetManyReferenceRequest, Response } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
-import { GetManyReferenceRequest, GetManyRequest, Response } from "./Http";
+import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere } from "./extractWhere";
 
 export const getManyReferenceHandler = async (

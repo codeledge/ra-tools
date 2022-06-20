@@ -1,4 +1,4 @@
-import { AuditOptions, defaultAuditOptions } from "./types";
+import { AuditOptions, AuditOptionsFixed, defaultAuditOptions } from "./types";
 import { Request } from "../Http";
 
 export const auditHandler = async (
@@ -7,7 +7,10 @@ export const auditHandler = async (
   created?: any
 ) => {
   const action = request.body.method.split(/(?=[A-Z])/)[0];
-  options = { ...defaultAuditOptions, ...options };
+  const mergedOptions = {
+    ...defaultAuditOptions,
+    ...options,
+  } as AuditOptionsFixed;
 
   if (action === "get") {
     return;
@@ -18,32 +21,42 @@ export const auditHandler = async (
     request.body.method === "deleteMany"
   ) {
     for (const id of request.body.params.ids) {
-      await createAuditEntry(options, request, id);
+      await createAuditEntry(mergedOptions, request, id);
     }
   } else if ("id" in request.body.params) {
-    await createAuditEntry(options, request, request.body.params.id);
+    await createAuditEntry(mergedOptions, request, request.body.params.id);
   } else if (created) {
-    await createAuditEntry(options, request, created.id);
+    await createAuditEntry(mergedOptions, request, created.id);
   }
 
   return true;
 };
 
 const createAuditEntry = async (
-  options: AuditOptions,
+  options: AuditOptionsFixed,
   request: Request,
   id: any
 ) => {
+  let payload: {
+    id: string;
+    data?: object;
+    previousData?: object;
+  } = {
+    id: id.toString(),
+  };
+
+  // if (isSqlite) {
+  //   payload = JSON.stringify(payload);
+  // }
+
+  const user = await options.authProvider.getIdentity();
   let data = {
     [options.columns.action]: request.body.method.split(/(?=[A-Z])/)[0], //createMany => create
     [options.columns.resource]: request.body.resource,
-    [options.columns.payload]: JSON.stringify({
-      id: id.toString(),
-    }),
-    // [options.columns.date]: new Date(),
-    // [options.columns.author]: {
-    //   connect: { id: request.body. },
-    // },
+    [options.columns.payload]: payload,
+    [options.columns.author]: {
+      connect: { id: user.id },
+    },
   };
 
   const created = await options.model.create({

@@ -1,6 +1,6 @@
-import { auditHandler } from "./audit/auditHandler";
 import { AuditOptions } from "./audit/types";
 import { DeleteRequest, Response } from "./Http";
+import { auditHandler } from "./audit/auditHandler";
 
 export type DeleteOptions = {
   softDeleteField?: string;

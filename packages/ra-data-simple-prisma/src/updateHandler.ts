@@ -1,6 +1,6 @@
-import { auditHandler } from "./audit/auditHandler";
 import { AuditOptions } from "./audit/types";
 import { Response, UpdateRequest } from "./Http";
+import { auditHandler } from "./audit/auditHandler";
 import { isNotField } from "./lib/isNotField";
 import { isObject } from "./lib/isObject";
 

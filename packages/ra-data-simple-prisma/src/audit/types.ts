@@ -1,3 +1,4 @@
+import { UserIdentity } from "react-admin";
 // model Log {
 //   id       String    @id @default(cuid())
 //   date     DateTime  @default(now())
@@ -10,7 +11,7 @@
 
 export type AuditOptions = {
   model?: { create: Function };
-  authProvider: any;
+  authProvider?: any;
   columns?: {
     id?: string;
     date?: string;
@@ -27,8 +28,26 @@ export type AuditOptions = {
   enabledResources?: string[];
 };
 
+export type AuditOptionsFixed = {
+  model: { create: Function };
+  authProvider: any; //{ getIdentity: Promise<UserIdentity> };
+  columns: {
+    id: string;
+    date: string;
+    resource: string;
+    action: string;
+    payload: string;
+    author: string;
+  };
+  enabledFor: {
+    create: boolean;
+    update: boolean;
+    delete: boolean;
+  };
+  enabledResources?: string[];
+};
+
 export const defaultAuditOptions: AuditOptions = {
-  authProvider: null,
   columns: {
     id: "id",
     date: "date",

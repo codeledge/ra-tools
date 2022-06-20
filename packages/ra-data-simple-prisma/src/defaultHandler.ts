@@ -1,3 +1,4 @@
+import { AuditOptions } from "./audit/types";
 import {
   CreateRequest,
   DeleteManyRequest,
@@ -10,16 +11,15 @@ import {
   Response,
   UpdateRequest,
 } from "./Http";
+import { DeleteOptions, deleteHandler } from "./deleteHandler";
+import { GetListOptions, getListHandler } from "./getListHandler";
 import { PrismaClient } from "@prisma/client";
-import { getListHandler, GetListOptions } from "./getListHandler";
-import { getManyHandler } from "./getManyHandler";
-import { getOneHandler } from "./getOneHandler";
-import { updateHandler, UpdateOptions } from "./updateHandler";
-import { deleteHandler, DeleteOptions } from "./deleteHandler";
+import { UpdateOptions, updateHandler } from "./updateHandler";
 import { createHandler } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
+import { getManyHandler } from "./getManyHandler";
 import { getManyReferenceHandler } from "./getManyReferenceHandler";
-import { AuditOptions } from "./audit/types";
+import { getOneHandler } from "./getOneHandler";
 
 export const defaultHandler = async (
   req: Request,
@@ -35,7 +35,7 @@ export const defaultHandler = async (
   const tableName = req.body.model || req.body.resource;
   if (!tableName) throw new Error(`table name is empty`);
 
-  const prismaDelegate = prisma[tableName];
+  const prismaDelegate = (prisma as any)[tableName];
   if (!prismaDelegate)
     throw new Error(
       `No model found for "${req.body.model || req.body.resource}"`
@@ -68,7 +68,7 @@ export const defaultHandler = async (
         req as CreateRequest,
         res,
         prismaDelegate,
-        null,
+        undefined,
         options?.auditLog
       );
     }
