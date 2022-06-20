@@ -8,7 +8,7 @@ export const auditHandler = async (
   created?: any
 ) => {
   const action = request.body.method.split(/(?=[A-Z])/)[0];
-  options = { ...options, ...defaultAuditOptions };
+  options = { ...defaultAuditOptions, ...options, };
 
   if (action === "get") {
     return;
