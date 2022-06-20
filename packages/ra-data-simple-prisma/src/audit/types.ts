@@ -9,8 +9,9 @@
 // }
 
 export type AuditOptions = {
-  table?: { create: Function }
-  tableColumns?: {
+  model?: { create: Function };
+  authProvider: any;
+  columns?: {
     id?: string;
     date?: string;
     resource?: string;
@@ -27,7 +28,8 @@ export type AuditOptions = {
 };
 
 export const defaultAuditOptions: AuditOptions = {
-  tableColumns: {
+  authProvider: null,
+  columns: {
     id: "id",
     date: "date",
     resource: "resource",
