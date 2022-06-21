@@ -24,7 +24,7 @@ export const updateHandler = async (
   req: UpdateRequest,
   res: Response,
   model: { update: Function },
-  options?: UpdateOptions
+  options?: UpdateOptions,
   audit?: AuditOptions
 ) => {
   const { id } = req.body.params;
@@ -88,6 +88,6 @@ export const updateHandler = async (
   if (audit) {
     await auditHandler(audit, req);
   }
-  
+
   res.json({ data: updated });
 };

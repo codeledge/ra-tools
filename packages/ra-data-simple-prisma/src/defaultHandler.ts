@@ -64,7 +64,7 @@ export const defaultHandler = async (
       return await createHandler(
         req as CreateRequest,
         res,
-        prismaDelegate,
+        model,
         undefined,
         options?.auditLog
       );
@@ -73,7 +73,7 @@ export const defaultHandler = async (
       return await updateHandler(
         req as UpdateRequest,
         res,
-        prismaDelegate,
+        model,
         options?.update,
         options?.auditLog
       );
@@ -82,7 +82,7 @@ export const defaultHandler = async (
       return await deleteHandler(
         req as DeleteRequest,
         res,
-        prismaDelegate,
+        model,
         options?.delete,
         options?.auditLog
       );
@@ -91,10 +91,10 @@ export const defaultHandler = async (
       return deleteManyHandler(
         req as DeleteManyRequest,
         res,
-        prismaDelegate,
+        model,
         options?.delete,
         options?.auditLog
-);
+      );
     }
     default:
       throw new Error("Invalid method");
