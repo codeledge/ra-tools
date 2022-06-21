@@ -2,8 +2,8 @@ import { AuditOptions, AuditOptionsFixed, defaultAuditOptions } from "./types";
 import { Request } from "../Http";
 
 export const auditHandler = async (
-  options: AuditOptions,
   request: Request,
+  options: AuditOptions,
   created?: any
 ) => {
   const action = request.body.method.split(/(?=[A-Z])/)[0];

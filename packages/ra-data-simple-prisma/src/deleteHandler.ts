@@ -30,7 +30,7 @@ export const deleteHandler = async <
       });
 
   if (audit) {
-    await auditHandler(audit, req);
+    await auditHandler(req, audit);
   }
 
   res.json({ data: deleted });

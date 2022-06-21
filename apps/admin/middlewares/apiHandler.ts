@@ -13,6 +13,6 @@ export const apiHandler =
     } catch (error: any) {
       console.error(error);
       // do this or nextjs will show an entire html error response
-      return res.status(error.status || 500).json({ message: error.message });
+      return res.status(error?.status || 500).json({ message: error?.message });
     }
   };

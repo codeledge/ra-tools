@@ -29,7 +29,7 @@ export const defaultHandler = async (
     delete?: DeleteOptions;
     update?: UpdateOptions;
     getList?: GetListOptions;
-    auditLog?: AuditOptions;
+    audit?: AuditOptions;
   }
 ) => {
   const modelName = req.body.model || req.body.resource;
@@ -66,7 +66,7 @@ export const defaultHandler = async (
         res,
         model,
         undefined,
-        options?.auditLog
+        options?.audit
       );
     }
     case "update": {
@@ -75,7 +75,7 @@ export const defaultHandler = async (
         res,
         model,
         options?.update,
-        options?.auditLog
+        options?.audit
       );
     }
     case "delete": {
@@ -84,7 +84,7 @@ export const defaultHandler = async (
         res,
         model,
         options?.delete,
-        options?.auditLog
+        options?.audit
       );
     }
     case "deleteMany": {
@@ -93,7 +93,7 @@ export const defaultHandler = async (
         res,
         model,
         options?.delete,
-        options?.auditLog
+        options?.audit
       );
     }
     default:

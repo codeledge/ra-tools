@@ -20,7 +20,7 @@ export type AuditOptions = {
     payload?: string;
     author?: string;
   };
-  enabledFor?: {
+  enabledForAction?: {
     create?: boolean;
     update?: boolean;
     delete?: boolean;
@@ -39,7 +39,7 @@ export type AuditOptionsFixed = {
     payload: string;
     author: string;
   };
-  enabledFor: {
+  enabledForAction: {
     create: boolean;
     update: boolean;
     delete: boolean;
@@ -56,7 +56,7 @@ export const defaultAuditOptions: AuditOptions = {
     payload: "payload",
     author: "author",
   },
-  enabledFor: {
+  enabledForAction: {
     create: true,
     update: true,
     delete: true,

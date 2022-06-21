@@ -86,7 +86,7 @@ export const updateHandler = async (
   });
 
   if (audit) {
-    await auditHandler(audit, req);
+    await auditHandler(req, audit);
   }
 
   res.json({ data: updated });

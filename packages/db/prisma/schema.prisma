@@ -1,8 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./admin.local.db"
 }
 
 generator client {
@@ -131,10 +131,10 @@ model AdminUser {
   email         String?        @unique
   emailVerified DateTime?
   image         String?
-  role          Role?
+  role          Int?
   accounts      AdminAccount[]
   sessions      AdminSession[]
-  Log           Log[]
+  audit         Audit[]
 }
 
 model AdminVerificationToken {
@@ -145,18 +145,18 @@ model AdminVerificationToken {
   @@unique([identifier, token])
 }
 
-model Log {
-  id       String    @id @default(cuid())
-  date     DateTime  @default(now())
+model Audit {
+  id       String     @id @default(cuid())
+  date     DateTime   @default(now())
   resource String
   action   String
-  payload  Json?
-  authorId String
-  author   AdminUser @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  payload  String?
+  authorId String?
+  author   AdminUser? @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
-enum Role {
-  COLLABORATOR
-  OWNER
-  READER
-}
+// enum Role {
+//   COLLABORATOR
+//   OWNER
+//   READER
+// }

@@ -29,7 +29,7 @@ export const deleteManyHandler = async <
       });
 
   if (audit) {
-    await auditHandler(audit, req);
+    await auditHandler(req, audit);
   }
 
   // react-admin expects the ids of the deleted rows
