@@ -33,5 +33,5 @@ export const deleteHandler = async <
     await auditHandler(audit, req);
   }
 
-  return res.json({ data: deleted });
+  res.json({ data: deleted });
 };

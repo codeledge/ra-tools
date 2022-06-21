@@ -51,6 +51,7 @@ export const UserEdit = (props: EditProps) => (
   <Edit {...props}>
     <SimpleForm>
       <TextInput source="name" />
+      <TextInput source="settings.language" />
     </SimpleForm>
   </Edit>
 );
@@ -60,6 +61,7 @@ export const UserShow = () => (
     <SimpleShowLayout>
       <TextField source="id" />
       <TextField source="name" />
+      <TextField source="settings.language" />
       <DateField source="createdAt" />
       <DateField source="updatedAt" />
     </SimpleShowLayout>

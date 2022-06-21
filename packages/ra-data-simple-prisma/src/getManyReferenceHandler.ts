@@ -23,5 +23,5 @@ export const getManyReferenceHandler = async (
     take,
   });
 
-  return res.json({ data: list, total: list.length });
+  res.json({ data: list, total: list.length });
 };

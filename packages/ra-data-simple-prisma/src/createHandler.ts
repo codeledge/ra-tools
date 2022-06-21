@@ -49,5 +49,5 @@ export const createHandler = async <T extends { create: Function }>(
     await auditHandler(audit, req, created);
   }
 
-  return res.json({ data: created });
+  res.json({ data: created });
 };
