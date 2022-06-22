@@ -1,5 +1,5 @@
 import { AuditOptions, AuditOptionsFixed, defaultAuditOptions } from "./types";
-import { Request } from "../Http";
+import { Request, UpdateRequest } from "../Http";
 
 export const auditHandler = async (
   request: Request,
@@ -41,9 +41,22 @@ const createAuditEntry = async (
     id: string;
     data?: object;
     previousData?: object;
+    diff?: object;
   } = {
     id: id.toString(),
   };
+
+  if ("previousData" in request.body.params) {
+    payload.previousData = request.body.params.previousData;
+  }
+
+  if ("data" in request.body.params) {
+    payload.data = request.body.params.data;
+  }
+
+  if (payload.data && payload.previousData) {
+    payload.diff = objectDiff(payload.data, payload.previousData);
+  }
 
   // if (isSqlite) {
   //   payload = JSON.stringify(payload);
@@ -63,4 +76,14 @@ const createAuditEntry = async (
     data,
   });
   return created;
+};
+
+const objectDiff = (obj1, obj2) => {
+  var ret = {};
+  for (var i in obj2) {
+    if (!obj1.hasOwnProperty(i) || obj2[i] !== obj1[i]) {
+      ret[i] = obj2[i];
+    }
+  }
+  return ret;
 };

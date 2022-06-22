@@ -7,7 +7,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 export default async function auth(req: any, res: any) {
   return await NextAuth(req, res, {
     //debug: true,
-    secret: "LlKq6ZtYbr+hTC073mAmAh9/h2HwMfsFo4hrfCx5mLg=",
+    secret: process.env.NEXTAUTH_SECRET,
     adapter: PrismaAdapter(prismaClient, {
       userModel: "adminUser",
       accountModel: "adminAccount",
@@ -68,14 +68,14 @@ export default async function auth(req: any, res: any) {
         //always add this, very handy
         session.userId = user.id;
 
-        // const admin = await prismaClient.adminUser.findUnique({
-        //   select: {
-        //     role: true,
-        //   },
-        //   where: { id: user.id },
-        // });
+        const admin = await prismaClient.adminUser.findUnique({
+          select: {
+            role: true,
+          },
+          where: { id: user.id },
+        });
 
-        // session.role = admin?.role;
+        session.role = admin?.role;
 
         return Promise.resolve(session);
       },

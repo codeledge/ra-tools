@@ -12,7 +12,7 @@ import {
   CategoryCreate,
   CategoryEdit,
 } from "./resources/Category";
-import { LogList } from "./resources/Log";
+import { AuditList } from "./resources/Audit";
 
 const ReactAdmin = () => {
   const { data: session, status } = useSession();
@@ -51,7 +51,7 @@ const ReactAdmin = () => {
         create={CategoryCreate}
         edit={CategoryEdit}
       />
-      <Resource name="log" list={LogList} />
+      <Resource name="audit" list={AuditList} />
     </Admin>
   );
 };

@@ -1,8 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 datasource db {
-  provider = "sqlite"
-  url      = "file:./admin.local.db"
+  provider = "postgres"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -131,7 +131,7 @@ model AdminUser {
   email         String?        @unique
   emailVerified DateTime?
   image         String?
-  role          Int?
+  role          Role?
   accounts      AdminAccount[]
   sessions      AdminSession[]
   audit         Audit[]
@@ -150,13 +150,13 @@ model Audit {
   date     DateTime   @default(now())
   resource String
   action   String
-  payload  String?
+  payload  Json?
   authorId String?
   author   AdminUser? @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
-// enum Role {
-//   COLLABORATOR
-//   OWNER
-//   READER
-// }
+enum Role {
+  COLLABORATOR
+  OWNER
+  READER
+}
