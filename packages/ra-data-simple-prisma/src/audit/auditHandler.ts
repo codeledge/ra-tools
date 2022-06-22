@@ -55,7 +55,7 @@ const createAuditEntry = async (
   }
 
   if (payload.data && payload.previousData) {
-    payload.diff = objectDiff(payload.data, payload.previousData);
+    payload.diff = objectDiff(payload.previousData, payload.data);
   }
 
   // if (isSqlite) {
