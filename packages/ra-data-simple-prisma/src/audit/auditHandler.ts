@@ -12,7 +12,8 @@ export const auditHandler = async (
     ...options,
   } as AuditOptionsFixed;
 
-  if (action === "get") {
+  //skip get and disabled actions
+  if (action === "get" || options.enabledForAction[action] === false) {
     return;
   }
 
@@ -28,8 +29,6 @@ export const auditHandler = async (
   } else if (created) {
     await createAuditEntry(mergedOptions, request, created.id);
   }
-
-  return true;
 };
 
 const createAuditEntry = async (

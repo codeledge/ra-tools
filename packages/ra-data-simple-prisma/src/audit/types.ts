@@ -1,13 +1,4 @@
-import { UserIdentity } from "react-admin";
-// model Log {
-//   id       String    @id @default(cuid())
-//   date     DateTime  @default(now())
-//   resource String
-//   action   String
-//   payload  Json?
-//   authorId String
-//   author   AdminUser @relation(fields: [authorId], references: [id], onDelete: Cascade)
-// }
+// import { UserIdentity } from "react-admin";
 
 export type AuditOptions = {
   model?: { create: Function };
