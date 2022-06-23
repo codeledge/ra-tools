@@ -134,6 +134,7 @@ model AdminUser {
   role          Role?
   accounts      AdminAccount[]
   sessions      AdminSession[]
+  audit         Audit[]
 }
 
 model AdminVerificationToken {
@@ -144,10 +145,14 @@ model AdminVerificationToken {
   @@unique([identifier, token])
 }
 
-model Log {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  payload   Json
+model Audit {
+  id       String     @id @default(cuid())
+  date     DateTime   @default(now())
+  resource String
+  action   String
+  payload  Json?
+  authorId String?
+  author   AdminUser? @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 enum Role {

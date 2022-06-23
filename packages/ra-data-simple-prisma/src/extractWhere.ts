@@ -1,7 +1,7 @@
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
-import setObjectProp from "set-value";
 import { isNotField } from "./lib/isNotField";
 import { isObject } from "./lib/isObject";
+import setObjectProp from "set-value";
 
 const logicalOperators = ["gte", "lte", "lt", "gt"];
 
@@ -64,8 +64,7 @@ const getPostgresJsonFilter = (obj: any) => {
   const val = obj[path[0]];
   let equals;
   if (isObject(val)) {
-    const { path: returnedPath, equals: returnedEquals } =
-      getPostgresJsonFilter(val);
+    const { path: returnedPath, equals: returnedEquals } = getPostgresJsonFilter(val);
     equals = returnedEquals;
     path.push(...returnedPath);
   } else {

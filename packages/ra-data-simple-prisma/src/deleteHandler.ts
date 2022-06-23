@@ -1,4 +1,6 @@
+import { AuditOptions } from "./audit/types";
 import { DeleteRequest, Response } from "./Http";
+import { auditHandler } from "./audit/auditHandler";
 
 export type DeleteOptions = {
   softDeleteField?: string;
@@ -11,7 +13,8 @@ export const deleteHandler = async <
   req: DeleteRequest,
   res: Response,
   table: T,
-  options?: DeleteOptions
+  options?: DeleteOptions,
+  audit?: AuditOptions
 ) => {
   const { id } = req.body.params;
 
@@ -25,6 +28,10 @@ export const deleteHandler = async <
     : await table.delete({
         where: { id },
       });
+
+  if (audit) {
+    await auditHandler(req, audit);
+  }
 
   res.json({ data: deleted });
 };

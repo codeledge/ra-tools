@@ -1,3 +1,4 @@
+import { AuditOptions } from "./audit/types";
 import {
   CreateRequest,
   DeleteManyRequest,
@@ -10,15 +11,15 @@ import {
   Response,
   UpdateRequest,
 } from "./Http";
+import { DeleteOptions, deleteHandler } from "./deleteHandler";
+import { GetListOptions, getListHandler } from "./getListHandler";
 import { PrismaClient } from "@prisma/client";
-import { getListHandler, GetListOptions } from "./getListHandler";
-import { getManyHandler } from "./getManyHandler";
-import { getOneHandler } from "./getOneHandler";
-import { updateHandler, UpdateOptions } from "./updateHandler";
-import { deleteHandler, DeleteOptions } from "./deleteHandler";
+import { UpdateOptions, updateHandler } from "./updateHandler";
 import { createHandler } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
+import { getManyHandler } from "./getManyHandler";
 import { getManyReferenceHandler } from "./getManyReferenceHandler";
+import { getOneHandler } from "./getOneHandler";
 
 export const defaultHandler = async (
   req: Request,
@@ -28,6 +29,7 @@ export const defaultHandler = async (
     delete?: DeleteOptions;
     update?: UpdateOptions;
     getList?: GetListOptions;
+    audit?: AuditOptions;
   }
 ) => {
   const modelName = req.body.model || req.body.resource;
@@ -59,20 +61,39 @@ export const defaultHandler = async (
       );
     }
     case "create": {
-      return createHandler(req as CreateRequest, res, model);
+      return await createHandler(
+        req as CreateRequest,
+        res,
+        model,
+        undefined,
+        options?.audit
+      );
     }
     case "update": {
-      return updateHandler(req as UpdateRequest, res, model, options?.update);
+      return await updateHandler(
+        req as UpdateRequest,
+        res,
+        model,
+        options?.update,
+        options?.audit
+      );
     }
     case "delete": {
-      return deleteHandler(req as DeleteRequest, res, model, options?.delete);
+      return await deleteHandler(
+        req as DeleteRequest,
+        res,
+        model,
+        options?.delete,
+        options?.audit
+      );
     }
     case "deleteMany": {
       return deleteManyHandler(
         req as DeleteManyRequest,
         res,
         model,
-        options?.delete
+        options?.delete,
+        options?.audit
       );
     }
     default:
