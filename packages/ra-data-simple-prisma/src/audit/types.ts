@@ -1,8 +1,10 @@
 // import { UserIdentity } from "react-admin";
 
+import { AuthProvider } from "react-admin";
+
 export type AuditOptions = {
-  model?: { create: Function };
-  authProvider?: any;
+  model: { create: Function };
+  authProvider: AuthProvider;
   columns?: {
     id?: string;
     date?: string;
@@ -19,26 +21,10 @@ export type AuditOptions = {
   enabledResources?: string[];
 };
 
-export type AuditOptionsFixed = {
-  model: { create: Function };
-  authProvider: any; //{ getIdentity: Promise<UserIdentity> };
-  columns: {
-    id: string;
-    date: string;
-    resource: string;
-    action: string;
-    payload: string;
-    author: string;
-  };
-  enabledForAction: {
-    create: boolean;
-    update: boolean;
-    delete: boolean;
-  };
-  enabledResources?: string[];
-};
-
-export const defaultAuditOptions: AuditOptions = {
+export const defaultAuditOptions: Pick<
+  AuditOptions,
+  "columns" | "enabledForAction"
+> = {
   columns: {
     id: "id",
     date: "date",

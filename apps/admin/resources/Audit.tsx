@@ -13,7 +13,7 @@ export const AuditList = (props: ListProps) => (
     <Datagrid rowClick="show">
       <TextField source="id" />
       <ExtendedJsonField source="payload" />
-      <DateField source="date" />
+      <DateField source="date" showTime />
       <TextField source="action" />
       <TextField source="resource" />
     </Datagrid>

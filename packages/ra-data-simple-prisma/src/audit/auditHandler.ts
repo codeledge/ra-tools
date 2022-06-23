@@ -1,4 +1,4 @@
-import { AuditOptions, AuditOptionsFixed, defaultAuditOptions } from "./types";
+import { AuditOptions, defaultAuditOptions } from "./types";
 import { Request, UpdateRequest } from "../Http";
 
 export const auditHandler = async (
@@ -10,10 +10,10 @@ export const auditHandler = async (
   const mergedOptions = {
     ...defaultAuditOptions,
     ...options,
-  } as AuditOptionsFixed;
+  };
 
   //skip get and disabled actions
-  if (action === "get" || options.enabledForAction[action] === false) {
+  if (action === "get" || mergedOptions.enabledForAction[action] === false) {
     return;
   }
 
@@ -31,8 +31,8 @@ export const auditHandler = async (
   }
 };
 
-const createAuditEntry = async (
-  options: AuditOptionsFixed,
+export const createAuditEntry = async (
+  options: AuditOptions,
   request: Request,
   id: any
 ) => {
@@ -56,10 +56,6 @@ const createAuditEntry = async (
   if (payload.data && payload.previousData) {
     payload.diff = objectDiff(payload.previousData, payload.data);
   }
-
-  // if (isSqlite) {
-  //   payload = JSON.stringify(payload);
-  // }
 
   const user = await options.authProvider.getIdentity();
   let data = {
