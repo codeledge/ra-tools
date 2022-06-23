@@ -18,6 +18,13 @@ export const auditHandler = async (
   }
 
   if (
+    mergedOptions.enabledResources &&
+    !(request.body.model in mergedOptions)
+  ) {
+    return;
+  }
+
+  if (
     request.body.method === "updateMany" ||
     request.body.method === "deleteMany"
   ) {
