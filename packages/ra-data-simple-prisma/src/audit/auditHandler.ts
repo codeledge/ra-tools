@@ -1,5 +1,5 @@
 import { AuditOptions, defaultAuditOptions } from "./types";
-import { Request, UpdateRequest } from "../Http";
+import { Request } from "../Http";
 
 export const auditHandler = async (
   request: Request,

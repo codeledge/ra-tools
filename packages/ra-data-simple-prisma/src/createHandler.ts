@@ -10,8 +10,8 @@ export const createHandler = async <T extends { create: Function }>(
     connect?: {
       [key: string]: string;
     };
-  },
-  audit?: AuditOptions
+    audit?: AuditOptions;
+  }
 ) => {
   const { data } = req.body.params;
 
@@ -45,8 +45,8 @@ export const createHandler = async <T extends { create: Function }>(
     data,
   });
 
-  if (audit) {
-    await auditHandler(req, audit, created);
+  if (options?.audit) {
+    await auditHandler(req, options?.audit);
   }
 
   res.json({ data: created });

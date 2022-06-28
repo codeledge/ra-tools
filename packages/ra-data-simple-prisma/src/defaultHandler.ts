@@ -61,40 +61,27 @@ export const defaultHandler = async (
       );
     }
     case "create": {
-      return await createHandler(
-        req as CreateRequest,
-        res,
-        model,
-        undefined,
-        options?.audit
-      );
+      return await createHandler(req as CreateRequest, res, model, {
+        audit: options?.audit,
+      });
     }
     case "update": {
-      return await updateHandler(
-        req as UpdateRequest,
-        res,
-        model,
-        options?.update,
-        options?.audit
-      );
+      return await updateHandler(req as UpdateRequest, res, model, {
+        ...options?.update,
+        ...options?.audit,
+      });
     }
     case "delete": {
-      return await deleteHandler(
-        req as DeleteRequest,
-        res,
-        model,
-        options?.delete,
-        options?.audit
-      );
+      return await deleteHandler(req as DeleteRequest, res, model, {
+        ...options?.delete,
+        ...options?.audit,
+      });
     }
     case "deleteMany": {
-      return deleteManyHandler(
-        req as DeleteManyRequest,
-        res,
-        model,
-        options?.delete,
-        options?.audit
-      );
+      return deleteManyHandler(req as DeleteManyRequest, res, model, {
+        ...options?.delete,
+        ...options?.audit,
+      });
     }
     default:
       throw new Error("Invalid method");
