@@ -68,19 +68,19 @@ export const defaultHandler = async (
     case "update": {
       return await updateHandler(req as UpdateRequest, res, model, {
         ...options?.update,
-        ...options?.audit,
+        audit: options?.audit,
       });
     }
     case "delete": {
       return await deleteHandler(req as DeleteRequest, res, model, {
         ...options?.delete,
-        ...options?.audit,
+        audit: options?.audit,
       });
     }
     case "deleteMany": {
       return deleteManyHandler(req as DeleteManyRequest, res, model, {
         ...options?.delete,
-        ...options?.audit,
+        audit: options?.audit,
       });
     }
     default:
