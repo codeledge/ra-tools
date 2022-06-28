@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The best package to connect react-admin with prisma, and now supporting an audit log.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
