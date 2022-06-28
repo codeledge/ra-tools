@@ -8,7 +8,7 @@ export const getOneHandler = async <
 >(
   req: GetOneRequest,
   res: Response,
-  table: { findUnique: Function },
+  model: { findUnique: Function },
   options?: {
     select?: W["select"];
     include?: W["include"];
@@ -18,13 +18,17 @@ export const getOneHandler = async <
 ) => {
   const { id } = req.body.params;
 
-  const row = await table.findUnique({
+  const row = await model.findUnique({
     where: { id },
     select: options?.select ?? undefined,
     include: options?.include ?? undefined,
   });
 
+  if (options?.debug) console.log("getOneHandler:beforeTransform", row);
+
   await options?.transform?.(row);
 
-  return res.json({ data: row });
+  if (options?.debug) console.log("getOneHandler:afterTransform", row);
+
+  res.json({ data: row });
 };

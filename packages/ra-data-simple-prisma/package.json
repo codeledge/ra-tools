@@ -1,7 +1,7 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "0.3.4",
-  "description": "Create a fullstack react-admin app adding just one file",
+  "version": "1.0.2",
+  "description": "The best package to connect react-admin with prisma, and now supporting an audit log.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -21,7 +21,9 @@
     "rest",
     "marmelab",
     "react-admin",
-    "dataprovider"
+    "dataprovider",
+    "audit-log",
+    "audit"
   ],
   "repository": {
     "type": "git",

@@ -1,3 +1,4 @@
+import { AuditOptions } from "./audit/types";
 import {
   CreateRequest,
   DeleteManyRequest,
@@ -10,15 +11,15 @@ import {
   Response,
   UpdateRequest,
 } from "./Http";
+import { DeleteOptions, deleteHandler } from "./deleteHandler";
+import { GetListOptions, getListHandler } from "./getListHandler";
 import { PrismaClient } from "@prisma/client";
-import { getListHandler } from "./getListHandler";
-import { getManyHandler } from "./getManyHandler";
-import { getOneHandler } from "./getOneHandler";
-import { updateHandler, UpdateOptions } from "./updateHandler";
-import { deleteHandler, DeleteOptions } from "./deleteHandler";
+import { UpdateOptions, updateHandler } from "./updateHandler";
 import { createHandler } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
+import { getManyHandler } from "./getManyHandler";
 import { getManyReferenceHandler } from "./getManyReferenceHandler";
+import { getOneHandler } from "./getOneHandler";
 
 export const defaultHandler = async (
   req: Request,
@@ -27,60 +28,60 @@ export const defaultHandler = async (
   options?: {
     delete?: DeleteOptions;
     update?: UpdateOptions;
+    getList?: GetListOptions;
+    audit?: AuditOptions;
   }
 ) => {
-  const tableName = req.body.model || req.body.resource;
-  if (!tableName) throw new Error(`table name is empty`);
+  const modelName = req.body.model || req.body.resource;
+  if (!modelName) throw new Error(`model name is empty`);
 
-  const prismaDelegate = prisma[tableName];
-  if (!prismaDelegate)
-    throw new Error(
-      `No model found for "${req.body.model || req.body.resource}"`
-    );
+  const model = prisma[modelName];
+  if (!model) throw new Error(`No model found for "${modelName}"`);
 
   switch (req.body.method) {
     case "getList": {
-      return await getListHandler(req as GetListRequest, res, prismaDelegate);
+      return getListHandler(
+        req as GetListRequest,
+        res,
+        model,
+        options?.getList
+      );
     }
     case "getOne": {
-      return await getOneHandler(req as GetOneRequest, res, prismaDelegate);
+      return getOneHandler(req as GetOneRequest, res, model);
     }
     case "getMany": {
-      return await getManyHandler(req as GetManyRequest, res, prismaDelegate);
+      return getManyHandler(req as GetManyRequest, res, model);
     }
     case "getManyReference": {
-      throw await getManyReferenceHandler(
+      return getManyReferenceHandler(
         req as GetManyReferenceRequest,
         res,
-        prismaDelegate
+        model
       );
     }
     case "create": {
-      return await createHandler(req as CreateRequest, res, prismaDelegate);
+      return await createHandler(req as CreateRequest, res, model, {
+        audit: options?.audit,
+      });
     }
     case "update": {
-      return await updateHandler(
-        req as UpdateRequest,
-        res,
-        prismaDelegate,
-        options?.update
-      );
+      return await updateHandler(req as UpdateRequest, res, model, {
+        ...options?.update,
+        audit: options?.audit,
+      });
     }
     case "delete": {
-      return await deleteHandler(
-        req as DeleteRequest,
-        res,
-        prismaDelegate,
-        options?.delete
-      );
+      return await deleteHandler(req as DeleteRequest, res, model, {
+        ...options?.delete,
+        audit: options?.audit,
+      });
     }
     case "deleteMany": {
-      return await deleteManyHandler(
-        req as DeleteManyRequest,
-        res,
-        prismaDelegate,
-        options?.delete
-      );
+      return deleteManyHandler(req as DeleteManyRequest, res, model, {
+        ...options?.delete,
+        audit: options?.audit,
+      });
     }
     default:
       throw new Error("Invalid method");

@@ -6,7 +6,9 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["filterJson"]
+
 }
 
 model Post {
@@ -68,16 +70,24 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?     @updatedAt
   post          Post[]
   accounts      Account[]
   sessions      Session[]
+  settings      UserSettings?
+}
+
+model UserSettings {
+  id       String @id @default(cuid())
+  userId   String @unique
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language String
 }
 
 model VerificationToken {
@@ -124,6 +134,7 @@ model AdminUser {
   role          Role?
   accounts      AdminAccount[]
   sessions      AdminSession[]
+  audit         Audit[]
 }
 
 model AdminVerificationToken {
@@ -132,6 +143,16 @@ model AdminVerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Audit {
+  id       String     @id @default(cuid())
+  date     DateTime   @default(now())
+  resource String
+  action   String
+  payload  Json?
+  authorId String?
+  author   AdminUser? @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
