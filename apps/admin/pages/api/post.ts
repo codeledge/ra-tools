@@ -15,17 +15,12 @@ export default apiHandler(
   async (req: NextApiRequest, res: NextApiResponse, auth) => {
     switch (req.body.method) {
       case "create":
-        return await createHandler(
-          req,
-          res,
-          prismaClient["post"],
-          {
-            connect: {
-              tags: "id",
-            },
+        return await createHandler(req, res, prismaClient["post"], {
+          connect: {
+            tags: "id",
           },
-          { model: prismaClient.audit, authProvider: auth }
-        );
+          audit: { model: prismaClient.audit, authProvider: auth },
+        });
       case "getList":
         return await getListHandler(
           req as GetListRequest,
@@ -55,17 +50,12 @@ export default apiHandler(
           }
         );
       case "update":
-        return await updateHandler(
-          req,
-          res,
-          prismaClient["post"],
-          {
-            set: {
-              tags: "id",
-            },
+        return await updateHandler(req, res, prismaClient["post"], {
+          set: {
+            tags: "id",
           },
-          { model: prismaClient.audit, authProvider: auth }
-        );
+          audit: { model: prismaClient.audit, authProvider: auth },
+        });
       default:
         return await defaultHandler(req, res, prismaClient, {
           audit: { model: prismaClient.audit, authProvider: auth },

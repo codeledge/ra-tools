@@ -4,6 +4,7 @@ import { auditHandler } from "./audit/auditHandler";
 
 export type DeleteManyOptions = {
   softDeleteField?: string;
+  audit?: AuditOptions;
 };
 
 export const deleteManyHandler = async <
@@ -12,8 +13,7 @@ export const deleteManyHandler = async <
   req: DeleteManyRequest,
   res: Response,
   table: T,
-  options?: DeleteManyOptions,
-  audit?: AuditOptions
+  options?: DeleteManyOptions
 ) => {
   const { ids } = req.body.params;
 
@@ -28,8 +28,8 @@ export const deleteManyHandler = async <
         where: { id: { in: ids } },
       });
 
-  if (audit) {
-    await auditHandler(req, audit);
+  if (options?.audit) {
+    await auditHandler(req, options?.audit);
   }
 
   // react-admin expects the ids of the deleted rows
