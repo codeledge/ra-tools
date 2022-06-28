@@ -19,6 +19,9 @@ export type UpdateOptions = {
     [key: string]: boolean;
   };
   audit?: AuditOptions;
+  allowJsonUpdate?: {
+    [key: string]: boolean;
+  };
 };
 
 export const updateHandler = async (
@@ -66,6 +69,10 @@ export const updateHandler = async (
               update: value,
             },
           };
+        }
+        if (options?.allowJsonUpdate?.[key]) {
+          //Allow json type update
+          fields[key] = value;
         }
       } else {
         fields[key] = value;
