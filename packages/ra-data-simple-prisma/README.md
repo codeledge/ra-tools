@@ -50,9 +50,39 @@ import { defaultHandler } from "ra-data-simple-prisma";
 import { prismaClient } from "../prisma/client"; // <= Your prisma client instance
 
 export default function handler(req, res) {
-  defaultHandler(req, res, prisma);
+  defaultHandler(req, res, prismaClient);
 }
 ```
+
+With an audit log (ex. uses next-auth):
+
+```js
+// /api/[resource].ts <= catch all resource requests
+
+import { defaultHandler } from "ra-data-simple-prisma";
+import { prismaClient } from "../prisma/client";
+import { authProvider } from "../providers/authProvider";
+import { getSession } from "next-auth/react";
+
+
+export default function handler(req, res) {
+  const session = await getSession({ req });
+  defaultHandler(req, res, prismaClient, {
+    audit: {
+      model: prismaClient.audit_log,
+      authProvider: authProvider(session)
+    },
+  });
+}
+```
+
+audit:
+
+- model: Insert your audit_log table ex. prisma.auditLog
+- authProvider: Insert your AuthProvider from React-Admin
+- columns?: Link your database tables {id: "id", date: "created_at"}
+- enabledForAction?: Enabled for which action ex. {create: true, update: true, delete: false}
+  enabledResources?: List of resources which are to be audited. Default all.
 
 ### Overrides
 
@@ -123,8 +153,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         res,
         prismaClient.post,
         {
-          skipFields: ...
-          allowFields: ...
+          skipFields: {
+            computedField: true
+          },
           set: {
             tags: "id",
           },

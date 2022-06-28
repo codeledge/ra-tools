@@ -1,3 +1,15 @@
+import {
+  CreateParams,
+  DeleteManyParams,
+  DeleteParams,
+  GetListParams,
+  GetManyParams,
+  GetManyReferenceParams,
+  GetOneParams,
+  UpdateManyParams,
+  UpdateParams,
+} from "react-admin";
+
 export type Request =
   | GetListRequest
   | GetOneRequest
@@ -9,19 +21,11 @@ export type Request =
   | DeleteRequest
   | DeleteManyRequest;
 
-export type SortRequest = { field: string; order: "ASC" | "DESC" };
-
-export type PaginationRequest = { page: number; perPage: number };
-
 export type GetListRequest = {
   body: {
     method: "getList";
     filter: object;
-    params: {
-      pagination: PaginationRequest;
-      sort: SortRequest;
-      filter: object;
-    };
+    params: GetListParams;
     resource: string;
     model?: string;
   };
@@ -30,9 +34,7 @@ export type GetListRequest = {
 export type GetOneRequest = {
   body: {
     method: "getOne";
-    params: {
-      id: any;
-    };
+    params: GetOneParams;
     resource: string;
     model?: string;
   };
@@ -41,9 +43,7 @@ export type GetOneRequest = {
 export type GetManyRequest = {
   body: {
     method: "getMany";
-    params: {
-      ids: any[];
-    };
+    params: GetManyParams;
     resource: string;
     model?: string;
   };
@@ -52,13 +52,7 @@ export type GetManyRequest = {
 export type GetManyReferenceRequest = {
   body: {
     method: "getManyReference";
-    params: {
-      target: string;
-      id: any;
-      pagination: PaginationRequest;
-      sort: SortRequest;
-      filter: object;
-    };
+    params: GetManyReferenceParams;
     resource: string;
     model?: string;
   };
@@ -67,9 +61,7 @@ export type GetManyReferenceRequest = {
 export type CreateRequest = {
   body: {
     method: "create";
-    params: {
-      data: Record<string, any>;
-    };
+    params: CreateParams;
     resource: string;
     model?: string;
   };
@@ -78,11 +70,7 @@ export type CreateRequest = {
 export type UpdateRequest = {
   body: {
     method: "update";
-    params: {
-      id: any;
-      data: object;
-      previousData: object;
-    };
+    params: UpdateParams;
     resource: string;
     model?: string;
   };
@@ -91,10 +79,7 @@ export type UpdateRequest = {
 export type UpdateManyRequest = {
   body: {
     method: "updateMany";
-    params: {
-      ids: any[];
-      data: object;
-    };
+    params: UpdateManyParams;
     resource: string;
     model?: string;
   };
@@ -103,10 +88,7 @@ export type UpdateManyRequest = {
 export type DeleteRequest = {
   body: {
     method: "delete";
-    params: {
-      id: any;
-      previousData: object;
-    };
+    params: DeleteParams;
     resource: string;
     model?: string;
   };
@@ -115,9 +97,7 @@ export type DeleteRequest = {
 export type DeleteManyRequest = {
   body: {
     method: "deleteMany";
-    params: {
-      ids: any[];
-    };
+    params: DeleteManyParams;
     resource: string;
     model?: string;
   };

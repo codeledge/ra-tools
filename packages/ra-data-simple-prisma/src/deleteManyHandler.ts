@@ -1,7 +1,10 @@
+import { AuditOptions } from "./audit/types";
 import { DeleteManyRequest, DeleteRequest, Response } from "./Http";
+import { auditHandler } from "./audit/auditHandler";
 
 export type DeleteManyOptions = {
   softDeleteField?: string;
+  audit?: AuditOptions;
 };
 
 export const deleteManyHandler = async <
@@ -25,7 +28,11 @@ export const deleteManyHandler = async <
         where: { id: { in: ids } },
       });
 
+  if (options?.audit) {
+    await auditHandler(req, options?.audit);
+  }
+
   // react-admin expects the ids of the deleted rows
   // but only the count is returned from prisma deleteMany method, so...
-  return res.json({ data: ids });
+  res.json({ data: ids });
 };
