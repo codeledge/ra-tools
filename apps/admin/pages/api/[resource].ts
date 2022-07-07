@@ -7,7 +7,11 @@ export default apiHandler(
   async (req: NextApiRequest, res: NextApiResponse, auth) => {
     return await defaultHandler(req, res, prismaClient, {
       getList: { debug: false },
-      audit: { model: prismaClient.audit, authProvider: auth },
+      audit: {
+        model: prismaClient.audit,
+        authProvider: auth,
+        // enabledResources: ["post","category"],
+      },
     });
   }
 );
