@@ -2,16 +2,18 @@ import { AuditOptions } from "./audit/types";
 import { CreateRequest, Response } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 
+export type CreateOptions = {
+  connect?: {
+    [key: string]: string;
+  };
+  audit?: AuditOptions;
+};
+
 export const createHandler = async <T extends { create: Function }>(
   req: CreateRequest,
   res: Response,
   table: T,
-  options?: {
-    connect?: {
-      [key: string]: string;
-    };
-    audit?: AuditOptions;
-  }
+  options?: CreateOptions
 ) => {
   const { data } = req.body.params;
 

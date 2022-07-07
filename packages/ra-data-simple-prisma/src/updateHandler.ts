@@ -18,10 +18,10 @@ export type UpdateOptions = {
   allowNestedUpsert?: {
     [key: string]: boolean;
   };
-  audit?: AuditOptions;
   allowJsonUpdate?: {
     [key: string]: boolean;
   };
+  audit?: AuditOptions;
 };
 
 export const updateHandler = async (

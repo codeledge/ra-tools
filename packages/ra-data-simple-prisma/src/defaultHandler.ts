@@ -15,7 +15,7 @@ import { DeleteOptions, deleteHandler } from "./deleteHandler";
 import { GetListOptions, getListHandler } from "./getListHandler";
 import { PrismaClient } from "@prisma/client";
 import { UpdateOptions, updateHandler } from "./updateHandler";
-import { createHandler } from "./createHandler";
+import { createHandler, CreateOptions } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
 import { getManyHandler } from "./getManyHandler";
 import { getManyReferenceHandler } from "./getManyReferenceHandler";
@@ -26,6 +26,7 @@ export const defaultHandler = async (
   res: Response,
   prisma: PrismaClient,
   options?: {
+    create?: CreateOptions;
     delete?: DeleteOptions;
     update?: UpdateOptions;
     getList?: GetListOptions;
@@ -62,6 +63,7 @@ export const defaultHandler = async (
     }
     case "create": {
       return await createHandler(req as CreateRequest, res, model, {
+        ...options?.create,
         audit: options?.audit,
       });
     }
