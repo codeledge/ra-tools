@@ -4,7 +4,14 @@ import { auditHandler } from "./audit/auditHandler";
 import { isNotField } from "./lib/isNotField";
 import { isObject } from "./lib/isObject";
 
-export type UpdateOptions = {
+export type UpdateArgs = {
+  include?: object | null;
+  select?: object | null;
+};
+
+export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = {
+  select?: Args["select"];
+  include?: Args["include"];
   debug?: boolean;
   skipFields?: {
     [key: string]: boolean;
@@ -24,11 +31,11 @@ export type UpdateOptions = {
   audit?: AuditOptions;
 };
 
-export const updateHandler = async (
+export const updateHandler = async <Args extends UpdateArgs>(
   req: UpdateRequest,
   res: Response,
   model: { update: Function },
-  options?: UpdateOptions
+  options?: UpdateOptions<Args>
 ) => {
   const { id } = req.body.params;
 
@@ -90,6 +97,8 @@ export const updateHandler = async (
   const updated = await model.update({
     where: { id },
     data,
+    select: options?.select ?? undefined,
+    include: options?.include ?? undefined,
   });
 
   if (options?.audit) {

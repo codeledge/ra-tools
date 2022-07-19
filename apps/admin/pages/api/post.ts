@@ -10,6 +10,7 @@ import {
   updateHandler,
 } from "ra-data-simple-prisma";
 import { apiHandler } from "../../middlewares/apiHandler";
+import { Prisma } from "@prisma/client";
 
 export default apiHandler(
   async (req: NextApiRequest, res: NextApiResponse, auth) => {
@@ -37,7 +38,7 @@ export default apiHandler(
           }
         );
       case "getOne":
-        return await getOneHandler(
+        return await getOneHandler<Prisma.PostFindUniqueArgs>(
           req as GetOneRequest,
           res,
           prismaClient["post"],
