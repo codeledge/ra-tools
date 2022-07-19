@@ -19,7 +19,7 @@ import { createHandler, CreateOptions } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
 import { getManyHandler } from "./getManyHandler";
 import { getManyReferenceHandler } from "./getManyReferenceHandler";
-import { getOneHandler } from "./getOneHandler";
+import { getOneHandler, GetOneOptions } from "./getOneHandler";
 
 export const defaultHandler = async (
   req: Request,
@@ -30,6 +30,7 @@ export const defaultHandler = async (
     delete?: DeleteOptions;
     update?: UpdateOptions;
     getList?: GetListOptions;
+    getOne?: GetOneOptions;
     audit?: AuditOptions;
   }
 ) => {
@@ -49,7 +50,7 @@ export const defaultHandler = async (
       );
     }
     case "getOne": {
-      return getOneHandler(req as GetOneRequest, res, model);
+      return getOneHandler(req as GetOneRequest, res, model, options?.getOne);
     }
     case "getMany": {
       return getManyHandler(req as GetManyRequest, res, model);

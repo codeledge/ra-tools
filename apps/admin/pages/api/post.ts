@@ -10,17 +10,23 @@ import {
   updateHandler,
 } from "ra-data-simple-prisma";
 import { apiHandler } from "../../middlewares/apiHandler";
+import { Prisma } from "@prisma/client";
 
 export default apiHandler(
   async (req: NextApiRequest, res: NextApiResponse, auth) => {
     switch (req.body.method) {
       case "create":
-        return await createHandler(req, res, prismaClient["post"], {
-          connect: {
-            tags: "id",
-          },
-          audit: { model: prismaClient.audit, authProvider: auth },
-        });
+        return await createHandler<Prisma.PostCreateArgs>(
+          req,
+          res,
+          prismaClient["post"],
+          {
+            connect: {
+              tags: "id",
+            },
+            audit: { model: prismaClient.audit, authProvider: auth },
+          }
+        );
       case "getList":
         return await getListHandler(
           req as GetListRequest,
@@ -37,7 +43,7 @@ export default apiHandler(
           }
         );
       case "getOne":
-        return await getOneHandler(
+        return await getOneHandler<Prisma.PostFindUniqueArgs>(
           req as GetOneRequest,
           res,
           prismaClient["post"],
