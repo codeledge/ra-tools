@@ -6,7 +6,7 @@ import { extractWhere } from "./extractWhere";
 export const getManyReferenceHandler = async (
   req: GetManyReferenceRequest,
   res: Response,
-  table: { findMany: Function }
+  model: { findMany: Function }
 ) => {
   const { id, target } = req.body.params;
 
@@ -16,7 +16,7 @@ export const getManyReferenceHandler = async (
 
   const { skip, take } = extractSkipTake(req);
 
-  const list = await table.findMany({
+  const list = await model.findMany({
     where: { [target]: id, ...where },
     orderBy,
     skip,
