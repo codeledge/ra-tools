@@ -147,6 +147,7 @@ importers:
     specifiers:
       '@types/node': ^18.0.3
       axios: ^0.27.2
+      deepmerge: ^4.2.2
       jest: ^28.1.2
       react-admin: ^4.2.1
       set-value: ^4.1.0
@@ -155,6 +156,7 @@ importers:
     dependencies:
       '@types/node': 18.0.3
       axios: 0.27.2
+      deepmerge: 4.2.2
       react-admin: 4.2.1
       set-value: 4.1.0
     devDependencies:
@@ -2323,7 +2325,6 @@ packages:
   /deepmerge/4.2.2:
     resolution: {integrity: sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /define-properties/1.1.4:
     resolution: {integrity: sha512-uckOqKcfaVvtBdsVkdPv3XjveQJsNQqmhXgRi8uhvWWuPYZCNlzT8qAyblUgNoXdHdjMTzAqeGjAoli8f+bzPA==}

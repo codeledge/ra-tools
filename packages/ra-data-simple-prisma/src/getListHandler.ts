@@ -2,6 +2,7 @@ import { GetListRequest, Response } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere } from "./extractWhere";
+import deepmerge from "deepmerge";
 
 export type GetListOptions = {
   noNullsOnSort?: string[];
@@ -31,7 +32,7 @@ export const getListHandler = async <
     transform?: (data: any) => any;
   }
 ) => {
-  const { pagination, sort, filter } = req.body.params;
+  if (!table) throw new Error(`missing table in getListHandler`);
 
   let queryArgs: {
     findManyArg: {
@@ -56,26 +57,23 @@ export const getListHandler = async <
     },
   };
 
-  if (!table) throw new Error(`missing table in getListHandler`);
-
+  // FILTER STAGE
   const where = extractWhere(req);
+
   if (options?.debug) {
     console.log("getListHandler:where", JSON.stringify(where, null, 2));
   }
-  //TODO this is only shallow merge
-  queryArgs.findManyArg.where = {
-    ...queryArgs.findManyArg.where,
-    ...where,
-  };
-  queryArgs.countArg.where = {
-    ...queryArgs.countArg.where,
-    ...where,
-  };
 
+  queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, where);
+  queryArgs.countArg.where = deepmerge(queryArgs.countArg.where, where);
+
+  // PAGINATION STAGE
   const { skip, take } = extractSkipTake(req);
   queryArgs.findManyArg.skip = skip;
   queryArgs.findManyArg.take = take;
 
+  // SORT STAGE
+  const { sort } = req.body.params;
   if (sort) {
     queryArgs.findManyArg.orderBy = extractOrderBy(req);
 
@@ -91,13 +89,16 @@ export const getListHandler = async <
     console.log("getListHandler:queryArgs", JSON.stringify(queryArgs, null, 2));
   }
 
+  // GET DATA
   const [data, total] = await Promise.all([
     table.findMany(queryArgs.findManyArg),
     table.count(queryArgs.countArg),
   ]);
 
+  // TRANSFORM
   await options?.transform?.(data);
 
+  // RESPOND WITH DATA
   res.json({
     data,
     total,

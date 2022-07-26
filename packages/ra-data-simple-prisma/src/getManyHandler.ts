@@ -3,11 +3,11 @@ import { GetManyRequest, Response } from "./Http";
 export const getManyHandler = async (
   req: GetManyRequest,
   res: Response,
-  table: { findMany: Function }
+  model: { findMany: Function }
 ) => {
   const { ids } = req.body.params;
 
-  const list = await table.findMany({
+  const list = await model.findMany({
     where: { id: { in: ids } },
   });
 
