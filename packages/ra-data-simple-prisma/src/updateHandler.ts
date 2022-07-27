@@ -44,7 +44,8 @@ export const updateHandler = async <Args extends UpdateArgs>(
       if (isNotField(key)) return fields;
       if (options?.skipFields?.[key]) return fields;
 
-      // transfor an array to a connect (many-to-many)
+      // transform an array to a connect (many-to-many)
+      // when the key is declared via 'set' option.
       // e.g. (handler)
       // updateHandler(req, res, prismaClient.post, {
       //      set: {
@@ -58,6 +59,9 @@ export const updateHandler = async <Args extends UpdateArgs>(
           fields[key] = {
             set: value.map((value) => ({ [foreignConnectKey]: value })),
           };
+        } else {
+          // Assign the array value directly if the key is not declared via 'set' option
+          fields[key] = value;
         }
       } else if (isObject(value)) {
         if (options?.allowNestedUpdate?.[key]) {
