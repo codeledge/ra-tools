@@ -1,3 +1,4 @@
+import UpdateIcon from "@mui/icons-material/Update";
 import { Typography } from "@mui/material";
 import {
   List,
@@ -19,6 +20,7 @@ import {
   ChipField,
   ReferenceManyField,
   SingleFieldList,
+  BulkUpdateButton,
 } from "react-admin";
 
 export const CategoryCreate = (props: CreateProps) => {
@@ -76,9 +78,22 @@ export const CategoryChild = (props: CreateProps) => {
   );
 };
 
+const PostBulkActionButtons = () => (
+  <>
+    <BulkUpdateButton
+      label="Set as Updated"
+      icon={<UpdateIcon />}
+      data={{
+        updatedAt: new Date(),
+      }}
+      mutationMode="pessimistic"
+    />
+  </>
+);
+
 export const CategoryList = (props: ListProps) => (
   <List {...props}>
-    <Datagrid rowClick={"edit"}>
+    <Datagrid rowClick={"edit"} bulkActionButtons={<PostBulkActionButtons />}>
       <TextField source="id" />
       <TextField source="name" />
       <ReferenceField
@@ -98,7 +113,7 @@ export const CategoryList = (props: ListProps) => (
         </SingleFieldList>
       </ReferenceManyField>
       <DateField source="createdAt" />
-      <DateField source="updatedAt" />
+      <DateField source="updatedAt" showTime />
     </Datagrid>
   </List>
 );

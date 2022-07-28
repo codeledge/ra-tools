@@ -9,6 +9,7 @@ import {
   GetOneRequest,
   Request,
   Response,
+  UpdateManyRequest,
   UpdateRequest,
 } from "./Http";
 import { DeleteOptions, deleteHandler } from "./deleteHandler";
@@ -20,6 +21,7 @@ import { deleteManyHandler } from "./deleteManyHandler";
 import { getManyHandler } from "./getManyHandler";
 import { getManyReferenceHandler } from "./getManyReferenceHandler";
 import { getOneHandler, GetOneOptions } from "./getOneHandler";
+import { updateManyHandler } from "./updateManyHandler";
 
 export const defaultHandler = async (
   req: Request,
@@ -70,6 +72,12 @@ export const defaultHandler = async (
     }
     case "update": {
       return await updateHandler(req as UpdateRequest, res, model, {
+        ...options?.update,
+        audit: options?.audit,
+      });
+    }
+    case "updateMany": {
+      return await updateManyHandler(req as UpdateManyRequest, res, model, {
         ...options?.update,
         audit: options?.audit,
       });
