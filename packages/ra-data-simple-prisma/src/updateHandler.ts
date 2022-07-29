@@ -31,7 +31,7 @@ export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = {
   audit?: AuditOptions;
 };
 
-export const reduceData = (data, options) => {
+export const reduceData = (data, options: UpdateOptions) => {
   return Object.entries(data).reduce((fields, [key, value]) => {
     if (isNotField(key)) return fields;
     if (options?.skipFields?.[key]) return fields;
@@ -88,7 +88,7 @@ export const reduceData = (data, options) => {
 export const updateHandler = async <Args extends UpdateArgs>(
   req: UpdateRequest,
   res: Response,
-  model: { update: Function; updateMany: Function },
+  model: { update: Function },
   options?: UpdateOptions<Args>
 ) => {
   const { id } = req.body.params;
