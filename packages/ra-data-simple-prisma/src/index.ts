@@ -12,4 +12,5 @@ export * from "./getManyReferenceHandler";
 export * from "./getOneHandler";
 export * from "./Http";
 export * from "./updateHandler";
+export * from "./updateManyHandler";
 export * from "./audit";

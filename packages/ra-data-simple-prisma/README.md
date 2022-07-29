@@ -161,6 +161,20 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           },
         }
       );
+    case "updateMany":
+      return updateHandler(
+        req,
+        res,
+        prismaClient.post,
+        {
+          skipFields: {
+            computedField: true
+          },
+          set: {
+            tags: "id",
+          },
+        }
+      );
     default: // <= fall back on default handler
       return defaultHandler(req, res, prismaClient);
   }
