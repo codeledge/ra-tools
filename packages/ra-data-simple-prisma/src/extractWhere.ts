@@ -35,6 +35,7 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
         colName === "uuid" ||
         colName === "cuid" ||
         colName.endsWith("_id") ||
+        colName.endsWith("Id") ||
         typeof value === "number" ||
         typeof value === "boolean"
       ) {
