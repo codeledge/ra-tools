@@ -7,9 +7,9 @@ export type GetManyArgs = {
 
 export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = {
   debug?: boolean;
-  transform?: (data: any) => any;
-  select?: Args["select"];
   include?: Args["include"];
+  select?: Args["select"];
+  transform?: (data: any) => any;
 };
 
 export const getManyHandler = async <Args extends GetManyArgs>(
@@ -22,8 +22,8 @@ export const getManyHandler = async <Args extends GetManyArgs>(
 
   // GET DATA
   const data = await model.findMany({
-    select: options?.select,
     include: options?.include,
+    select: options?.select,
     where: { id: { in: ids } },
   });
 
