@@ -16,12 +16,13 @@ export const getManyReferenceHandler = async (
 
   const { skip, take } = extractSkipTake(req);
 
-  const list = await model.findMany({
+  // GET DATA
+  const data = await model.findMany({
     where: { [target]: id, ...where },
     orderBy,
     skip,
     take,
   });
 
-  res.json({ data: list, total: list.length });
+  res.json({ data, total: data.length });
 };
