@@ -5,7 +5,14 @@ import setObjectProp from "set-value";
 
 const logicalOperators = ["gte", "lte", "lt", "gt"];
 
-export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
+type ExtractWhereOptions = {
+  mode?: "insensitive" | "default";
+};
+
+export const extractWhere = (
+  req: GetListRequest | GetManyReferenceRequest,
+  options?: ExtractWhereOptions
+) => {
   const { filter } = req.body.params;
 
   const where = {};
@@ -65,7 +72,8 @@ const getPostgresJsonFilter = (obj: any) => {
   const val = obj[path[0]];
   let equals;
   if (isObject(val)) {
-    const { path: returnedPath, equals: returnedEquals } = getPostgresJsonFilter(val);
+    const { path: returnedPath, equals: returnedEquals } =
+      getPostgresJsonFilter(val);
     equals = returnedEquals;
     path.push(...returnedPath);
   } else {
