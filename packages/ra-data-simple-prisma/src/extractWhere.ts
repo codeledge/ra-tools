@@ -43,7 +43,7 @@ export const extractWhere = (req: GetListRequest | GetManyReferenceRequest) => {
       } else if (Array.isArray(value)) {
         setObjectProp(where, colName, { in: value });
       } else if (typeof value === "string") {
-        setObjectProp(where, colName, { contains: value, mode: "insensitive" });
+        setObjectProp(where, colName, { contains: value});
       } else if (isObject(value)) {
         // if object then it's a Json field, this is EXPERIMENTAL and works only for Postgres
         // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filter-on-object-property
