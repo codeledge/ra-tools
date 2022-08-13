@@ -1,36 +1,27 @@
 import { GetListRequest, Response } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
-import { extractWhere } from "./extractWhere";
+import { extractWhere, FilterMode } from "./extractWhere";
 import deepmerge from "deepmerge";
 
-export type GetListOptions = {
+export type GetListArgs = {
+  include?: object | null;
+  select?: object | null;
+  where?: object | null;
+};
+
+export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
   noNullsOnSort?: string[];
   debug?: boolean;
   transform?: (data: any) => any;
+  filterMode?: FilterMode;
 };
 
-export const getListHandler = async <
-  W extends {
-    include?: object | null;
-    orderBy?: object | null;
-    select?: object | null;
-    skip?: number | null;
-    take?: number | null;
-    where?: object | null;
-  }
->(
+export const getListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
   res: Response,
   table: { findMany: Function; count: Function },
-  options?: {
-    select?: W["select"];
-    include?: W["include"];
-    where?: W["where"];
-    noNullsOnSort?: string[];
-    debug?: boolean;
-    transform?: (data: any) => any;
-  }
+  options?: GetListOptions<Args>
 ) => {
   if (!table) throw new Error(`missing table in getListHandler`);
 
@@ -58,7 +49,9 @@ export const getListHandler = async <
   };
 
   // FILTER STAGE
-  const where = extractWhere(req);
+  const where = extractWhere(req, {
+    filterMode: options?.filterMode,
+  });
 
   if (options?.debug) {
     console.log("getListHandler:where", JSON.stringify(where, null, 2));

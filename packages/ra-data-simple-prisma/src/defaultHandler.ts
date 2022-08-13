@@ -19,7 +19,10 @@ import { UpdateOptions, updateHandler } from "./updateHandler";
 import { createHandler, CreateOptions } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
 import { getManyHandler } from "./getManyHandler";
-import { getManyReferenceHandler } from "./getManyReferenceHandler";
+import {
+  getManyReferenceHandler,
+  GetManyReferenceOptions,
+} from "./getManyReferenceHandler";
 import { getOneHandler, GetOneOptions } from "./getOneHandler";
 import { updateManyHandler } from "./updateManyHandler";
 
@@ -28,12 +31,13 @@ export const defaultHandler = async (
   res: Response,
   prisma: PrismaClient,
   options?: {
+    audit?: AuditOptions;
     create?: CreateOptions;
     delete?: DeleteOptions;
-    update?: UpdateOptions;
     getList?: GetListOptions;
+    getManyReference?: GetManyReferenceOptions;
     getOne?: GetOneOptions;
-    audit?: AuditOptions;
+    update?: UpdateOptions;
   }
 ) => {
   const modelName = req.body.model || req.body.resource;
@@ -61,7 +65,8 @@ export const defaultHandler = async (
       return getManyReferenceHandler(
         req as GetManyReferenceRequest,
         res,
-        model
+        model,
+        options?.getManyReference
       );
     }
     case "create": {

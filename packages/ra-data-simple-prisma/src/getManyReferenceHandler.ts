@@ -1,7 +1,7 @@
 import { GetManyReferenceRequest, Response } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
-import { extractWhere } from "./extractWhere";
+import { extractWhere, FilterMode } from "./extractWhere";
 
 export type GetManyRefernceArgs = {
   include?: object | null;
@@ -10,11 +10,10 @@ export type GetManyRefernceArgs = {
 
 export type GetManyReferenceOptions<
   Args extends GetManyRefernceArgs = GetManyRefernceArgs
-> = {
+> = Args & {
   debug?: boolean;
-  include?: Args["include"];
-  select?: Args["select"];
   transform?: (data: any) => any;
+  filterMode?: FilterMode;
 };
 
 export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
@@ -27,7 +26,9 @@ export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
 
   const orderBy = extractOrderBy(req);
 
-  const where = extractWhere(req);
+  const where = extractWhere(req, {
+    filterMode: options?.filterMode,
+  });
 
   const { skip, take } = extractSkipTake(req);
 
