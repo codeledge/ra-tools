@@ -5,9 +5,7 @@ export type GetOneArgs = {
   select?: object | null;
 };
 
-export type GetOneOptions<Args extends GetOneArgs = GetOneArgs> = {
-  select?: Args["select"];
-  include?: Args["include"];
+export type GetOneOptions<Args extends GetOneArgs = GetOneArgs> = Args & {
   debug?: boolean;
   transform?: (row: any) => any;
 };

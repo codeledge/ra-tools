@@ -7,24 +7,22 @@ export type DeleteManyOptions = {
   audit?: AuditOptions;
 };
 
-export const deleteManyHandler = async <
-  T extends { updateMany: Function; deleteMany: Function }
->(
+export const deleteManyHandler = async (
   req: DeleteManyRequest,
   res: Response,
-  table: T,
+  model: { updateMany: Function; deleteMany: Function },
   options?: DeleteManyOptions
 ) => {
   const { ids } = req.body.params;
 
   const deleted = options?.softDeleteField
-    ? await table.updateMany({
+    ? await model.updateMany({
         where: { id: { in: ids } },
         data: {
           [options?.softDeleteField]: new Date(),
         },
       })
-    : await table.deleteMany({
+    : await model.deleteMany({
         where: { id: { in: ids } },
       });
 

@@ -20,10 +20,10 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
 export const getListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
   res: Response,
-  table: { findMany: Function; count: Function },
+  model: { findMany: Function; count: Function },
   options?: GetListOptions<Args>
 ) => {
-  if (!table) throw new Error(`missing table in getListHandler`);
+  if (!model) throw new Error(`missing model in getListHandler`);
 
   let queryArgs: {
     findManyArg: {
@@ -84,8 +84,8 @@ export const getListHandler = async <Args extends GetListArgs>(
 
   // GET DATA
   const [data, total] = await Promise.all([
-    table.findMany(queryArgs.findManyArg),
-    table.count(queryArgs.countArg),
+    model.findMany(queryArgs.findManyArg),
+    model.count(queryArgs.countArg),
   ]);
 
   // TRANSFORM

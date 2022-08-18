@@ -9,9 +9,7 @@ export type UpdateArgs = {
   select?: object | null;
 };
 
-export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = {
-  select?: Args["select"];
-  include?: Args["include"];
+export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
   debug?: boolean;
   skipFields?: {
     [key: string]: boolean;
@@ -100,10 +98,10 @@ export const updateHandler = async <Args extends UpdateArgs>(
   }
 
   const updated = await model.update({
-    where: { id },
     data,
-    select: options?.select ?? undefined,
     include: options?.include ?? undefined,
+    select: options?.select ?? undefined,
+    where: { id },
   });
 
   if (options?.audit) {

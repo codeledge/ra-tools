@@ -5,10 +5,8 @@ export type GetManyArgs = {
   select?: object | null;
 };
 
-export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = {
+export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = Args & {
   debug?: boolean;
-  include?: Args["include"];
-  select?: Args["select"];
   transform?: (data: any) => any;
 };
 
