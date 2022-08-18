@@ -7,9 +7,7 @@ export type CreateArgs = {
   select?: object | null;
 };
 
-export type CreateOptions<Args extends CreateArgs = CreateArgs> = {
-  select?: Args["select"];
-  include?: Args["include"];
+export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
   connect?: {
     [key: string]: string;
   };
@@ -52,8 +50,8 @@ export const createHandler = async <Args extends CreateArgs>(
 
   const created = await model.create({
     data,
-    select: options?.select ?? undefined,
     include: options?.include ?? undefined,
+    select: options?.select ?? undefined,
   });
 
   if (options?.audit) {

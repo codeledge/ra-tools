@@ -17,8 +17,8 @@ export const updateManyHandler = async <Args extends UpdateArgs>(
   }
 
   await model.updateMany({
-    where: { id: { in: ids } },
     data,
+    where: { id: { in: ids } },
   });
 
   if (options?.audit) {
