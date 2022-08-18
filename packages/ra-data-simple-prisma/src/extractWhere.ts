@@ -5,8 +5,10 @@ import setObjectProp from "set-value";
 
 const logicalOperators = ["gte", "lte", "lt", "gt"];
 
+export type FilterMode = "insensitive" | "default" | undefined;
+
 type ExtractWhereOptions = {
-  mode?: "insensitive" | "default";
+  filterMode?: FilterMode;
 };
 
 export const extractWhere = (
@@ -50,7 +52,10 @@ export const extractWhere = (
       } else if (Array.isArray(value)) {
         setObjectProp(where, colName, { in: value });
       } else if (typeof value === "string") {
-        setObjectProp(where, colName, { contains: value, mode: "insensitive" });
+        setObjectProp(where, colName, {
+          contains: value,
+          mode: options?.filterMode,
+        });
       } else if (isObject(value)) {
         // if object then it's a Json field, this is EXPERIMENTAL and works only for Postgres
         // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filter-on-object-property
