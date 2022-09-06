@@ -11,8 +11,8 @@ import type {
 
 export const dataProvider = (
   endpoint: string,
-  headers?: AxiosRequestHeaders,
   options?: {
+    headers?: AxiosRequestHeaders;
     resourceToModelMap?: Record<string, string>;
     axiosInterceptors?: {
       response?: {
