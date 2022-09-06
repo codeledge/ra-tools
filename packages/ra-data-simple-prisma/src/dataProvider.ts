@@ -6,10 +6,12 @@ import type {
   AxiosInterceptorOptions,
   AxiosRequestConfig,
   AxiosResponse,
+  AxiosRequestHeaders,
 } from "axios";
 
 export const dataProvider = (
   endpoint: string,
+  headers?: AxiosRequestHeaders,
   options?: {
     resourceToModelMap?: Record<string, string>;
     axiosInterceptors?: {
@@ -30,6 +32,7 @@ export const dataProvider = (
 ): DataProvider => {
   const apiService = axios.create({
     baseURL: endpoint,
+    headers,
   });
 
   apiService.interceptors.response.use((res) => res.data);
