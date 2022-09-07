@@ -20,6 +20,9 @@ export const GenerateShow = ({ model }: { model: DMMF.Model }) => {
       <SimpleShowLayout>
         {model.fields.map((field) => {
           const type = field.type as FieldType;
+          if (field.isReadOnly) {
+            return;
+          }
 
           if (type === "String") {
             return <TextField source={field.name} />;

@@ -6,10 +6,10 @@ import {
   BooleanField,
   DateField,
   NumberField,
+  ReferenceField,
 } from "react-admin";
 import { DMMF } from "@prisma/generator-helper";
 import React from "react";
-import { ShowField, ShowModelFields } from "./ShowField";
 import { FieldType } from "./types";
 import { JsonField } from "react-admin-json-view";
 
@@ -21,6 +21,9 @@ export const GenerateList = ({ model }: { model: DMMF.Model }) => {
         {model.fields.map((field) => {
           const type = field.type as FieldType;
 
+          if (field.isReadOnly) {
+            return;
+          }
           if (type === "String") {
             return <TextField source={field.name} />;
           }
@@ -35,6 +38,23 @@ export const GenerateList = ({ model }: { model: DMMF.Model }) => {
           }
           if (type === "JSON") {
             return <JsonField key={field.name} source={field.name} />;
+          }
+          if (field.kind === "object" && field.relationFromFields?.[0]) {
+            return (
+              <ReferenceField
+                source={field.relationFromFields[0]}
+                reference={field.type}
+              >
+                <TextField source="name" />
+              </ReferenceField>
+            );
+          }
+          if (field.kind === "object") {
+            return (
+              <ReferenceField source={field.name} reference={field.type}>
+                <TextField />
+              </ReferenceField>
+            );
           }
         })}
       </Datagrid>
