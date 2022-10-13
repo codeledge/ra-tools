@@ -3,7 +3,7 @@ import { isNotField } from "./lib/isNotField";
 import { isObject } from "./lib/isObject";
 import setObjectProp from "set-value";
 
-const logicalOperators = ["gte", "lte", "lt", "gt"];
+const logicalOperators = ["gte", "lte", "lt", "gt", "enum"];
 
 export type FilterMode = "insensitive" | "default" | undefined;
 
@@ -31,7 +31,9 @@ export const extractWhere = (
       const hasOperator = logicalOperators.some((operator) => {
         if (colName.endsWith(`_${operator}`)) {
           [colName] = colName.split(`_${operator}`);
-          setObjectProp(where, colName, { [operator]: value }, { merge: true });
+          operator === "enum" 
+            ? setObjectProp(where, colName, value)
+            : setObjectProp(where, colName, { [operator]: value }, { merge: true });
           return true;
         }
       });
