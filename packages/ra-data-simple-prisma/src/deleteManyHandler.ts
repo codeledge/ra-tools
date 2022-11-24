@@ -5,6 +5,7 @@ import { auditHandler } from "./audit/auditHandler";
 export type DeleteManyOptions = {
   softDeleteField?: string;
   audit?: AuditOptions;
+  debug?: boolean;
 };
 
 export const deleteManyHandler = async (

@@ -94,26 +94,45 @@ All dataProvider methods can be overridden for a given resource, or all.
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.body.method) {
     case "create":
-      return createHandler(req, res, prismaClient.post, {
+      return createHandler<Prisma.PostCreateArgs>(req, res, prismaClient.post, {
         connect: {
           tags: "id",
+          // or
+          tagIds: {
+            tag: "id",
+          },
+          // or
+          mediaIds: {
+            postToMediaRels: {
+              media: "id",
+            }
+          },
         },
+        audit: ...
+        debug: ...
       });
     case "delete":
-      return deleteHandler(req, res, prismaClient.post, {
+      return deleteHandler<Prisma.PostDeleteArgs>(req, res, prismaClient.post, {
         softDeleteField: "deletedAt",
+        audit: ...
+        debug: ...
       });
     case "deleteMany":
-      return deleteManyHandler(req, res, prismaClient.post, {
+      return deleteManyHandler<Prisma.PostDeleteManyArgs>(req, res, prismaClient.post, {
         softDeleteField: "deletedAt",
+        audit: ...
+        debug: ...
       });
     case "getList":
-      return getListHandler(
+      return getListHandler<Prisma.PostFindManyArgs>(
         req,
         res,
         prismaClient.post,
         {
           select: ...
+          where: ...
+          noNullsOnSort: ...
+          filterMode: ...
           include: { tags: true },
           transform: (posts: any[]) => {
             posts.forEach((post: any) => {
@@ -123,19 +142,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         }
       );
     case "getMany":
-      return getManyHandler(
+      return getManyHandler<Prisma.PostFindManyArgs>(
         req,
         res,
         prismaClient.post,
       );
     case "getManyReference":
-      return getManyReferenceHandler(
+      return getManyReferenceHandler<Prisma.PostFindManyArgs>(
         req,
         res,
         prismaClient.post,
       );
     case "getOne":
-      return getOneHandler(
+      return getOneHandler<Prisma.PostFindUniqueArgs>(
         req,
         res,
         prismaClient.post,
@@ -148,7 +167,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         }
       )
     case "update":
-      return updateHandler(
+      return updateHandler<Prisma.PostUpdateArgs>(
         req,
         res,
         prismaClient.post,
@@ -162,7 +181,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         }
       );
     case "updateMany":
-      return updateHandler(
+      return updateHandler<Prisma.PostUpdateManyArgs>(
         req,
         res,
         prismaClient.post,
@@ -176,7 +195,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         }
       );
     default: // <= fall back on default handler
-      return defaultHandler(req, res, prismaClient);
+      return defaultHandler(req, res, prismaClient, {
+        audit: ...
+        create: ...
+        delete: ...
+        getList: ...
+        getMany: ...
+        getManyReference: ...
+        getOne: ...
+        update: ...
+      });
   }
 }
 ```
