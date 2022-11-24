@@ -11,23 +11,23 @@ export type CreateArgs = {
   select?: object | null;
 };
 
-export type CreateImplicitConnectionShortcut = {
-  [key: string]: string;
-};
+// export type CreateImplicitConnectionShortcut = {
+//   [key: string]: string;
+// };
 
-export type CreateImplicitConnection = {
-  [key: string]: {
-    [key: string]: string;
-  };
-};
+// export type CreateImplicitConnection = {
+//   [key: string]: {
+//     [key: string]: string;
+//   };
+// };
 
-export type CreateExplicitConnection = {
-  [key: string]: {
-    [key: string]: {
-      [key: string]: string;
-    };
-  };
-};
+// export type CreateExplicitConnection = {
+//   [key: string]: {
+//     [key: string]: {
+//       [key: string]: string;
+//     };
+//   };
+// };
 
 export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
   connect?: {

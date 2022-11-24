@@ -12,23 +12,23 @@ export type UpdateArgs = {
   select?: object | null;
 };
 
-export type UpdateImplicitConnectionShortcut = {
-  [key: string]: string;
-};
+// export type UpdateImplicitConnectionShortcut = {
+//   [key: string]: string;
+// };
 
-export type UpdateImplicitConnection = {
-  [key: string]: {
-    [key: string]: string;
-  };
-};
+// export type UpdateImplicitConnection = {
+//   [key: string]: {
+//     [key: string]: string;
+//   };
+// };
 
-export type CreateExplicitConnection = {
-  [key: string]: {
-    [key: string]: {
-      [key: string]: string;
-    };
-  };
-};
+// export type CreateExplicitConnection = {
+//   [key: string]: {
+//     [key: string]: {
+//       [key: string]: string;
+//     };
+//   };
+// };
 
 export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
   debug?: boolean;
