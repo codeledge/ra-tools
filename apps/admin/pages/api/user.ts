@@ -18,7 +18,7 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
     case "getOne":
-      return getOneHandler<Prisma.UserFindUniqueArgs>(
+      return getOneHandler<Prisma.UserFindFirstArgs>(
         req,
         res,
         prismaClient["user"],
