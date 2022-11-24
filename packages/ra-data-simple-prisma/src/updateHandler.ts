@@ -3,10 +3,31 @@ import { Response, UpdateRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 import { isNotField } from "./lib/isNotField";
 import { isObject } from "./lib/isObject";
+import { isString } from "./lib/isString";
+import { firstValue } from "./lib/firstValue";
+import { firstKey } from "./lib/firstKey";
 
 export type UpdateArgs = {
   include?: object | null;
   select?: object | null;
+};
+
+export type UpdateImplicitConnectionShortcut = {
+  [key: string]: string;
+};
+
+export type UpdateImplicitConnection = {
+  [key: string]: {
+    [key: string]: string;
+  };
+};
+
+export type CreateExplicitConnection = {
+  [key: string]: {
+    [key: string]: {
+      [key: string]: string;
+    };
+  };
 };
 
 export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
@@ -15,7 +36,16 @@ export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
     [key: string]: boolean;
   };
   set?: {
-    [key: string]: string;
+    // TODO: Make this work UpdateImplicitConnectionShortcut | UpdateImplicitConnection | CreateExplicitConnection;
+    [key: string]:
+      | string
+      | {
+          [key: string]:
+            | string
+            | {
+                [key: string]: string;
+              };
+        };
   };
   allowNestedUpdate?: {
     [key: string]: boolean;
@@ -34,24 +64,84 @@ export const reduceData = (data, options: UpdateOptions) => {
     if (isNotField(key)) return fields;
     if (options?.skipFields?.[key]) return fields;
 
-    // transform an array to a connect (many-to-many)
-    // when the key is declared via 'set' option.
-    // e.g. (handler)
-    // updateHandler(req, res, prismaClient.post, {
-    //      set: {
-    //        tags: "id",
-    //      },
-    //    });
-    // (data) tags: [1, 2, 3] => tags: { set: [{id: 1}, {id: 2}, {id: 3}]} }
-    if (Array.isArray(value)) {
-      const foreignConnectKey = options?.set?.[key];
-      if (foreignConnectKey) {
+    const foreignSet = options?.set?.[key];
+    if (foreignSet) {
+      if (isString(foreignSet)) {
+        // transform an array to a connect (many-to-many)
+        // when the key is declared via 'set' option.
+        // e.g. (handler)
+        // updateHandler(req, res, prismaClient.post, {
+        //      set: {
+        //        tags: "id",
+        //      },
+        //    });
+        // (data) tags: [1, 2, 3] => tags: { set: [{id: 1}, {id: 2}, {id: 3}]} }
+
+        // foreignSet => id
+
         fields[key] = {
-          set: value.map((value) => ({ [foreignConnectKey]: value })),
+          set: (value as number[]).map((value) => ({
+            [foreignSet]: value,
+          })),
         };
-      } else {
-        // Assign the array value directly if the key is not declared via 'set' option
-        fields[key] = value;
+      }
+
+      if (isObject(foreignSet)) {
+        if (isObject(firstValue(foreignSet))) {
+          //foreignSet => { postToMediaRels: { media: "id" } }
+
+          // transform an array to a connect (EXPLICIT many-to-many)
+          // e.g. (handler)
+          // createHandler(req, res, prismaClient.post, {
+          //      set: {
+          //        mediaIds: {
+          //          postToMediaRels: {
+          //            media: "id",
+          //          }
+          //        },
+          //      },
+          //    });
+          // (data) mediaIds: [1, 2, 3] => postToMediaRels: { deleteMany: {}, create: [{media: {connect: {id: 1}}}, {media: {connect: {id: 2}}}, {media: {connect: {id: 3}}}] }
+
+          const foreignCreateKey = firstKey(foreignSet); // => postToMediaRels
+          const foreignConnectObject = foreignSet[foreignCreateKey]; // => {media: "id"}
+          const foreignConnectModel = firstKey(foreignConnectObject); // => media
+          const foreignConnectField = foreignConnectObject[foreignConnectModel]; // => id
+
+          fields[foreignCreateKey] = {
+            deleteMany: {}, // OK not perfect because now the "created at" will update for all rels
+            create: (value as any[]).map((val) => ({
+              [foreignConnectModel]: {
+                connect: { [foreignConnectField]: val },
+              },
+            })),
+          };
+        } else {
+          //foreignSet => { tags: "id" }
+
+          // transform an array to a connect (IMPLICIT many-to-many)
+          // e.g. (handler)
+          // createHandler(req, res, prismaClient.post, {
+          //      set: {
+          //        tagIds: {
+          //          tags: "id",
+          //        },
+          //      },
+          //    });
+          // (data) tagIds: [1, 2, 3] => tags: { connect: [{id: 1}, {id: 2}, {id: 3}] }
+
+          const foreignConnectKey = firstKey(foreignSet); // => tags
+          const foreignConnectField = foreignSet[foreignConnectKey] as string; // => id
+
+          fields[foreignConnectKey] = {
+            set: (value as any[]).map((val) => ({
+              [foreignConnectField]: val,
+            })),
+          };
+        }
+
+        // remove this data now that it has been transformed into another property
+        delete fields[key]; //delete mediaIds/tagIds: [1, 2, 3]
       }
     } else if (isObject(value)) {
       if (options?.allowNestedUpdate?.[key]) {
@@ -76,6 +166,7 @@ export const reduceData = (data, options: UpdateOptions) => {
         fields[key] = value;
       }
     } else {
+      // could be an array and get here if not consumed by foreignSet
       fields[key] = value;
     }
 
@@ -87,7 +178,7 @@ export const updateHandler = async <Args extends UpdateArgs>(
   req: UpdateRequest,
   res: Response,
   model: { update: Function },
-  options?: UpdateOptions<Args>
+  options?: UpdateOptions<Omit<Args, "data" | "where">>
 ) => {
   const { id } = req.body.params;
 

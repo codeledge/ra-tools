@@ -3,6 +3,7 @@ import { GetOneRequest, Response } from "./Http";
 export type GetOneArgs = {
   include?: object | null;
   select?: object | null;
+  // there is no where because it's always id based
 };
 
 export type GetOneOptions<Args extends GetOneArgs = GetOneArgs> = Args & {
@@ -14,7 +15,7 @@ export const getOneHandler = async <Args extends GetOneArgs>(
   req: GetOneRequest,
   res: Response,
   model: { findUnique: Function },
-  options?: GetOneOptions<Args>
+  options?: GetOneOptions<Omit<Args, "where">> // omit where so the Prisma.ModelFindUniqueArgs can be passed in, without complaining about the where property missing
 ) => {
   const { id } = req.body.params;
 

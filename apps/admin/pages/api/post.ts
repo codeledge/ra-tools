@@ -10,7 +10,13 @@ import {
   updateHandler,
 } from "ra-data-simple-prisma";
 import { apiHandler } from "../../middlewares/apiHandler";
-import { Prisma } from "@prisma/client";
+import { Prisma, Post, Tag, Media } from "@prisma/client";
+
+export type AdminPost = Post & {
+  tagIds: Tag["id"][];
+  mediaIds: Media["id"][];
+  _tags_count: number;
+};
 
 export default apiHandler(
   async (req: NextApiRequest, res: NextApiResponse, auth) => {
@@ -22,22 +28,39 @@ export default apiHandler(
           prismaClient["post"],
           {
             connect: {
-              tags: "id",
+              //tags: "id", if the prop is tag: [1,2,3]
+              tagIds: {
+                tags: "id",
+              },
+              mediaIds: {
+                postToMediaRels: {
+                  media: "id",
+                },
+              },
             },
             audit: { model: prismaClient.audit, authProvider: auth },
+            debug: true,
           }
         );
       case "getList":
-        return await getListHandler(
+        return await getListHandler<Prisma.PostFindManyArgs>(
           req as GetListRequest,
           res,
-          prismaClient["post"],
+          prismaClient.post,
           {
-            include: { tags: true },
-            transform: (posts: any[]) => {
-              posts.forEach((post: any) => {
-                post.tags = post.tags.map((tag: any) => tag.id);
-                post._tags_count = post.tags.length;
+            include: {
+              tags: true,
+              postToMediaRels: { include: { media: true } },
+            },
+            transform: (
+              posts: (AdminPost & { tags: any[]; postToMediaRels: any })[]
+            ) => {
+              posts.forEach((post) => {
+                post.tagIds = post["tags"].map((tag: any) => tag.id);
+                post.mediaIds = post["postToMediaRels"].map(
+                  ({ media }: any) => media.id
+                );
+                post._tags_count = post.tagIds.length;
               });
             },
           }
@@ -48,20 +71,39 @@ export default apiHandler(
           res,
           prismaClient["post"],
           {
-            include: { tags: true },
+            include: {
+              tags: true,
+              postToMediaRels: { include: { media: true } },
+            },
             transform: (post: any) => {
-              post.tags = post.tags.map((tag: any) => tag.id);
-              post._tags_count = post.tags.length;
+              post.tagIds = post.tags.map((tag: any) => tag.id);
+              post.mediaIds = post.postToMediaRels.map(
+                ({ media }: any) => media.id
+              );
+              post._tags_count = post.tagIds.length;
             },
           }
         );
       case "update":
-        return await updateHandler(req, res, prismaClient["post"], {
-          set: {
-            tags: "id",
-          },
-          audit: { model: prismaClient.audit, authProvider: auth },
-        });
+        return await updateHandler<Prisma.PostUpdateArgs>(
+          req,
+          res,
+          prismaClient["post"],
+          {
+            set: {
+              //tags: "id", if the prop is tag: [1,2,3]
+              tagIds: {
+                tags: "id",
+              },
+              mediaIds: {
+                postToMediaRels: {
+                  media: "id",
+                },
+              },
+            },
+            audit: { model: prismaClient.audit, authProvider: auth },
+          }
+        );
       default:
         return await defaultHandler(req, res, prismaClient, {
           audit: { model: prismaClient.audit, authProvider: auth },

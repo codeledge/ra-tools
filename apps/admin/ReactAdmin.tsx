@@ -13,6 +13,7 @@ import {
   CategoryEdit,
 } from "./resources/Category";
 import { AuditList } from "./resources/Audit";
+import { MediaCreate, MediaList } from "./resources/Media";
 
 const ReactAdmin = () => {
   const { data: session, status } = useSession();
@@ -32,6 +33,7 @@ const ReactAdmin = () => {
         edit={UserEdit}
         show={UserShow}
       />
+      <Resource name="media" list={MediaList} create={MediaCreate} />
       <Resource
         name="post"
         list={PostList}

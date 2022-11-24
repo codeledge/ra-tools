@@ -43,7 +43,12 @@ export const PostList = (props: ListProps) => (
       <TextField source="text" />
       <DateField source="createdAt" />
       <DateField source="updatedAt" />
-      <ReferenceArrayField label="Tags" reference="tag" source="tags">
+      <ReferenceArrayField label="Media" reference="media" source="mediaIds">
+        <SingleFieldList>
+          <ChipField source="url" />
+        </SingleFieldList>
+      </ReferenceArrayField>
+      <ReferenceArrayField label="Tags" reference="tag" source="tagIds">
         <SingleFieldList>
           <ChipField source="name" />
         </SingleFieldList>
@@ -59,8 +64,11 @@ export const PostCreate = (props: CreateProps) => (
         <AutocompleteInput optionText="name" />
       </ReferenceInput>
       <TextInput source="text" />
-      <ReferenceArrayInput label="Tags" reference="tag" source="tags">
+      <ReferenceArrayInput label="Tags" reference="tag" source="tagIds">
         <AutocompleteArrayInput />
+      </ReferenceArrayInput>
+      <ReferenceArrayInput label="Media" reference="media" source="mediaIds">
+        <AutocompleteArrayInput optionText={"url"} />
       </ReferenceArrayInput>
     </SimpleForm>
   </Create>
@@ -71,8 +79,11 @@ export const PostEdit = (props: EditProps) => (
     <SimpleForm>
       <TextInput source="text" />
       <NumberInput disabled source="_tags_count" />
-      <ReferenceArrayInput label="Tags" reference="tag" source="tags">
+      <ReferenceArrayInput label="Tags" reference="tag" source="tagIds">
         <AutocompleteArrayInput />
+      </ReferenceArrayInput>
+      <ReferenceArrayInput label="Media" reference="media" source="mediaIds">
+        <AutocompleteArrayInput optionText={"url"} />
       </ReferenceArrayInput>
     </SimpleForm>
   </Edit>
