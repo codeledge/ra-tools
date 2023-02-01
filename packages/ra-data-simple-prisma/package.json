@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "No brainer react-admin dataprovider for prisma, now also supporting audit logs",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
