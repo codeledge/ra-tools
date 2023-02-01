@@ -32,7 +32,7 @@ export const dataProvider = (
 ): DataProvider => {
   const apiService = axios.create({
     baseURL: endpoint,
-    headers: options.headers,
+    headers: options?.headers,
   });
 
   apiService.interceptors.response.use((res) => res.data);
