@@ -1,13 +1,13 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "No brainer react-admin dataprovider for prisma, now also supporting audit logs",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "pnpm build --watch",
     "lint": "TIMING=1 eslint src --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "prepublish": "pnpm build",
