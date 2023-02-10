@@ -1,7 +1,6 @@
 # React Admin & Prisma (& Next.js)
 
 Check the example apps to see common usages or use them as a boilerplate.
-Data is stored in local sqlite file!
 
 # Packages
 
