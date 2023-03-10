@@ -8,7 +8,15 @@ export type DeleteOptions = {
   audit?: AuditOptions;
 };
 
-export const deleteHandler = async (
+// NOTE: generic type W is not used in this function yet
+
+export const deleteHandler = async <
+  W extends {
+    include?: object | null;
+    select?: object | null;
+    where?: object | null;
+  }
+>(
   req: DeleteRequest,
   res: Response,
   model: { update: Function; delete: Function },
@@ -20,7 +28,7 @@ export const deleteHandler = async (
     ? await model.update({
         where: { id },
         data: {
-          [options?.softDeleteField]: new Date(),
+          [options.softDeleteField]: new Date(),
         },
       })
     : await model.delete({
