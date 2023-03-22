@@ -25,7 +25,7 @@ export const authProvider = (session?: Session | null): AuthProvider => ({
   getIdentity: () => {
     if (session?.user)
       return Promise.resolve({
-        id: session.userId! as string,
+        id: session.userId!,
         email: session.user.email,
         fullName: session.user.name!,
         avatar: session.user.image!,

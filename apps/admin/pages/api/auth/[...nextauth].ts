@@ -50,8 +50,7 @@ export default async function auth(req: any, res: any) {
           return Promise.resolve(true);
         }
 
-        if (account.provider === "google" && profile.verified_email === true)
-          return Promise.resolve(false);
+        if (account?.provider === "google") return Promise.resolve(false);
 
         //restrict domain
         if (
