@@ -7,18 +7,8 @@ Most of the examples will use Next.js but you can use any node-based server-side
 ### Installation
 
 ```
-yarn add ra-data-simple-prisma
-```
-
-or
-
-```
 npm i ra-data-simple-prisma
-```
-
-or
-
-```
+yarn add ra-data-simple-prisma
 pnpm i ra-data-simple-prisma
 ```
 
@@ -64,7 +54,6 @@ import { prismaClient } from "../prisma/client";
 import { authProvider } from "../providers/authProvider";
 import { getSession } from "next-auth/react";
 
-
 export default function handler(req, res) {
   const session = await getSession({ req });
   defaultHandler(req, res, prismaClient, {
@@ -78,11 +67,11 @@ export default function handler(req, res) {
 
 audit:
 
-- model: Insert your audit_log table ex. prisma.auditLog
+- model: The prisma model of the `audit log` table eg. `prisma.auditLog`
 - authProvider: Insert your AuthProvider from React-Admin
-- columns?: Link your database tables {id: "id", date: "created_at"}
-- enabledForAction?: Enabled for which action ex. {create: true, update: true, delete: false}
-  enabledResources?: List of resources which are to be audited. Default all.
+- columns?: Map fields to your database columns `{id: "_id", date: "created_at"}`
+- enabledForAction?: Enabled for which action eg. `{create: true, update: true, delete: false}`
+- enabledResources?: List of resources which are to be audited. Defaults to all.
 
 ### Overrides
 
