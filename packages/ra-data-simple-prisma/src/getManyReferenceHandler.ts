@@ -45,5 +45,7 @@ export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
   // TRANSFORM
   await options?.transform?.(data);
 
-  res.json({ data, total: data.length });
+  const response = { data, total: data.length };
+  res.json(response);
+  return response;
 };

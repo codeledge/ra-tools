@@ -35,5 +35,7 @@ export const getOneHandler = async <Args extends GetOneArgs>(
 
   if (options?.debug) console.log("getOneHandler:afterTransform", row);
 
-  res.json({ data: row });
+  const response = { data: row };
+  res.json(response);
+  return response;
 };
