@@ -1,5 +1,5 @@
 {
-  "name": "ra-prisma-nextjs-admin",
+  "name": "admin",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -10,30 +10,30 @@
     "kill": "kill -9 $(lsof -t -i:3020)"
   },
   "dependencies": {
-    "@babel/core": "7.21.3",
-    "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.13",
-    "@mui/styles": "^5.11.13",
-    "axios": "^0.27.2",
+    "@babel/core": "7.21.4",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.12.0",
+    "@mui/styles": "^5.12.0",
+    "axios": "^1.3.5",
     "db": "workspace:*",
     "lodash": "^4.17.21",
-    "next": "13.2.4",
-    "next-auth": "^4.20.1",
+    "next": "13.3.0",
+    "next-auth": "^4.22.0",
     "next-auth-prisma-adapter": "workspace:*",
     "ra-data-simple-prisma": "workspace:*",
     "react": "18.2.0",
-    "react-admin": "^4.8.4",
+    "react-admin": "^4.9.2",
     "react-admin-json-view": "^2.0.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.191",
-    "@types/node": "18.15.3",
-    "@types/react": "18.0.28",
+    "@types/lodash": "^4.14.192",
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.34",
     "@types/react-dom": "18.0.11",
     "config": "workspace:*",
-    "eslint": "8.36.0",
-    "eslint-config-next": "13.2.4",
-    "typescript": "5.0.2"
+    "eslint": "8.38.0",
+    "eslint-config-next": "13.3.0",
+    "typescript": "5.0.4"
   }
 }

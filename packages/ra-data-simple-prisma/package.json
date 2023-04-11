@@ -6,7 +6,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "build": "tsup src/index.ts --format esm,cjs --dts --treeshake",
     "dev": "pnpm build --watch",
     "lint": "TIMING=1 eslint src --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
@@ -29,7 +29,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/codeledge/ra-prisma-nextjs.git",
+    "url": "https://github.com/codeledge/ra-data-simple-prisma.git",
     "directory": "packages/ra-data-simple-prisma"
   },
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",

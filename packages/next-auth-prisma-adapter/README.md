@@ -122,7 +122,7 @@ You can now override in your second app the model names:
 
 ```js
 import { PrismaAdapter } from "next-auth-prisma-adapter";
-import prismaClient from "path/to/your/client";
+import { prismaClient } from "path/to/your/client";
 ...
 
   return await NextAuth(req, res, {

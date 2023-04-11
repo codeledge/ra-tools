@@ -1,4 +1,4 @@
-import prismaClient from "db";
+import { prismaClient } from "db";
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   defaultHandler,

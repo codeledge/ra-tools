@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "next-auth-prisma-adapter";
-import prismaClient from "db";
+import { prismaClient } from "db";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export default async function auth(req: any, res: any) {
@@ -49,8 +49,6 @@ export default async function auth(req: any, res: any) {
         if (user.email === "demo@example.com") {
           return Promise.resolve(true);
         }
-
-        if (account?.provider === "google") return Promise.resolve(false);
 
         //restrict domain
         if (

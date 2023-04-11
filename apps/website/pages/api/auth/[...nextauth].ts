@@ -1,6 +1,6 @@
 import NextAuth, { Session, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import prismaClient from "db";
+import { prismaClient } from "db";
 
 export default async function auth(req: any, res: any) {
   return await NextAuth(req, res, {

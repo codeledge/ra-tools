@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage } from "next/types";
 import { Post } from "@prisma/client";
-import prismaClient from "db";
+import { prismaClient } from "db";
 
 const HomePage: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (

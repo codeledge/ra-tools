@@ -6,8 +6,8 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+    "build": "tsup src/index.ts --format esm,cjs --dts --treeshake",
+    "dev": "pnpm build --watch",
     "lint": "TIMING=1 eslint src --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "prepublish": "pnpm build",
@@ -31,7 +31,8 @@
   },
   "devDependencies": {
     "jest": "^29.5.0",
+    "next-auth": "^4.22.0",
     "tsup": "^6.7.0",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.4"
   }
 }

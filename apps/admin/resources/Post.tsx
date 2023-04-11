@@ -19,6 +19,7 @@ import {
   EditProps,
   NumberInput,
   ReferenceField,
+  CloneButton,
 } from "react-admin";
 import { AutocompleteFilter } from "../filters/AutocompleteFilter";
 
@@ -53,6 +54,7 @@ export const PostList = (props: ListProps) => (
           <ChipField source="name" />
         </SingleFieldList>
       </ReferenceArrayField>
+      <CloneButton />
     </Datagrid>
   </List>
 );

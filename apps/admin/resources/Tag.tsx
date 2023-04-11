@@ -8,6 +8,7 @@ import {
   Create,
   SimpleForm,
   TextInput,
+  CloneButton,
 } from "react-admin";
 
 export const TagCreate = (props: CreateProps) => (
@@ -25,6 +26,7 @@ export const TagList = (props: ListProps) => (
       <TextField source="name" />
       <DateField source="createdAt" />
       <DateField source="updatedAt" />
+      <CloneButton />
     </Datagrid>
   </List>
 );
