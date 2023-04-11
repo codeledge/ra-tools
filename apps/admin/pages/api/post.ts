@@ -39,7 +39,6 @@ export default apiHandler(
               },
             },
             audit: { model: prismaClient.audit, authProvider: auth },
-            debug: true,
           }
         );
       case "getList":

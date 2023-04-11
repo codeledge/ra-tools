@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
 import { AuthProvider } from "react-admin";
 import { authProvider } from "../providers/authProvider";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../pages/api/auth/[...nextauth]";
 
 //API handler, catches all errors and returns them as JSON
 export const apiHandler =
@@ -14,8 +15,11 @@ export const apiHandler =
   ) =>
   async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-      const session = await getSession({ req });
-      if (!session) return res.status(401).json({});
+      const session = await getServerSession(req, res, authOptions);
+      if (!session)
+        return res.status(401).json({
+          message: "Unauthorized",
+        });
       return handler(req, res, authProvider(session));
     } catch (error: any) {
       console.error(error);

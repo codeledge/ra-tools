@@ -12,7 +12,6 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.body.method) {
     case "update":
       return updateHandler(req, res, prismaClient["user"], {
-        debug: true,
         allowNestedUpsert: {
           settings: true,
         },
