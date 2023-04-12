@@ -22,7 +22,7 @@ export default apiHandler(
   async (req: NextApiRequest, res: NextApiResponse, auth) => {
     switch (req.body.method) {
       case "create":
-        return await createHandler<Prisma.PostCreateArgs>(
+        await createHandler<Prisma.PostCreateArgs>(
           req,
           res,
           prismaClient["post"],
@@ -42,7 +42,7 @@ export default apiHandler(
           }
         );
       case "getList":
-        return await getListHandler<Prisma.PostFindManyArgs>(
+        await getListHandler<Prisma.PostFindManyArgs>(
           req as GetListRequest,
           res,
           prismaClient.post,
@@ -65,7 +65,7 @@ export default apiHandler(
           }
         );
       case "getOne":
-        return await getOneHandler<Prisma.PostFindUniqueArgs>(
+        await getOneHandler<Prisma.PostFindUniqueArgs>(
           req as GetOneRequest,
           res,
           prismaClient["post"],
@@ -84,7 +84,7 @@ export default apiHandler(
           }
         );
       case "update":
-        return await updateHandler<Prisma.PostUpdateArgs>(
+        await updateHandler<Prisma.PostUpdateArgs>(
           req,
           res,
           prismaClient["post"],
@@ -104,7 +104,7 @@ export default apiHandler(
           }
         );
       default:
-        return await defaultHandler(req, res, prismaClient, {
+        await defaultHandler(req, res, prismaClient, {
           audit: { model: prismaClient.audit, authProvider: auth },
         });
     }

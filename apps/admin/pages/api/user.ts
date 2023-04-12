@@ -11,13 +11,13 @@ import { Prisma } from "@prisma/client";
 export default apiHandler(async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.body.method) {
     case "update":
-      return updateHandler(req, res, prismaClient["user"], {
+      await updateHandler(req, res, prismaClient["user"], {
         allowNestedUpsert: {
           settings: true,
         },
       });
     case "getOne":
-      return getOneHandler<Prisma.UserFindFirstArgs>(
+      await getOneHandler<Prisma.UserFindFirstArgs>(
         req,
         res,
         prismaClient["user"],
@@ -32,6 +32,6 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse) => {
         }
       );
     default:
-      return defaultHandler(req, res, prismaClient);
+      await defaultHandler(req, res, prismaClient);
   }
 });

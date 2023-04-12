@@ -79,6 +79,9 @@ export const PostCreate = (props: CreateProps) => (
 export const PostEdit = (props: EditProps) => (
   <Edit {...props}>
     <SimpleForm>
+      <ReferenceInput label="User" source="userId" reference="user">
+        <AutocompleteInput optionText="name" />
+      </ReferenceInput>
       <TextInput source="text" />
       <NumberInput disabled source="_tags_count" />
       <ReferenceArrayInput label="Tags" reference="tag" source="tagIds">

@@ -5,7 +5,7 @@ import { prismaClient } from "db";
 
 export default apiHandler(
   async (req: NextApiRequest, res: NextApiResponse, auth) => {
-    return await defaultHandler(req, res, prismaClient, {
+    await defaultHandler(req, res, prismaClient, {
       getList: { debug: false },
       audit: {
         model: prismaClient.audit,

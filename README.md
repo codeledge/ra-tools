@@ -4,8 +4,8 @@ Check the example apps to see common usages or use them as a boilerplate.
 
 # Packages
 
-[ra-data-simple-prisma](./packages/ra-data-simple-prisma/)
-[next-auth-prisma](./packages/next-auth-prisma/)
+- [ra-data-simple-prisma](./packages/ra-data-simple-prisma/)
+- [next-auth-prisma-adapter](./packages/next-auth-prisma-adapter/)
 
 # Examples
 
