@@ -28,5 +28,7 @@ export const getManyHandler = async <Args extends GetManyArgs>(
   // TRANSFORM
   await options?.transform?.(data);
 
-  res.json({ data });
+  const response = { data };
+  res.json(response);
+  return response;
 };

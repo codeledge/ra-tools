@@ -92,8 +92,10 @@ export const getListHandler = async <Args extends GetListArgs>(
   await options?.transform?.(data);
 
   // RESPOND WITH DATA
-  res.json({
+  const response = {
     data,
     total,
-  });
+  };
+  res.json(response);
+  return response;
 };

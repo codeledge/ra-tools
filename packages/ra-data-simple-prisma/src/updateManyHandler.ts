@@ -1,4 +1,4 @@
-import { Response, UpdateManyRequest, UpdateRequest } from "./Http";
+import { Response, UpdateManyRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 import { reduceData, UpdateArgs, UpdateOptions } from "./updateHandler";
 
@@ -26,5 +26,7 @@ export const updateManyHandler = async <Args extends UpdateArgs>(
   }
 
   //react-admin expects a array of ids as response
-  res.json({ data: ids });
+  const response = { data: ids };
+  res.json(response);
+  return response;
 };

@@ -151,5 +151,7 @@ export const createHandler = async <Args extends CreateArgs>(
     await auditHandler(req, options?.audit, created);
   }
 
-  res.json({ data: created });
+  const response = { data: created };
+  res.json(response);
+  return response;
 };

@@ -39,5 +39,7 @@ export const deleteHandler = async <
     await auditHandler(req, options?.audit);
   }
 
-  res.json({ data: deleted });
+  const response = { data: deleted };
+  res.json(response);
+  return response;
 };
