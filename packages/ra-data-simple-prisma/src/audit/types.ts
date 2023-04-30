@@ -1,5 +1,3 @@
-// import { UserIdentity } from "react-admin";
-
 import { AuthProvider } from "react-admin";
 
 export type AuditOptions = {

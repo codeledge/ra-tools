@@ -196,7 +196,7 @@ export const updateHandler = async <Args extends UpdateArgs>(
   });
 
   if (options?.audit) {
-    await auditHandler(req, options?.audit);
+    await auditHandler(req, options.audit);
   }
 
   const response = { data: updated };

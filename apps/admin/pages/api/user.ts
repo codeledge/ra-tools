@@ -16,6 +16,7 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse) => {
           settings: true,
         },
       });
+      break;
     case "getOne":
       await getOneHandler<Prisma.UserFindFirstArgs>(
         req,
@@ -31,7 +32,9 @@ export default apiHandler(async (req: NextApiRequest, res: NextApiResponse) => {
           },
         }
       );
+      break;
     default:
       await defaultHandler(req, res, prismaClient);
+      break;
   }
 });

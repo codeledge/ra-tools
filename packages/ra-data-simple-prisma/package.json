@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "No brainer react-admin dataprovider for prisma, now also supporting audit logs",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --treeshake",
     "dev": "pnpm build --watch",
-    "lint": "TIMING=1 eslint src --fix",
+    "lint": "eslint src --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "prepublish": "pnpm build",
     "test": "jest"
@@ -38,15 +38,17 @@
     "@prisma/client": ">=3"
   },
   "dependencies": {
-    "@types/node": "^18.15.3",
-    "axios": "^0.27.2",
+    "@types/node": "^18.16.3",
+    "axios": "^1.4.0",
     "deepmerge": "^4.3.1",
-    "react-admin": "^4.8.4",
+    "deverything": "^0.18.0",
+    "react-admin": "^4.10.1",
     "set-value": "^4.1.0"
   },
   "devDependencies": {
     "jest": "^29.5.0",
+    "eslint-config-custom": "workspace:*",
     "tsup": "^6.7.0",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.4"
   }
 }

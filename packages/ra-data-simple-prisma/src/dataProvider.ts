@@ -4,10 +4,11 @@ import axios from "axios";
 import type {
   AxiosError,
   AxiosInterceptorOptions,
-  AxiosRequestConfig,
-  AxiosResponse,
   AxiosRequestHeaders,
 } from "axios";
+
+type AxiosInterceptorFulfilled<V> = ((value: V) => V | Promise<V>) | null;
+type AxiosInterceptorError = ((error: any) => any) | null;
 
 export const dataProvider = (
   endpoint: string,
@@ -16,15 +17,13 @@ export const dataProvider = (
     resourceToModelMap?: Record<string, string>;
     axiosInterceptors?: {
       response?: {
-        onFulfilled?: (value: AxiosResponse<any, any>) => any;
-        onRejected?: (error: any) => any;
+        onFulfilled?: AxiosInterceptorFulfilled<any>;
+        onRejected?: AxiosInterceptorError;
         options?: AxiosInterceptorOptions;
       }[];
       request?: {
-        onFulfilled?: (
-          value: AxiosRequestConfig<any>
-        ) => AxiosRequestConfig<any> | Promise<AxiosRequestConfig<any>>;
-        onRejected?: (error: any) => any;
+        onFulfilled?: AxiosInterceptorFulfilled<any>;
+        onRejected?: AxiosInterceptorError;
         options?: AxiosInterceptorOptions;
       }[];
     };

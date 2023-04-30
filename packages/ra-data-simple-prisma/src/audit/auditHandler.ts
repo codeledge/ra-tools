@@ -1,5 +1,6 @@
 import { AuditOptions, defaultAuditOptions } from "./types";
 import { Request } from "../Http";
+import { objectDiff } from "deverything";
 
 export const auditHandler = async (
   request: Request,
@@ -78,14 +79,4 @@ export const createAuditEntry = async (
     data,
   });
   return created;
-};
-
-const objectDiff = (obj1, obj2) => {
-  var ret = {};
-  for (var i in obj2) {
-    if (!obj1.hasOwnProperty(i) || obj2[i] !== obj1[i]) {
-      ret[i] = obj2[i];
-    }
-  }
-  return ret;
 };

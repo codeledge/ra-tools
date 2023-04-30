@@ -1,5 +1,5 @@
 {
-  "name": "ra-data-simple-prisma-root",
+  "name": "ra-tools",
   "version": "0.0.0",
   "private": true,
   "workspaces": [

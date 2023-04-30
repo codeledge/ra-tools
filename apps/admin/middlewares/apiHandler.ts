@@ -10,7 +10,7 @@ export const apiHandler =
     handler: (
       req: NextApiRequest,
       res: NextApiResponse,
-      auth: AuthProvider
+      authProviderInstance: AuthProvider
     ) => void
   ) =>
   async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {

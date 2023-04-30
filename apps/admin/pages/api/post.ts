@@ -11,6 +11,7 @@ import {
 } from "ra-data-simple-prisma";
 import { apiHandler } from "../../middlewares/apiHandler";
 import { Prisma, Post, Tag, Media } from "@prisma/client";
+import { AuthProvider } from "react-admin";
 
 export type AdminPost = Post & {
   tagIds: Tag["id"][];
@@ -19,7 +20,11 @@ export type AdminPost = Post & {
 };
 
 export default apiHandler(
-  async (req: NextApiRequest, res: NextApiResponse, auth) => {
+  async (
+    req: NextApiRequest,
+    res: NextApiResponse,
+    authProvider: AuthProvider
+  ) => {
     switch (req.body.method) {
       case "create":
         await createHandler<Prisma.PostCreateArgs>(
@@ -38,9 +43,10 @@ export default apiHandler(
                 },
               },
             },
-            audit: { model: prismaClient.audit, authProvider: auth },
+            audit: { model: prismaClient.audit, authProvider },
           }
         );
+        break;
       case "getList":
         await getListHandler<Prisma.PostFindManyArgs>(
           req as GetListRequest,
@@ -64,7 +70,8 @@ export default apiHandler(
             },
           }
         );
-      case "getOne":
+        break;
+      case "getOne": {
         await getOneHandler<Prisma.PostFindUniqueArgs>(
           req as GetOneRequest,
           res,
@@ -83,11 +90,13 @@ export default apiHandler(
             },
           }
         );
-      case "update":
+        break;
+      }
+      case "update": {
         await updateHandler<Prisma.PostUpdateArgs>(
           req,
           res,
-          prismaClient["post"],
+          prismaClient.post,
           {
             set: {
               //tags: "id", if the prop is tag: [1,2,3]
@@ -100,13 +109,17 @@ export default apiHandler(
                 },
               },
             },
-            audit: { model: prismaClient.audit, authProvider: auth },
+            audit: { model: prismaClient.audit, authProvider },
+            // debug: true,
           }
         );
+        break;
+      }
       default:
         await defaultHandler(req, res, prismaClient, {
-          audit: { model: prismaClient.audit, authProvider: auth },
+          audit: { model: prismaClient.audit, authProvider },
         });
+        break;
     }
   }
 );

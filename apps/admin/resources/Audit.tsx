@@ -3,15 +3,17 @@ import {
   DateField,
   List,
   ListProps,
-  SelectInput,
+  ReferenceField,
   TextField,
 } from "react-admin";
 import { ExtendedJsonField } from "../fields/ExtendedJsonField";
 
 export const AuditList = (props: ListProps) => (
-  <List {...props}>
+  <List sort={{ field: "date", order: "DESC" }} {...props}>
     <Datagrid rowClick="show">
-      <TextField source="id" />
+      <ReferenceField label="Author" source="authorId" reference="adminUser">
+        <TextField source="name" />
+      </ReferenceField>
       <ExtendedJsonField source="payload" />
       <DateField source="date" showTime />
       <TextField source="action" />
