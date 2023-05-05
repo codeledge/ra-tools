@@ -33,7 +33,7 @@ export const authProvider = (session?: Session | null): AuthProvider => ({
       });
     else return Promise.reject(new Error("identity not found"));
   },
-  getPermissions: () => {
+  getPermissions: (_params) => {
     if (!session?.role) return Promise.reject(new Error("role not found"));
     return Promise.resolve(permissionsConfig[session.role]);
   },
