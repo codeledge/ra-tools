@@ -41,7 +41,7 @@
     "@types/node": "^18.16.3",
     "axios": "^1.4.0",
     "deepmerge": "^4.3.1",
-    "deverything": "^0.18.0",
+    "deverything": "^0.19.1",
     "react-admin": "^4.10.1",
     "set-value": "^4.1.0"
   },
