@@ -10,24 +10,24 @@
     "kill": "kill -9 $(lsof -t -i:3021)"
   },
   "dependencies": {
-    "@babel/core": "7.21.3",
-    "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.13",
-    "@mui/styles": "^5.11.13",
+    "@babel/core": "7.21.8",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.12.3",
+    "@mui/styles": "^5.12.3",
     "config": "workspace:*",
     "db": "workspace:*",
-    "next": "13.2.4",
-    "next-auth": "^4.20.1",
+    "next": "13.4.1",
+    "next-auth": "^4.22.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@types/node": "18.15.3",
-    "@types/react": "18.0.28",
-    "@types/react-dom": "18.0.11",
+    "@types/node": "20.1.0",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
     "babel-plugin-superjson-next": "^0.4.5",
     "eslint-config-custom": "workspace:*",
-    "superjson": "^1.12.2",
-    "typescript": "5.0.2"
+    "superjson": "^1.12.3",
+    "typescript": "5.0.4"
   }
 }

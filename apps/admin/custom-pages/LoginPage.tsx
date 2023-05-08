@@ -10,7 +10,6 @@ import Typography from "@mui/material/Typography";
 import { signIn } from "next-auth/react";
 import { useCheckAuth } from "react-admin";
 import Router from "next/router";
-import Link from "next/link";
 
 const LoginPage = () => {
   const checkAuth = useCheckAuth();
@@ -56,7 +55,6 @@ const LoginPage = () => {
             sx={{ mt: 1 }}
           >
             <Button
-              // type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
@@ -65,17 +63,11 @@ const LoginPage = () => {
               Sign In with Google
             </Button>
           </Box>
-          <Link href="/api/auth/signin">Login by password</Link>
+          {/* <Link href="/api/auth/signin">Login by password</Link> */}
         </Box>
       </Container>
     </ThemeProvider>
   );
 };
-{
-  /* <>
-      Not signed in <br />
-      
-    </> */
-}
 
 export default LoginPage;
