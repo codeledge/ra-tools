@@ -10,27 +10,27 @@
     "kill": "kill -9 $(lsof -t -i:3020)"
   },
   "dependencies": {
-    "@babel/core": "7.21.5",
+    "@babel/core": "7.21.8",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.12.2",
-    "@mui/styles": "^5.12.0",
+    "@mui/material": "^5.12.3",
+    "@mui/styles": "^5.12.3",
     "axios": "^1.4.0",
     "db": "workspace:*",
     "lodash": "^4.17.21",
-    "next": "13.3.2",
+    "next": "13.4.1",
     "next-auth": "^4.22.1",
     "next-auth-prisma-adapter": "workspace:*",
     "ra-data-simple-prisma": "workspace:*",
     "react": "18.2.0",
-    "react-admin": "^4.10.1",
+    "react-admin": "^4.10.2",
     "react-admin-json-view": "^2.0.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.194",
-    "@types/node": "18.16.3",
-    "@types/react": "18.2.0",
-    "@types/react-dom": "18.2.1",
+    "@types/node": "20.1.0",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
     "eslint-config-custom": "workspace:*",
     "typescript": "5.0.4"
   }

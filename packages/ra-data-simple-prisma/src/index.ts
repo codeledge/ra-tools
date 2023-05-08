@@ -14,3 +14,4 @@ export * from "./Http";
 export * from "./updateHandler";
 export * from "./updateManyHandler";
 export * from "./audit";
+export * from "./permissions";

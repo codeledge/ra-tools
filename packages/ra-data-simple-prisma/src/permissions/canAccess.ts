@@ -1,0 +1,97 @@
+import isMatch from "lodash/isMatch";
+import { Action, Permission, Permissions } from "./types";
+
+export type ReactAdminFetchActions =
+  | "getOne"
+  | "create"
+  | "update"
+  | "getList"
+  | "getMany"
+  | "getManyReference"
+  | "updateMany"
+  | "delete"
+  | "deleteMany";
+
+export const fetchActionToAction: Record<ReactAdminFetchActions, Action> = {
+  getOne: "show",
+  create: "create",
+  getList: "list",
+  getMany: "list",
+  getManyReference: "list",
+  update: "edit",
+  updateMany: "edit",
+  delete: "delete",
+  deleteMany: "delete",
+};
+
+export const canAccess = ({
+  action,
+  permissions,
+  resource,
+  record,
+}: {
+  action: Action;
+  permissions: Permissions<string>;
+  resource: string; //better type is Permission["resource"] but ra's resource is string
+  record?: any;
+}): boolean => {
+  if (!permissions || permissions.length === 0) return false;
+
+  // if any deny permission matches => false
+  for (const permission of permissions.filter(
+    (p) => p !== null && p.type === "deny"
+  )) {
+    if (matchTarget(permission, resource, action, record)) {
+      return false;
+    }
+  }
+  // if any allow permission matches => true
+  for (const permission of permissions.filter(
+    (p) => p !== null && p.type !== "deny"
+  )) {
+    if (matchTarget(permission, resource, action, record)) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const matchTarget = (
+  permission: Permission<string>,
+  resource: string,
+  action: Action,
+  record?: any
+) => {
+  if (permission === null || !matchWildcard(permission.resource, resource)) {
+    return false;
+  }
+  if (Array.isArray(permission.action) && !permission.action.includes(action)) {
+    return false;
+  }
+  if (
+    typeof permission.action === "string" &&
+    permission.action !== "*" &&
+    permission.action !== action
+  ) {
+    return false;
+  }
+  if (permission.record && record) {
+    if (!isMatch(record, permission.record)) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const matchWildcard = (pattern: string, resource: string) => {
+  if (pattern === "*") {
+    return true;
+  }
+  if (pattern === resource) {
+    return true;
+  }
+  if (pattern.endsWith("*")) {
+    return resource.startsWith(pattern.slice(0, -1));
+  }
+  return false;
+};

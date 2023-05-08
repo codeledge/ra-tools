@@ -1,7 +1,7 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "2.2.1",
-  "description": "No brainer react-admin dataprovider for prisma, now also supporting audit logs",
+  "version": "2.3.0",
+  "description": "Simple react-admin dataprovider for prisma, supporting audit logs and roles",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -38,16 +38,16 @@
     "@prisma/client": ">=3"
   },
   "dependencies": {
-    "@types/node": "^18.16.3",
+    "@types/node": "^20.1.0",
     "axios": "^1.4.0",
     "deepmerge": "^4.3.1",
-    "deverything": "^0.19.1",
-    "react-admin": "^4.10.1",
+    "deverything": "^0.20.0",
+    "react-admin": "^4.10.2",
     "set-value": "^4.1.0"
   },
   "devDependencies": {
-    "jest": "^29.5.0",
     "eslint-config-custom": "workspace:*",
+    "jest": "^29.5.0",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   }

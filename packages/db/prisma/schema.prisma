@@ -148,7 +148,7 @@ model AdminUser {
   email         String?        @unique
   emailVerified DateTime?
   image         String?
-  role          Role?
+  role          Role           @default(READER)
   accounts      AdminAccount[]
   sessions      AdminSession[]
   audit         Audit[]

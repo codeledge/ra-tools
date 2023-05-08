@@ -1,6 +1,7 @@
 import { AuthProvider } from "react-admin";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
+import { permissionsConfig } from "./permissions";
 
 export const authProvider = (session?: Session | null): AuthProvider => ({
   login: (_params) => {
@@ -29,11 +30,12 @@ export const authProvider = (session?: Session | null): AuthProvider => ({
         email: session.user.email,
         fullName: session.user.name!,
         avatar: session.user.image!,
+        role: session.role!,
       });
     else return Promise.reject(new Error("identity not found"));
   },
   getPermissions: (_params) => {
-    //console.info("getPermissions", params);
-    return Promise.resolve(session?.role);
+    if (!session?.role) return Promise.reject(new Error("role not found"));
+    return Promise.resolve(permissionsConfig[session.role]);
   },
 });
