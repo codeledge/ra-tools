@@ -1,5 +1,5 @@
 import { Adapter } from "next-auth/adapters";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 // https://github.com/nextauthjs/adapters/blob/main/packages/prisma/src/index.ts
 export function PrismaAdapter(
@@ -55,8 +55,8 @@ export function PrismaAdapter(
       } catch (error) {
         // If token already used/deleted, just return null
         // https://www.prisma.io/docs/reference/api-reference/error-reference#p2025
-        if ((error as Prisma.PrismaClientKnownRequestError).code === "P2025")
-          return null;
+        // PrismaClientKnownRequestError
+        if ((error as any).code === "P2025") return null;
         throw error;
       }
     },
