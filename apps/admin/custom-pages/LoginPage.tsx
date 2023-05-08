@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { signIn } from "next-auth/react";
 import { useCheckAuth } from "react-admin";
 import Router from "next/router";
+import Link from "next/link";
 
 const LoginPage = () => {
   const checkAuth = useCheckAuth();
@@ -27,7 +28,10 @@ const LoginPage = () => {
 
   return (
     <ThemeProvider theme={createTheme()}>
-      <Container component="main" maxWidth="xs">
+      <Container
+        component="main"
+        maxWidth="xs"
+      >
         <CssBaseline />
         <Box
           sx={{
@@ -40,10 +44,17 @@ const LoginPage = () => {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography
+            component="h1"
+            variant="h5"
+          >
             Sign in
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            noValidate
+            sx={{ mt: 1 }}
+          >
             <Button
               // type="submit"
               fullWidth
@@ -54,6 +65,7 @@ const LoginPage = () => {
               Sign In with Google
             </Button>
           </Box>
+          <Link href="/api/auth/signin">Login by password</Link>
         </Box>
       </Container>
     </ThemeProvider>

@@ -3,6 +3,7 @@ import { AuthProvider } from "react-admin";
 import { authProvider } from "../providers/authProvider";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
+import { accessCheck } from "../providers/accessCheck";
 
 //API handler, catches all errors and returns them as JSON
 export const apiHandler =
@@ -20,6 +21,9 @@ export const apiHandler =
         return res.status(401).json({
           message: "Unauthorized",
         });
+
+      await accessCheck(req, res);
+
       return handler(req, res, authProvider(session));
     } catch (error: any) {
       console.error(error);

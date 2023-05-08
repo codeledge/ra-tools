@@ -30,6 +30,7 @@ export const authProvider = (session?: Session | null): AuthProvider => ({
         email: session.user.email,
         fullName: session.user.name!,
         avatar: session.user.image!,
+        role: session.role!,
       });
     else return Promise.reject(new Error("identity not found"));
   },

@@ -5,7 +5,7 @@ import { prismaClient } from "db";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
-  debug: true,
+  // debug: true,
   secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prismaClient, {
     userModel: "adminUser",

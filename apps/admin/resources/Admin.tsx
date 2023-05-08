@@ -14,9 +14,12 @@ import {
   SimpleForm,
   SimpleShowLayout,
   SingleFieldList,
+  SelectInput,
   TextField,
   TextInput,
+  EditButton,
 } from "react-admin";
+import { Role } from "@prisma/client";
 
 export const AdminCreate = (props: CreateProps) => (
   <Create {...props}>
@@ -26,9 +29,29 @@ export const AdminCreate = (props: CreateProps) => (
   </Create>
 );
 
+export const AdminEdit = (props: EditProps) => (
+  <Edit
+    {...props}
+    mutationMode="pessimistic"
+  >
+    <SimpleForm>
+      <TextInput source="name" />
+      <SelectInput
+        source="role"
+        choices={Object.values(Role).map((value) => ({
+          id: value,
+          name: value,
+        }))}
+        required
+      />
+    </SimpleForm>
+  </Edit>
+);
+
 export const AdminList = (props: ListProps) => (
   <List {...props}>
     <Datagrid rowClick="show">
+      <EditButton />
       <TextField source="id" />
       <TextField source="name" />
       <TextField source="email" />
@@ -43,6 +66,8 @@ export const AdminShow = () => (
   <Show>
     <SimpleShowLayout>
       <TextField source="name" />
+      <TextField source="role" />
+      <TextField source="email" />
     </SimpleShowLayout>
   </Show>
 );
