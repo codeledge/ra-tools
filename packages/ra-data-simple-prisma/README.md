@@ -20,7 +20,7 @@ import { dataProvider } from "ra-data-simple-prisma";
 
 const ReactAdmin = () => {
   return (
-    <Admin dataProvider={dataProvider("/api")}>
+    <Admin dataProvider={dataProvider("/api", options)}>
       <Resource name="users" />
     </Admin>
   );
