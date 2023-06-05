@@ -14,6 +14,7 @@ export const dataProvider = (
   endpoint: string,
   options?: {
     headers?: AxiosRequestHeaders;
+    withCredentials?: boolean;
     resourceToModelMap?: Record<string, string>;
     axiosInterceptors?: {
       response?: {
@@ -32,6 +33,7 @@ export const dataProvider = (
   const apiService = axios.create({
     baseURL: endpoint,
     headers: options?.headers,
+    withCredentials: options?.withCredentials,
   });
 
   apiService.interceptors.response.use((res) => res.data);

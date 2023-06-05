@@ -58,7 +58,11 @@ const LoginPage = () => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={() => signIn("google")}
+              onClick={() =>
+                signIn("google", {
+                  callbackUrl: "/", // should fix redirection
+                })
+              }
             >
               Sign In with Google
             </Button>

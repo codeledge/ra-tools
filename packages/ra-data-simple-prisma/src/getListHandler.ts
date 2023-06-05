@@ -9,10 +9,11 @@ export type GetListArgs = {
   include?: object | null;
   select?: object | null;
   where?: object | null;
+  orderBy?: object | null;
 };
 
 export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
-  noNullsOnSort?: string[];
+  noNullsOnSort?: string[]; // TODO: to be keyof Args["orderBy"]
   debug?: boolean;
   transform?: (data: any) => any;
   filterMode?: FilterMode;
