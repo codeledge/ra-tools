@@ -4,7 +4,7 @@ import axios from "axios";
 import type {
   AxiosError,
   AxiosInterceptorOptions,
-  AxiosRequestHeaders,
+  CreateAxiosDefaults,
 } from "axios";
 
 type AxiosInterceptorFulfilled<V> = ((value: V) => V | Promise<V>) | null;
@@ -13,7 +13,7 @@ type AxiosInterceptorError = ((error: any) => any) | null;
 export const dataProvider = (
   endpoint: string,
   options?: {
-    headers?: AxiosRequestHeaders;
+    headers?: CreateAxiosDefaults["headers"];
     withCredentials?: boolean;
     resourceToModelMap?: Record<string, string>;
     axiosInterceptors?: {

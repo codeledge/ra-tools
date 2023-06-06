@@ -31,9 +31,15 @@ export const extractWhere = (
       const hasOperator = logicalOperators.some((operator) => {
         if (colName.endsWith(`_${operator}`)) {
           [colName] = colName.split(`_${operator}`);
-          operator === "enum" 
+          // TODO: also add an _exact operator?, same as _eq or enum
+          operator === "enum"
             ? setObjectProp(where, colName, value)
-            : setObjectProp(where, colName, { [operator]: value }, { merge: true });
+            : setObjectProp(
+                where,
+                colName,
+                { [operator]: value },
+                { merge: true }
+              );
           return true;
         }
       });
@@ -50,6 +56,7 @@ export const extractWhere = (
         typeof value === "number" ||
         typeof value === "boolean"
       ) {
+        // TODO: if the client sends null, than that is also a valid (exact) filter!
         setObjectProp(where, colName, value);
       } else if (Array.isArray(value)) {
         setObjectProp(where, colName, { in: value });
