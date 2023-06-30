@@ -13,7 +13,7 @@ export const authProvider = (session?: Session | null): AuthProvider => ({
     return Promise.resolve();
   },
   checkAuth: (_params) => {
-    //console.info("checkAuth", params);
+    // console.info("checkAuth", _params, session);
     if (session) return Promise.resolve();
     return Promise.reject(new Error("Invalid session"));
   },
@@ -26,16 +26,16 @@ export const authProvider = (session?: Session | null): AuthProvider => ({
   getIdentity: () => {
     if (session?.user)
       return Promise.resolve({
-        id: session.userId!,
+        id: session.user.userId,
         email: session.user.email,
-        fullName: session.user.name!,
-        avatar: session.user.image!,
-        role: session.role!,
+        fullName: session.user.name,
+        avatar: session.user.image,
+        role: session.user.role,
       });
     else return Promise.reject(new Error("identity not found"));
   },
   getPermissions: (_params) => {
-    if (!session?.role) return Promise.reject(new Error("role not found"));
-    return Promise.resolve(permissionsConfig[session.role]);
+    if (!session?.user.role) return Promise.reject(new Error("role not found"));
+    return Promise.resolve(permissionsConfig[session.user.role]);
   },
 });

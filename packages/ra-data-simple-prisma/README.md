@@ -126,9 +126,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           noNullsOnSort: ...
           filterMode: ...
           include: { tags: true },
-          transform: (posts: any[]) => {
-            posts.forEach((post: any) => {
-              post.tags = post.tags.map((tag: any) => tag.id);
+          // Deprecated - use `map` which works better with TS
+          transform: (posts: Post[]) => {
+            // some clunky casting to make TS happy
+            (posts as AugmentedPost[]).forEach((post ) => {
+              post.tagIds = post.tags.map((tag) => tag.id);
+            });
+          },
+          map: (posts: Post[]): AugmentedPost[] => {
+            posts.forEach((post) => {
+              return {
+                ...post
+                tagIds: post.tags.map((tag) => tag.id);
+              }
             });
           },
         }

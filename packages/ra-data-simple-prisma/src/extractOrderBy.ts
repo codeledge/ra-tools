@@ -10,6 +10,7 @@ export const extractOrderBy = (
 
   if (sort) {
     const { field, order } = sort;
+    // TODO: use isField() or you will sort underscore fields
     if (field && order) {
       setObjectProp(orderBy, field, order.toLowerCase());
     }

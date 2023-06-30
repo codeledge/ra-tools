@@ -115,51 +115,14 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model AdminAccount {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  user AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model AdminSession {
-  id           String    @id @default(cuid())
-  sessionToken String    @unique
-  userId       String
-  expires      DateTime
-  user         AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 model AdminUser {
-  id            String         @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String?        @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
-  role          Role           @default(READER)
-  accounts      AdminAccount[]
-  sessions      AdminSession[]
+  role          Role      @default(READER)
   audit         Audit[]
-}
-
-model AdminVerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
 }
 
 model Audit {

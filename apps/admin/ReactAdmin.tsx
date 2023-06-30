@@ -23,6 +23,7 @@ import Dashboard from "./custom-pages/Dashboard";
 
 const ReactAdmin = () => {
   const { data: session, status } = useSession();
+
   if (status === "loading") return <p>loading</p>;
 
   return (
@@ -40,22 +41,14 @@ const ReactAdmin = () => {
         edit={UserEdit}
         show={UserShow}
       />
-      <Resource
-        name="media"
-        list={MediaList}
-        create={MediaCreate}
-      />
+      <Resource name="media" list={MediaList} create={MediaCreate} />
       <Resource
         name="post"
         list={PostList}
         create={PostCreate}
         edit={PostEdit}
       />
-      <Resource
-        name="tag"
-        list={TagList}
-        create={TagCreate}
-      />
+      <Resource name="tag" list={TagList} create={TagCreate} />
       <Resource
         name="admin"
         list={AdminList}
@@ -69,10 +62,7 @@ const ReactAdmin = () => {
         create={CategoryCreate}
         edit={CategoryEdit}
       />
-      <Resource
-        name="audit"
-        list={AuditList}
-      />
+      <Resource name="audit" list={AuditList} />
     </Admin>
   );
 };
