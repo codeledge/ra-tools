@@ -10,10 +10,12 @@ export default async function handler(
 ) {
   const session = await getServerSession(req, res, authOptions);
 
-  await prismaClient.adminUser.update({
-    where: { id: session?.userId },
-    data: { role: "OWNER" },
-  });
+  if (session?.user?.userId) {
+    await prismaClient.adminUser.update({
+      where: { id: session?.user?.userId },
+      data: { role: "OWNER" },
+    });
+  }
 
   res.redirect("/api/auth/signout");
 }

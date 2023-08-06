@@ -13,7 +13,12 @@ import { apiHandler } from "../../middlewares/apiHandler";
 import { Prisma, Post, Tag, Media } from "@prisma/client";
 import { AuthProvider } from "react-admin";
 
-export type AdminPost = Post & {
+type QueryPost = Post & {
+  tags: Tag[];
+  postToMediaRels: { media: Media }[];
+};
+
+type ReturnPost = QueryPost & {
   tagIds: Tag["id"][];
   mediaIds: Media["id"][];
   _tags_count: number;
@@ -57,15 +62,14 @@ export default apiHandler(
               tags: true,
               postToMediaRels: { include: { media: true } },
             },
-            transform: (
-              posts: (AdminPost & { tags: any[]; postToMediaRels: any })[]
-            ) => {
-              posts.forEach((post) => {
-                post.tagIds = post["tags"].map((tag: any) => tag.id);
-                post.mediaIds = post["postToMediaRels"].map(
-                  ({ media }: any) => media.id
-                );
-                post._tags_count = post.tagIds.length;
+            map: (posts: QueryPost[]): ReturnPost[] => {
+              return posts.map((post) => {
+                return {
+                  ...post,
+                  tagIds: post.tags.map((tag) => tag.id),
+                  mediaIds: post.postToMediaRels.map(({ media }) => media.id),
+                  _tags_count: post.tags.length,
+                };
               });
             },
           }

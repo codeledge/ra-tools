@@ -1,18 +1,12 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth, { AuthOptions, Session } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "next-auth-prisma-adapter";
+import { Role } from "@prisma/client";
 import { prismaClient } from "db";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
-  // debug: true,
+  debug: false,
   secret: process.env.NEXTAUTH_SECRET,
-  adapter: PrismaAdapter(prismaClient, {
-    userModel: "adminUser",
-    accountModel: "adminAccount",
-    sessionModel: "adminSession",
-    verificationTokenModel: "adminVerificationToken",
-  }),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -46,7 +40,7 @@ export const authOptions: AuthOptions = {
     signIn: async ({ user, account, profile }) => {
       //security
       if (user.email === "demo@example.com") {
-        return Promise.resolve(true);
+        return true;
       }
 
       //restrict domain
@@ -54,26 +48,59 @@ export const authOptions: AuthOptions = {
         process.env.RESTRICT_EMAIL_DOMAIN &&
         !profile?.email?.endsWith(`@${process.env.RESTRICT_EMAIL_DOMAIN}`)
       ) {
-        return Promise.resolve(false);
+        return false;
       }
 
       //ok
-      return Promise.resolve(true);
+      return true;
     },
-    session: async ({ session, user, token }) => {
-      //always add this, very handy
-      session.userId = user.id;
+    jwt: async ({ token, user, trigger, account }) => {
+      // console.log("jwt", { token, user, trigger, account, session });
 
-      const admin = await prismaClient.adminUser.findUnique({
-        select: {
-          role: true,
-        },
-        where: { id: user.id },
-      });
+      if (trigger === "signIn" && account?.provider === "google") {
+        // No need for prisma adapter with custom query and jwt strategy
+        const adminUser = await prismaClient.adminUser.upsert({
+          select: {
+            id: true,
+            email: true,
+            role: true,
+            name: true,
+            image: true,
+          },
+          where: { email: user.email },
+          update: {
+            // TODO: last login at
+          },
+          create: {
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            role: "OWNER",
+          },
+        });
 
-      session.role = admin?.role || undefined;
+        // even if you don't return token fields, they will be added to the jwt token
+        // such as iat, exp, jti etc
 
-      return Promise.resolve(session);
+        return <Session["user"]>{
+          image: adminUser.image,
+          name: adminUser.name,
+          userId: adminUser.id,
+          email: adminUser.email,
+          role: adminUser.role,
+        };
+      }
+
+      return token;
+    },
+    session: async ({ session, token }) => {
+      // console.log("session", { session, user, token, newSession, trigger });
+
+      const { image, name, userId, email, role } = token as Session["user"]; // cast to Session["user"] next auth doesn't know...
+
+      session.user = { image, name, userId, email, role }; // add to session only the good fields, the rest is token, not needed
+
+      return session;
     },
   },
 };

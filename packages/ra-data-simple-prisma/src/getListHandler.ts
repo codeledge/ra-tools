@@ -16,6 +16,7 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
   noNullsOnSort?: string[]; // TODO: to be keyof Args["orderBy"]
   debug?: boolean;
   transform?: (data: any) => any;
+  map?: (data: any) => any;
   filterMode?: FilterMode;
 };
 
@@ -93,9 +94,12 @@ export const getListHandler = async <Args extends GetListArgs>(
   // TRANSFORM
   await options?.transform?.(data);
 
+  // MAP
+  const mappedData = await options?.map?.(data);
+
   // RESPOND WITH DATA
   const response = {
-    data,
+    data: mappedData || data,
     total,
   };
   res.json(response);
