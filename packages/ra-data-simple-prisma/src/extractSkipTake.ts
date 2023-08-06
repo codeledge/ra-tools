@@ -3,7 +3,7 @@ import { GetListRequest, GetManyReferenceRequest } from "./Http";
 export const extractSkipTake = (
   req: GetListRequest | GetManyReferenceRequest
 ) => {
-  const { pagination } = req.body.params;
+  const { pagination } = req.params;
 
   let skip;
   let take;

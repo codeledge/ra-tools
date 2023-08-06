@@ -4,7 +4,7 @@ import setObjectProp from "set-value";
 export const extractOrderBy = (
   req: GetListRequest | GetManyReferenceRequest
 ) => {
-  const { sort } = req.body.params;
+  const { sort } = req.params;
 
   let orderBy = {};
 

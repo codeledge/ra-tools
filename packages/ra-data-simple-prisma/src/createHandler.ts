@@ -1,10 +1,11 @@
 import { AuditOptions } from "./audit/types";
-import { CreateRequest, Response } from "./Http";
+import { CreateRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 import { isObject } from "./lib/isObject";
 import { isString } from "./lib/isString";
 import { firstKey } from "./lib/firstKey";
 import { firstValue } from "./lib/firstValue";
+import { isNotField } from "./lib/isNotField";
 
 export type CreateArgs = {
   include?: object | null;
@@ -48,16 +49,18 @@ export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
 
 export const createHandler = async <Args extends CreateArgs>(
   req: CreateRequest,
-  res: Response,
   model: { create: Function },
   options?: CreateOptions<Omit<Args, "data">> // omit data so the Prisma.ModelCreateArgs can be passed in, without complaining about the data property missing
 ) => {
-  const { data } = req.body.params;
+  const { data } = req.params;
 
   // Filter out invalid fields
-  Object.entries(data).forEach(([prop, value]) => {
+  Object.entries(data).forEach(([key, value]) => {
     if (value === "") {
-      delete data[prop];
+      delete data[key];
+    }
+    if (isNotField(key)) {
+      delete data[key];
     }
   });
 
@@ -152,6 +155,6 @@ export const createHandler = async <Args extends CreateArgs>(
   }
 
   const response = { data: created };
-  res.json(response);
+
   return response;
 };

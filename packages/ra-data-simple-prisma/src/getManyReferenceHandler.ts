@@ -1,4 +1,4 @@
-import { GetManyReferenceRequest, Response } from "./Http";
+import { GetManyReferenceRequest } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
@@ -18,11 +18,10 @@ export type GetManyReferenceOptions<
 
 export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
   req: GetManyReferenceRequest,
-  res: Response,
   model: { findMany: Function },
   options?: GetManyReferenceOptions<Args>
 ) => {
-  const { id, target } = req.body.params;
+  const { id, target } = req.params;
 
   const orderBy = extractOrderBy(req);
 
@@ -46,6 +45,6 @@ export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
   await options?.transform?.(data);
 
   const response = { data, total: data.length };
-  res.json(response);
+
   return response;
 };

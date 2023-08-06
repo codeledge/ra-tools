@@ -1,4 +1,4 @@
-import { GetOneRequest, Response } from "./Http";
+import { GetOneRequest } from "./Http";
 
 export type GetOneArgs = {
   include?: object | null;
@@ -13,11 +13,10 @@ export type GetOneOptions<Args extends GetOneArgs = GetOneArgs> = Args & {
 
 export const getOneHandler = async <Args extends GetOneArgs>(
   req: GetOneRequest,
-  res: Response,
   model: { findUnique: Function },
   options?: GetOneOptions<Omit<Args, "where">> // omit where so the Prisma.ModelFindUniqueArgs can be passed in, without complaining about the where property missing
 ) => {
-  const { id } = req.body.params;
+  const { id } = req.params;
 
   const where = { id };
 
@@ -36,6 +35,6 @@ export const getOneHandler = async <Args extends GetOneArgs>(
   if (options?.debug) console.log("getOneHandler:afterTransform", row);
 
   const response = { data: row };
-  res.json(response);
+
   return response;
 };

@@ -1,4 +1,4 @@
-import { GetManyRequest, Response } from "./Http";
+import { GetManyRequest } from "./Http";
 
 export type GetManyArgs = {
   include?: object | null;
@@ -12,11 +12,10 @@ export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = Args & {
 
 export const getManyHandler = async <Args extends GetManyArgs>(
   req: GetManyRequest,
-  res: Response,
   model: { findMany: Function },
   options?: GetManyOptions<Args>
 ) => {
-  const { ids } = req.body.params;
+  const { ids } = req.params;
 
   // GET DATA
   const data = await model.findMany({
@@ -29,6 +28,6 @@ export const getManyHandler = async <Args extends GetManyArgs>(
   await options?.transform?.(data);
 
   const response = { data };
-  res.json(response);
+
   return response;
 };

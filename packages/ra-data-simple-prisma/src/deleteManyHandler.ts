@@ -1,5 +1,5 @@
 import { AuditOptions } from "./audit/types";
-import { DeleteManyRequest, Response } from "./Http";
+import { DeleteManyRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 
 export type DeleteManyOptions = {
@@ -10,11 +10,10 @@ export type DeleteManyOptions = {
 
 export const deleteManyHandler = async (
   req: DeleteManyRequest,
-  res: Response,
   model: { updateMany: Function; deleteMany: Function },
   options?: DeleteManyOptions
 ) => {
-  const { ids } = req.body.params;
+  const { ids } = req.params;
 
   const deleted = options?.softDeleteField
     ? await model.updateMany({
@@ -34,6 +33,6 @@ export const deleteManyHandler = async (
   // react-admin expects the ids of the deleted rows
   // but only the count is returned from prisma deleteMany method, so...
   const response = { data: ids };
-  res.json(response);
+
   return response;
 };

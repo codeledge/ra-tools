@@ -1,25 +1,25 @@
 import { Admin, Resource } from "react-admin";
-import { PostCreate, PostEdit, PostList } from "./resources/Post";
-import { TagCreate, TagList } from "./resources/Tag";
-import { UserCreate, UserEdit, UserList, UserShow } from "./resources/User";
+import { PostCreate, PostEdit, PostList } from "../resources/Post";
+import { TagCreate, TagList } from "../resources/Tag";
+import { UserCreate, UserEdit, UserList, UserShow } from "../resources/User";
 import {
   AdminCreate,
   AdminEdit,
   AdminList,
   AdminShow,
-} from "./resources/Admin";
+} from "../resources/Admin";
 import { useSession } from "next-auth/react";
-import { authProvider } from "./providers/authProvider";
-import { dataProvider } from "./providers/dataProvider";
-import LoginPage from "./custom-pages/LoginPage";
+import { authProvider } from "../providers/authProvider";
+import { dataProvider } from "../providers/dataProvider";
+import LoginPage from "../custom-pages/LoginPage";
 import {
   CategoryList,
   CategoryCreate,
   CategoryEdit,
-} from "./resources/Category";
-import { AuditList } from "./resources/Audit";
-import { MediaCreate, MediaList } from "./resources/Media";
-import Dashboard from "./custom-pages/Dashboard";
+} from "../resources/Category";
+import { AuditList } from "../resources/Audit";
+import { MediaCreate, MediaList } from "../resources/Media";
+import Dashboard from "../custom-pages/Dashboard";
 
 const ReactAdmin = () => {
   const { data: session, status } = useSession();

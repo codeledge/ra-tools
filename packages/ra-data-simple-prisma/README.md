@@ -34,34 +34,45 @@ export default ReactAdmin;
 Simplest implementation ever:
 
 ```js
+// -- Page router --
 // /api/[resource].ts <= catch all resource requests
 
 import { defaultHandler } from "ra-data-simple-prisma";
 import { prismaClient } from "../prisma/client"; // <= Your prisma client instance
 
-export default function handler(req, res) {
-  defaultHandler(req, res, prismaClient);
+export default async function handler(req, res) {
+  const result = await defaultHandler(req.body, prismaClient);
+  res.json(result);
 }
+
+// -- App router --
+// /app/api/[resource]/route.ts <= catch all resource requests
+
+import { defaultHandler } from "ra-data-simple-prisma";
+import { prismaClient } from "../prisma/client"; // <= Your prisma client instance
+import { NextResponse } from "next/server";
+
+const handler = async (req: Request) => {
+  const body = await req.json();
+  const result = await defaultHandler(body, prismaClient);
+  return NextResponse.json(result);
+};
+
+export { handler as GET, handler as POST };
 ```
 
 With an audit log (ex. uses next-auth):
 
 ```js
-// /api/[resource].ts <= catch all resource requests
-
-import { defaultHandler } from "ra-data-simple-prisma";
-import { prismaClient } from "../prisma/client";
-import { authProvider } from "../providers/authProvider";
-import { getServerSession } from "next-auth/next";
-
-export default function handler(req, res) {
-  const session = await getServerSession(req);
-  await defaultHandler(req, res, prismaClient, {
+export default function handler(req) {
+  const session = await getServerSession(...);
+  await defaultHandler(req.body, prismaClient, {
     audit: {
       model: prismaClient.audit_log,
       authProvider: authProvider(session)
     },
   });
+  ...
 }
 ```
 
