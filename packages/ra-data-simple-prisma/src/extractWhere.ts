@@ -1,9 +1,9 @@
+import { isObject } from "deverything";
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
-import { isObject } from "./lib/isObject";
 import setObjectProp from "set-value";
 
-const logicalOperators = ["gte", "lte", "lt", "gt", "enum"];
+const logicalOperators = ["gte", "lte", "lt", "gt", "enum", "exact", "eq"];
 
 export type FilterMode = "insensitive" | "default" | undefined;
 
@@ -15,7 +15,7 @@ export const extractWhere = (
   req: GetListRequest | GetManyReferenceRequest,
   options?: ExtractWhereOptions
 ) => {
-  const { filter } = req.body.params;
+  const { filter } = req.params;
 
   const where = {};
 
@@ -32,7 +32,7 @@ export const extractWhere = (
         if (colName.endsWith(`_${operator}`)) {
           [colName] = colName.split(`_${operator}`);
           // TODO: also add an _exact operator?, same as _eq or enum
-          operator === "enum"
+          operator === "enum" || operator === "exact" || operator === "eq"
             ? setObjectProp(where, colName, value)
             : setObjectProp(
                 where,

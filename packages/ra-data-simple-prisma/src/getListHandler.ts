@@ -1,5 +1,5 @@
 import { pretty } from "deverything";
-import { GetListRequest, Response } from "./Http";
+import { GetListRequest } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
@@ -22,7 +22,6 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
 
 export const getListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
-  res: Response,
   model: { findMany: Function; count: Function },
   options?: GetListOptions<Args>
 ) => {
@@ -69,7 +68,7 @@ export const getListHandler = async <Args extends GetListArgs>(
   queryArgs.findManyArg.take = take;
 
   // SORT STAGE
-  const { sort } = req.body.params;
+  const { sort } = req.params;
   if (sort) {
     queryArgs.findManyArg.orderBy = extractOrderBy(req);
 
@@ -102,6 +101,6 @@ export const getListHandler = async <Args extends GetListArgs>(
     data: mappedData || data,
     total,
   };
-  res.json(response);
+
   return response;
 };

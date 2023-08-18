@@ -8,7 +8,6 @@ import {
   EditProps,
   List,
   ListProps,
-  NumberInput,
   ReferenceManyField,
   Show,
   SimpleForm,
@@ -27,8 +26,8 @@ export const UserCreate = (props: CreateProps) => (
 );
 
 const userFilters = [
-  <NumberInput key="1" label="Id (exact)" source="id" alwaysOn />,
-  <TextInput key="2" label="Name (contains)" source="name" alwaysOn />,
+  <TextInput key="id" label="Id (exact by convention)" source="id" alwaysOn />,
+  <TextInput key="name" label="Name (contains)" source="name" alwaysOn />,
 ];
 
 export const UserList = (props: ListProps) => (

@@ -1,13 +1,13 @@
 import { AuditOptions, defaultAuditOptions } from "./types";
-import { Request } from "../Http";
+import { RaPayload } from "../Http";
 import { objectDiff } from "deverything";
 
 export const auditHandler = async (
-  request: Request,
+  request: RaPayload,
   options: AuditOptions,
   created?: any
 ) => {
-  const action = request.body.method.split(/(?=[A-Z])/)[0];
+  const action = request.method.split(/(?=[A-Z])/)[0];
   const mergedOptions = {
     ...defaultAuditOptions,
     ...options,
@@ -18,22 +18,16 @@ export const auditHandler = async (
     return;
   }
 
-  if (
-    mergedOptions.enabledResources &&
-    !(request.body.model in mergedOptions)
-  ) {
+  if (mergedOptions.enabledResources && !(request.model in mergedOptions)) {
     return;
   }
 
-  if (
-    request.body.method === "updateMany" ||
-    request.body.method === "deleteMany"
-  ) {
-    for (const id of request.body.params.ids) {
+  if (request.method === "updateMany" || request.method === "deleteMany") {
+    for (const id of request.params.ids) {
       await createAuditEntry(mergedOptions, request, id);
     }
-  } else if ("id" in request.body.params) {
-    await createAuditEntry(mergedOptions, request, request.body.params.id);
+  } else if ("id" in request.params) {
+    await createAuditEntry(mergedOptions, request, request.params.id);
   } else if (created) {
     await createAuditEntry(mergedOptions, request, created.id);
   }
@@ -41,7 +35,7 @@ export const auditHandler = async (
 
 export const createAuditEntry = async (
   options: AuditOptions,
-  request: Request,
+  request: RaPayload,
   id: any
 ) => {
   let payload: {
@@ -53,12 +47,12 @@ export const createAuditEntry = async (
     id: id.toString(),
   };
 
-  if ("previousData" in request.body.params) {
-    payload.previousData = request.body.params.previousData;
+  if ("previousData" in request.params) {
+    payload.previousData = request.params.previousData;
   }
 
-  if ("data" in request.body.params) {
-    payload.data = request.body.params.data;
+  if ("data" in request.params) {
+    payload.data = request.params.data;
   }
 
   if (payload.data && payload.previousData) {
@@ -67,8 +61,8 @@ export const createAuditEntry = async (
 
   const user = await options.authProvider.getIdentity();
   let data = {
-    [options.columns.action]: request.body.method.split(/(?=[A-Z])/)[0], //createMany => create
-    [options.columns.resource]: request.body.resource,
+    [options.columns.action]: request.method.split(/(?=[A-Z])/)[0], //createMany => create
+    [options.columns.resource]: request.resource,
     [options.columns.payload]: payload,
     [options.columns.author]: {
       connect: { id: user.id },

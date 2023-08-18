@@ -1,6 +1,5 @@
 import NextAuth, { AuthOptions, Session } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { Role } from "@prisma/client";
 import { prismaClient } from "db";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -105,4 +104,6 @@ export const authOptions: AuthOptions = {
   },
 };
 
-export default NextAuth(authOptions);
+const nextAuth = NextAuth(authOptions);
+
+export { nextAuth as GET, nextAuth as POST };

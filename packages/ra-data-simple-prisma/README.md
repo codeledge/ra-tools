@@ -34,34 +34,45 @@ export default ReactAdmin;
 Simplest implementation ever:
 
 ```js
+// -- Example for Next Pages router --
 // /api/[resource].ts <= catch all resource requests
 
 import { defaultHandler } from "ra-data-simple-prisma";
 import { prismaClient } from "../prisma/client"; // <= Your prisma client instance
 
-export default function handler(req, res) {
-  defaultHandler(req, res, prismaClient);
+export default async function handler(req, res) {
+  const result = await defaultHandler(req.body, prismaClient);
+  res.json(result);
 }
-```
 
-With an audit log (ex. uses next-auth):
-
-```js
-// /api/[resource].ts <= catch all resource requests
+// -- Example for Next App router --
+// /app/api/[resource]/route.ts <= catch all resource requests
 
 import { defaultHandler } from "ra-data-simple-prisma";
-import { prismaClient } from "../prisma/client";
-import { authProvider } from "../providers/authProvider";
-import { getServerSession } from "next-auth/next";
+import { prismaClient } from "../prisma/client"; // <= Your prisma client instance
+import { NextResponse } from "next/server";
 
-export default function handler(req, res) {
-  const session = await getServerSession(req);
-  await defaultHandler(req, res, prismaClient, {
+const handler = async (req: Request) => {
+  const body = await req.json();
+  const result = await defaultHandler(body, prismaClient);
+  return NextResponse.json(result);
+};
+
+export { handler as GET, handler as POST };
+```
+
+With an audit log
+
+```js
+export default function handler(req) {
+  const session = await getServerSession(...);
+  await defaultHandler(req.body, prismaClient, {
     audit: {
       model: prismaClient.audit_log,
       authProvider: authProvider(session)
     },
   });
+  ...
 }
 ```
 
@@ -80,10 +91,10 @@ All dataProvider methods can be overridden for a given resource, or all.
 ```js
 // /api/post.ts <= override default handler for specific resource
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handler(req) {
   switch (req.body.method) {
     case "create":
-      await createHandler<Prisma.PostCreateArgs>(req, res, prismaClient.post, {
+      await createHandler<Prisma.PostCreateArgs>(req, prismaClient.post, {
         connect: {
           tags: "id",
           // or
@@ -102,14 +113,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       });
       break;
     case "delete":
-      await deleteHandler<Prisma.PostDeleteArgs>(req, res, prismaClient.post, {
+      await deleteHandler<Prisma.PostDeleteArgs>(req, prismaClient.post, {
         softDeleteField: "deletedAt",
         audit: ...
         debug: ...
       });
       break;
     case "deleteMany":
-      await deleteManyHandler<Prisma.PostDeleteManyArgs>(req, res, prismaClient.post, {
+      await deleteManyHandler<Prisma.PostDeleteManyArgs>(req, prismaClient.post, {
         softDeleteField: "deletedAt",
         audit: ...
         debug: ...
@@ -118,7 +129,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     case "getList":
       await getListHandler<Prisma.PostFindManyArgs>(
         req,
-        res,
         prismaClient.post,
         {
           select: ...
@@ -147,21 +157,18 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     case "getMany":
       await getManyHandler<Prisma.PostFindManyArgs>(
         req,
-        res,
         prismaClient.post,
       );
       break;
     case "getManyReference":
       await getManyReferenceHandler<Prisma.PostFindManyArgs>(
         req,
-        res,
         prismaClient.post,
       );
       break;
     case "getOne":
       await getOneHandler<Prisma.PostFindUniqueArgs>(
         req,
-        res,
         prismaClient.post,
         {
           select: ...
@@ -175,7 +182,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     case "update":
       await updateHandler<Prisma.PostUpdateArgs>(
         req,
-        res,
         prismaClient.post,
         {
           skipFields: {
@@ -190,7 +196,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     case "updateMany":
       await updateHandler<Prisma.PostUpdateManyArgs>(
         req,
-        res,
         prismaClient.post,
         {
           skipFields: {
@@ -203,7 +208,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       );
       break;
     default: // <= fall back on default handler
-      await defaultHandler(req, res, prismaClient, {
+      await defaultHandler(req, prismaClient, {
         audit: ...
         create: ...
         delete: ...

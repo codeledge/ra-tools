@@ -7,8 +7,7 @@ import {
   GetManyReferenceRequest,
   GetManyRequest,
   GetOneRequest,
-  Request,
-  Response,
+  RaPayload,
   UpdateManyRequest,
   UpdateRequest,
 } from "./Http";
@@ -27,8 +26,7 @@ import { getOneHandler, GetOneOptions } from "./getOneHandler";
 import { updateManyHandler } from "./updateManyHandler";
 
 export const defaultHandler = async (
-  req: Request,
-  res: Response,
+  req: RaPayload,
   prisma: PrismaClient,
   options?: {
     audit?: AuditOptions;
@@ -41,66 +39,55 @@ export const defaultHandler = async (
     update?: UpdateOptions;
   }
 ) => {
-  const modelName = req.body.model || req.body.resource;
+  const modelName = req.model || req.resource;
   if (!modelName) throw new Error(`model name is empty`);
 
   const model = prisma[modelName];
   if (!model) throw new Error(`No model found for "${modelName}"`);
 
-  switch (req.body.method) {
+  switch (req.method) {
     case "create": {
-      return await createHandler(req as CreateRequest, res, model, {
+      return await createHandler(req as CreateRequest, model, {
         ...options?.create,
         audit: options?.audit,
       });
     }
     case "delete": {
-      return await deleteHandler(req as DeleteRequest, res, model, {
+      return await deleteHandler(req as DeleteRequest, model, {
         ...options?.delete,
         audit: options?.audit,
       });
     }
     case "deleteMany": {
-      return deleteManyHandler(req as DeleteManyRequest, res, model, {
+      return deleteManyHandler(req as DeleteManyRequest, model, {
         ...options?.delete,
         audit: options?.audit,
       });
     }
     case "getList": {
-      return getListHandler(
-        req as GetListRequest,
-        res,
-        model,
-        options?.getList
-      );
+      return getListHandler(req as GetListRequest, model, options?.getList);
     }
     case "getMany": {
-      return getManyHandler(
-        req as GetManyRequest,
-        res,
-        model,
-        options?.getMany
-      );
+      return getManyHandler(req as GetManyRequest, model, options?.getMany);
     }
     case "getManyReference": {
       return getManyReferenceHandler(
         req as GetManyReferenceRequest,
-        res,
         model,
         options?.getManyReference
       );
     }
     case "getOne": {
-      return getOneHandler(req as GetOneRequest, res, model, options?.getOne);
+      return getOneHandler(req as GetOneRequest, model, options?.getOne);
     }
     case "update": {
-      return await updateHandler(req as UpdateRequest, res, model, {
+      return await updateHandler(req as UpdateRequest, model, {
         ...options?.update,
         audit: options?.audit,
       });
     }
     case "updateMany": {
-      return await updateManyHandler(req as UpdateManyRequest, res, model, {
+      return await updateManyHandler(req as UpdateManyRequest, model, {
         ...options?.update,
         audit: options?.audit,
       });

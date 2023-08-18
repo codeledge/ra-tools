@@ -1,11 +1,11 @@
 import { DataProvider } from "react-admin";
-import { isNumericId } from "./lib/isNumericId";
 import axios from "axios";
 import type {
   AxiosError,
   AxiosInterceptorOptions,
   CreateAxiosDefaults,
 } from "axios";
+import { isNumericId } from "deverything";
 
 type AxiosInterceptorFulfilled<V> = ((value: V) => V | Promise<V>) | null;
 type AxiosInterceptorError = ((error: any) => any) | null;

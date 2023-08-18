@@ -1,11 +1,10 @@
 import { AuditOptions } from "./audit/types";
-import { Response, UpdateRequest } from "./Http";
+import { UpdateRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 import { isNotField } from "./lib/isNotField";
-import { isObject } from "./lib/isObject";
-import { isString } from "./lib/isString";
 import { firstValue } from "./lib/firstValue";
 import { firstKey } from "./lib/firstKey";
+import { isObject, isString } from "deverything";
 
 export type UpdateArgs = {
   include?: object | null;
@@ -176,13 +175,12 @@ export const reduceData = (data, options: UpdateOptions) => {
 
 export const updateHandler = async <Args extends UpdateArgs>(
   req: UpdateRequest,
-  res: Response,
   model: { update: Function },
   options?: UpdateOptions<Omit<Args, "data" | "where">>
 ) => {
-  const { id } = req.body.params;
+  const { id } = req.params;
 
-  const data = reduceData(req.body.params.data, options);
+  const data = reduceData(req.params.data, options);
 
   if (options?.debug) {
     console.log("updateHandler:data", data);
@@ -200,6 +198,6 @@ export const updateHandler = async <Args extends UpdateArgs>(
   }
 
   const response = { data: updated };
-  res.json(response);
+
   return response;
 };

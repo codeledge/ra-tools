@@ -1,5 +1,5 @@
 import { AuditOptions } from "./audit/types";
-import { DeleteRequest, Response } from "./Http";
+import { DeleteRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 
 export type DeleteOptions = {
@@ -18,11 +18,10 @@ export const deleteHandler = async <
   }
 >(
   req: DeleteRequest,
-  res: Response,
   model: { update: Function; delete: Function },
   options?: DeleteOptions
 ) => {
-  const { id } = req.body.params;
+  const { id } = req.params;
 
   const deleted = options?.softDeleteField
     ? await model.update({
@@ -40,6 +39,6 @@ export const deleteHandler = async <
   }
 
   const response = { data: deleted };
-  res.json(response);
+
   return response;
 };
