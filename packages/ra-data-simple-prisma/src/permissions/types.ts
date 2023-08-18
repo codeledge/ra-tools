@@ -1,3 +1,6 @@
+// TODO: do this here instead of the app
+//export type Table = Prisma.ModelName;
+
 export interface Permission<T> {
   /**
    * @default 'allow'

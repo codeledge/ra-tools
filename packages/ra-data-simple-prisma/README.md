@@ -223,6 +223,37 @@ export default function handler(req) {
 }
 ```
 
+### Helpers
+
+Stuff you can use to write your own custom logic
+
+- extractOrderBy
+- extractSkipTake
+- extractWhere
+
+### Permissions
+
+In your Api handler, call the function `canAccess` to infer if the user (session) can perform that particular action.
+Example in [admin demo](apps/admin/auth/checkAccess.ts)
+
+It will need the permission object which looks like this
+
+```
+export const permissionsConfig: PermissionsConfig = {
+  OWNER: [{ action: "*", resource: "*" }], //admin can do anything
+  COLLABORATOR: [
+    //collaborator can do anything except edit, delete, create admin users
+    { action: "*", resource: "*" },
+    {
+      type: "deny",
+      action: ["edit", "delete", "create"],
+      resource: "adminUser",
+    },
+  ],
+  READER: [{ action: ["list", "show", "export"], resource: "*" }],
+};
+```
+
 ### Publish
 
 Use the example app to test the changes.
