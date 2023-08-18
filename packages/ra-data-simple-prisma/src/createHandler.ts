@@ -54,6 +54,8 @@ export const createHandler = async <Args extends CreateArgs>(
 ) => {
   const { data } = req.params;
 
+  if (options?.debug) console.log("createHandler:data", data);
+
   // Filter out invalid fields
   Object.entries(data).forEach(([key, value]) => {
     if (value === "") {
@@ -142,13 +144,13 @@ export const createHandler = async <Args extends CreateArgs>(
     }
   });
 
-  if (options?.debug) console.log("createHandler:data", data);
-
   const created = await model.create({
     data,
     include: options?.include ?? undefined,
     select: options?.select ?? undefined,
   });
+
+  if (options?.debug) console.log("createHandler:created", created);
 
   if (options?.audit) {
     await auditHandler(req, options?.audit, created);
