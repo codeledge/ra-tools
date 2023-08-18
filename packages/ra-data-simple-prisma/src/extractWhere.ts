@@ -1,6 +1,6 @@
+import { isObject } from "deverything";
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
-import { isObject } from "./lib/isObject";
 import setObjectProp from "set-value";
 
 const logicalOperators = ["gte", "lte", "lt", "gt", "enum", "exact", "eq"];

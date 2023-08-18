@@ -1,11 +1,10 @@
 import { AuditOptions } from "./audit/types";
 import { CreateRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
-import { isObject } from "./lib/isObject";
-import { isString } from "./lib/isString";
 import { firstKey } from "./lib/firstKey";
 import { firstValue } from "./lib/firstValue";
 import { isNotField } from "./lib/isNotField";
+import { isObject, isString } from "deverything";
 
 export type CreateArgs = {
   include?: object | null;

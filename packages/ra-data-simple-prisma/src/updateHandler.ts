@@ -2,10 +2,9 @@ import { AuditOptions } from "./audit/types";
 import { UpdateRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 import { isNotField } from "./lib/isNotField";
-import { isObject } from "./lib/isObject";
-import { isString } from "./lib/isString";
 import { firstValue } from "./lib/firstValue";
 import { firstKey } from "./lib/firstKey";
+import { isObject, isString } from "deverything";
 
 export type UpdateArgs = {
   include?: object | null;
