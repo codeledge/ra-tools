@@ -8,21 +8,16 @@ import {
   SimpleForm,
   Create,
   TextInput,
-  ReferenceField,
-  AutocompleteInput,
-  ReferenceInput,
 } from "react-admin";
-import { AutocompleteFilter } from "../filters/AutocompleteFilter";
 
 export const MediaList = (props: ListProps) => (
   <List
     {...props}
     filters={[
-      <AutocompleteFilter
-        key={`1`}
-        source={"userId"}
-        reference={"user"}
-        field={"name"}
+      <DateField
+        key="createdAt_gte"
+        label="Created after"
+        source="createdAt_gte"
         alwaysOn
       />,
     ]}
