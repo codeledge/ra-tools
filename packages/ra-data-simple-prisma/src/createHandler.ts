@@ -1,10 +1,8 @@
 import { AuditOptions } from "./audit/types";
 import { CreateRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
-import { firstKey } from "./lib/firstKey";
-import { firstValue } from "./lib/firstValue";
 import { isNotField } from "./lib/isNotField";
-import { isObject, isString } from "deverything";
+import { firstKey, firstValue, isObject, isString } from "deverything";
 
 export type CreateArgs = {
   include?: object | null;
@@ -72,7 +70,7 @@ export const createHandler = async <Args extends CreateArgs>(
 
       // transform an array to a connect (implicit many-to-many)
       // e.g. (handler)
-      // createHandler(req, res, prismaClient.post, {
+      // createHandler(payload, prismaClient.post, {
       //      connect: {
       //        tags: "id",
       //      },
@@ -93,7 +91,7 @@ export const createHandler = async <Args extends CreateArgs>(
 
         // transform an array to a connect (EXPLICIT many-to-many)
         // e.g. (handler)
-        // createHandler(req, res, prismaClient.post, {
+        // createHandler(payload, prismaClient.post, {
         //      connect: {
         //        mediaIds: {
         //          postToMediaRels: {
@@ -105,9 +103,9 @@ export const createHandler = async <Args extends CreateArgs>(
         // (data) mediaIds: [1, 2, 3] => postToMediaRels: { create: [{connect: {media: {id: 1}}}, {connect: {media: {id: 2}}}, {connect: {media: {id: 3}}}] }
 
         const foreignCreateKey = firstKey(foreignConnect); // => postToMediaRels
-        const foreignConnectObject = foreignConnect[foreignCreateKey]; // => {media: "id"}
+        const foreignConnectObject = firstValue(foreignConnect); // => { media: "id" }
         const foreignConnectModel = firstKey(foreignConnectObject); // => media
-        const foreignConnectField = foreignConnectObject[foreignConnectModel]; // => id
+        const foreignConnectField = firstValue(foreignConnectObject); // => id
 
         data[foreignCreateKey] = {
           create: (value as any[]).map((val) => ({
@@ -119,7 +117,7 @@ export const createHandler = async <Args extends CreateArgs>(
 
         // transform an array to a connect (IMPLICIT many-to-many)
         // e.g. (handler)
-        // createHandler(req, res, prismaClient.post, {
+        // createHandler(payload, prismaClient.post, {
         //      connect: {
         //        tagIds: {
         //          tags: "id",

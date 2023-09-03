@@ -61,7 +61,43 @@ const handler = async (req: Request) => {
 export { handler as GET, handler as POST };
 ```
 
-With an audit log
+### (List) Filters: Available Operators
+
+To be used with an underscore after the `source` name
+
+- endsWith
+- enum
+- eq
+- exact
+- gt
+- gte
+- lt
+- lte
+- not
+- search
+- startsWith
+
+```ts
+<List
+    {...props}
+    filters={[
+      <SelectInput
+        label="Status"
+        source={"status_enum"}
+      />,
+      <DateInput
+        label="Created After or on"
+        source={"created_at_gte"}
+      />,
+      <TextInput
+        label="Full-text Body search"
+        source={"body_search"}
+      />,
+    ]}
+  >
+```
+
+### With audit log
 
 ```js
 export default function handler(req) {
@@ -190,11 +226,21 @@ export default function handler(req) {
           set: {
             tags: "id",
           },
+          allowNestedUpdate: {
+            user_settings: true,
+            fixed_settings: false,
+          },
+          allowNestedUpsert: {
+            other_settings: true
+          },
+          allowJsonUpdate: {
+            raw_data_field: true;
+          }
         }
       );
       break;
     case "updateMany":
-      await updateHandler<Prisma.PostUpdateManyArgs>(
+      await updateManyHandler<Prisma.PostUpdateManyArgs>(
         req,
         prismaClient.post,
         {

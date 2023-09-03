@@ -33,7 +33,7 @@ const route = async (req: Request) => {
     case "create": {
       const result = await createHandler<Prisma.PostCreateArgs>(
         body,
-        prismaClient["post"],
+        prismaClient.post,
         {
           connect: {
             //tags: "id", if the prop is tag: [1,2,3]
@@ -59,6 +59,7 @@ const route = async (req: Request) => {
         body as GetListRequest,
         prismaClient.post,
         {
+          // debug: true,
           include: {
             tags: true,
             postToMediaRels: { include: { media: true } },
@@ -80,7 +81,7 @@ const route = async (req: Request) => {
     case "getOne": {
       const result = await getOneHandler<Prisma.PostFindUniqueArgs>(
         body as GetOneRequest,
-        prismaClient["post"],
+        prismaClient.post,
         {
           include: {
             tags: true,

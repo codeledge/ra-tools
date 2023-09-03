@@ -3,7 +3,19 @@ import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
 import setObjectProp from "set-value";
 
-const logicalOperators = ["gte", "lte", "lt", "gt", "enum", "exact", "eq"];
+const logicalOperators = [
+  "endsWith",
+  "enum",
+  "eq",
+  "exact",
+  "gt",
+  "gte",
+  "lt",
+  "lte",
+  "not",
+  "search",
+  "startsWith",
+];
 
 export type FilterMode = "insensitive" | "default" | undefined;
 
@@ -46,7 +58,7 @@ export const extractWhere = (
       if (hasOperator) return;
 
       if (colName === "q") {
-        //WHAT THE HECK IS q?
+        // i.e. full-text search, not sure why this has come as a column name?
       } else if (
         colName === "id" ||
         colName === "uuid" ||

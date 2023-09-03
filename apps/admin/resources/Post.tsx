@@ -34,6 +34,12 @@ export const PostList = (props: ListProps) => (
         field={"name"}
         alwaysOn
       />,
+      <TextInput
+        key={`2`}
+        label="Full-text Text search"
+        source={"text_search"}
+        alwaysOn
+      />,
     ]}
   >
     <Datagrid rowClick={"show"}>

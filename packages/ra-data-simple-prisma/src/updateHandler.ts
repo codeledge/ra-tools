@@ -2,9 +2,7 @@ import { AuditOptions } from "./audit/types";
 import { UpdateRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 import { isNotField } from "./lib/isNotField";
-import { firstValue } from "./lib/firstValue";
-import { firstKey } from "./lib/firstKey";
-import { isObject, isString } from "deverything";
+import { firstKey, firstValue, isObject, isString } from "deverything";
 
 export type UpdateArgs = {
   include?: object | null;
@@ -69,7 +67,7 @@ export const reduceData = (data, options: UpdateOptions) => {
         // transform an array to a connect (many-to-many)
         // when the key is declared via 'set' option.
         // e.g. (handler)
-        // updateHandler(req, res, prismaClient.post, {
+        // updateHandler(payload, prismaClient.post, {
         //      set: {
         //        tags: "id",
         //      },
@@ -91,7 +89,7 @@ export const reduceData = (data, options: UpdateOptions) => {
 
           // transform an array to a connect (EXPLICIT many-to-many)
           // e.g. (handler)
-          // createHandler(req, res, prismaClient.post, {
+          // createHandler(payload, prismaClient.post, {
           //      set: {
           //        mediaIds: {
           //          postToMediaRels: {
@@ -103,9 +101,9 @@ export const reduceData = (data, options: UpdateOptions) => {
           // (data) mediaIds: [1, 2, 3] => postToMediaRels: { deleteMany: {}, create: [{media: {connect: {id: 1}}}, {media: {connect: {id: 2}}}, {media: {connect: {id: 3}}}] }
 
           const foreignCreateKey = firstKey(foreignSet); // => postToMediaRels
-          const foreignConnectObject = foreignSet[foreignCreateKey]; // => {media: "id"}
+          const foreignConnectObject = firstValue(foreignSet); // => { media: "id" }
           const foreignConnectModel = firstKey(foreignConnectObject); // => media
-          const foreignConnectField = foreignConnectObject[foreignConnectModel]; // => id
+          const foreignConnectField = firstValue(foreignConnectObject); // => id
 
           fields[foreignCreateKey] = {
             deleteMany: {}, // OK not perfect because now the "created at" will update for all rels
@@ -120,7 +118,7 @@ export const reduceData = (data, options: UpdateOptions) => {
 
           // transform an array to a connect (IMPLICIT many-to-many)
           // e.g. (handler)
-          // createHandler(req, res, prismaClient.post, {
+          // createHandler(payload, prismaClient.post, {
           //      set: {
           //        tagIds: {
           //          tags: "id",
