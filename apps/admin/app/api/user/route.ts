@@ -7,8 +7,9 @@ import { prismaClient } from "db";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { checkAccess } from "../../../auth/checkAccess";
+import { apiHandler } from "../apiHandler";
 
-const route = async (req: NextRequest) => {
+const route = apiHandler(async (req: NextRequest) => {
   const body = await req.json();
 
   await checkAccess(body);
@@ -43,6 +44,6 @@ const route = async (req: NextRequest) => {
       return NextResponse.json(result);
     }
   }
-};
+});
 
 export { route as GET, route as POST };

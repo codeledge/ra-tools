@@ -23,7 +23,6 @@ export type RaPayload =
 
 export type GetListRequest = {
   method: "getList";
-  filter: object;
   params: GetListParams;
   resource: string;
   model?: string;

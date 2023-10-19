@@ -1,4 +1,4 @@
-import { DataProvider } from "react-admin";
+import { DataProvider, HttpError } from "react-admin";
 import axios from "axios";
 import type {
   AxiosError,
@@ -167,5 +167,9 @@ const castIdToOriginalType = (params: any) => {
 // react-admin expects the error to be thrown
 // https://marmelab.com/admin-on-rest/RestClients.html#writing-your-own-rest-client
 const reactAdminAxiosErrorHandler = (error: AxiosError) => {
-  throw error?.response?.data;
+  throw new HttpError(
+    (error?.response?.data as any)?.message || error?.response?.statusText,
+    error?.response?.status,
+    error?.response?.data
+  );
 };
