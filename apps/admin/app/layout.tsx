@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Next-React-Admin",
@@ -10,7 +11,7 @@ export default function RootLayout({
   // This will be populated with nested layouts or pages
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="en">
