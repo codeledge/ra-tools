@@ -43,7 +43,6 @@ export const extractWhere = (
       const hasOperator = logicalOperators.some((operator) => {
         if (colName.endsWith(`_${operator}`)) {
           [colName] = colName.split(`_${operator}`);
-          // TODO: also add an _exact operator?, same as _eq or enum
           operator === "enum" || operator === "exact" || operator === "eq"
             ? setObjectProp(where, colName, value)
             : setObjectProp(

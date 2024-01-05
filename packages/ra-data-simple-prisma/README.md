@@ -181,12 +181,20 @@ export default function handler(req) {
             });
           },
           map: (posts: Post[]): AugmentedPost[] => {
-            posts.forEach((post) => {
+            return posts.map((post) => {
               return {
                 ...post
                 tagIds: post.tags.map((tag) => tag.id);
               }
             });
+          },
+          mapRow: (
+            post: AugmentedPost
+          ): AugmentedPost & { _extraPropAfterMap: true } => {
+            return {
+              ...post,
+              _extraPropAfterMap: true,
+            };
           },
         }
       );

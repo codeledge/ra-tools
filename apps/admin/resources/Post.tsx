@@ -36,7 +36,7 @@ export const PostList = (props: ListProps) => (
       />,
       <TextInput
         key={`2`}
-        label="Full-text Text search"
+        label="Full-text search"
         source={"text_search"}
         alwaysOn
       />,

@@ -74,6 +74,14 @@ const route = async (req: Request) => {
               };
             });
           },
+          mapRow: (
+            post: ReturnPost
+          ): ReturnPost & { _extraPropAfterMapAll: true } => {
+            return {
+              ...post,
+              _extraPropAfterMapAll: true,
+            };
+          },
         }
       );
       return NextResponse.json(result);
@@ -93,6 +101,14 @@ const route = async (req: Request) => {
               ({ media }: any) => media.id
             );
             post._tags_count = post.tagIds.length;
+          },
+          mapRow: (
+            post: QueryPost
+          ): QueryPost & { _extraPropAfterTransform: true } => {
+            return {
+              ...post,
+              _extraPropAfterTransform: true,
+            };
           },
         }
       );

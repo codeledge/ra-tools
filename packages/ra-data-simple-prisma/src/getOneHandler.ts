@@ -8,7 +8,8 @@ export type GetOneArgs = {
 
 export type GetOneOptions<Args extends GetOneArgs = GetOneArgs> = Args & {
   debug?: boolean;
-  transform?: (row: any) => any;
+  transform?: (row: any) => void;
+  mapRow?: (row: any) => any;
 };
 
 export const getOneHandler = async <Args extends GetOneArgs>(
@@ -34,7 +35,11 @@ export const getOneHandler = async <Args extends GetOneArgs>(
 
   if (options?.debug) console.log("getOneHandler:afterTransform", row);
 
-  const response = { data: row };
+  const mappedRow = options?.mapRow ? await options.mapRow(row) : row;
+
+  if (options?.debug) console.log("getOneHandler:mappedRow", mappedRow);
+
+  const response = { data: mappedRow };
 
   return response;
 };
