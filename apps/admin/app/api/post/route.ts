@@ -76,10 +76,10 @@ const route = async (req: Request) => {
           },
           mapRow: (
             post: ReturnPost
-          ): ReturnPost & { _extraPropAfterMapAll: true } => {
+          ): ReturnPost & { _extraPropAfterMap: true } => {
             return {
               ...post,
-              _extraPropAfterMapAll: true,
+              _extraPropAfterMap: true,
             };
           },
         }

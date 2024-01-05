@@ -221,6 +221,14 @@ export default function handler(req) {
           transform: (post: any) => {
             post._computedProp = ...
           },
+          mapRow: (
+            post: QueryPost
+          ): QueryPost & { _extraPropAfterTransform: true } => {
+            return {
+              ...post,
+              _extraPropAfterTransform: true,
+            };
+          },
         }
       )
       break;
