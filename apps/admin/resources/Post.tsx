@@ -73,7 +73,7 @@ export const PostCreate = (props: CreateProps) => (
       </ReferenceInput>
       <TextInput source="text" />
       <ReferenceArrayInput label="Tags" reference="tag" source="tagIds">
-        <AutocompleteArrayInput />
+        <AutocompleteArrayInput optionText={"name"} />
       </ReferenceArrayInput>
       <ReferenceArrayInput label="Media" reference="media" source="mediaIds">
         <AutocompleteArrayInput optionText={"url"} />
@@ -91,7 +91,7 @@ export const PostEdit = (props: EditProps) => (
       <TextInput source="text" />
       <NumberInput disabled source="_tags_count" />
       <ReferenceArrayInput label="Tags" reference="tag" source="tagIds">
-        <AutocompleteArrayInput />
+        <AutocompleteArrayInput optionText={"name"} />
       </ReferenceArrayInput>
       <ReferenceArrayInput label="Media" reference="media" source="mediaIds">
         <AutocompleteArrayInput optionText={"url"} />

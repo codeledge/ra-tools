@@ -15,9 +15,11 @@ export type GetListArgs = {
 export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
   noNullsOnSort?: string[]; // TODO: to be keyof Args["orderBy"]
   debug?: boolean;
-  transform?: (data: any[]) => any[];
-  map?: (data: any[]) => any[];
-  mapRow?: (row: any, rowIndex: number, rows: any[]) => any;
+  transformRow?: (
+    row: any,
+    rowIndex: number,
+    rows: any[]
+  ) => any | Promise<any>;
   filterMode?: FilterMode;
 };
 
@@ -95,20 +97,14 @@ export const getListHandler = async <Args extends GetListArgs>(
     console.log("getListHandler:total", total);
   }
 
-  // TRANSFORM
-  await options?.transform?.(data);
-
-  // MAP
-  const mapData = options?.map ? await options.map(data) : data;
-
-  // MAP SINGLE ROW
-  const mapRowData = options?.mapRow
-    ? await Promise.all(mapData.map(options.mapRow))
+  // TRANSFORM DATA
+  const mappedData = options?.transformRow
+    ? await Promise.all(data.map(options.transformRow))
     : data;
 
   // RESPOND WITH DATA
   const response = {
-    data: mapRowData,
+    data: mappedData,
     total,
   };
 

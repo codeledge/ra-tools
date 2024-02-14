@@ -173,28 +173,11 @@ export default function handler(req) {
           filterMode: ...
           debug: ...
           include: { tags: true },
-          // Deprecated - use `map` which works better with TS
-          transform: (posts: Post[]) => {
-            // some clunky casting to make TS happy
-            (posts as AugmentedPost[]).forEach((post ) => {
-              post.tagIds = post.tags.map((tag) => tag.id);
-            });
-          },
-          map: (posts: Post[]): AugmentedPost[] => {
-            return posts.map((post) => {
-              return {
+          transformRow: (post: ServerPost, postIndex: number, posts: ServerPost[]): AugmentedPost => {
+            return {
                 ...post
                 tagIds: post.tags.map((tag) => tag.id);
               }
-            });
-          },
-          mapRow: (
-            post: AugmentedPost
-          ): AugmentedPost & { _extraPropAfterMap: true } => {
-            return {
-              ...post,
-              _extraPropAfterMap: true,
-            };
           },
         }
       );
@@ -221,12 +204,12 @@ export default function handler(req) {
           transform: (post: any) => {
             post._computedProp = ...
           },
-          mapRow: (
+          transform: async (
             post: QueryPost
-          ): QueryPost & { _extraPropAfterTransform: true } => {
+          ): Promise<QueryPost & { _extraPropAfterTransform: true }> => {
             return {
               ...post,
-              _extraPropAfterTransform: true,
+              _extraPropAfterTransform: await Promise.resolve(true),
             };
           },
         }

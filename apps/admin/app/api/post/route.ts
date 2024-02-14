@@ -24,6 +24,15 @@ type ReturnPost = QueryPost & {
   _tags_count: number;
 };
 
+const transformPost = async (post: QueryPost): Promise<ReturnPost> => {
+  return {
+    ...post,
+    tagIds: post.tags.map((tag) => tag.id),
+    mediaIds: post.postToMediaRels.map(({ media }) => media.id),
+    _tags_count: await Promise.resolve(post.tags.length),
+  };
+};
+
 const route = async (req: Request) => {
   const body = await req.json();
 
@@ -64,24 +73,7 @@ const route = async (req: Request) => {
             tags: true,
             postToMediaRels: { include: { media: true } },
           },
-          map: (posts: QueryPost[]): ReturnPost[] => {
-            return posts.map((post) => {
-              return {
-                ...post,
-                tagIds: post.tags.map((tag) => tag.id),
-                mediaIds: post.postToMediaRels.map(({ media }) => media.id),
-                _tags_count: post.tags.length,
-              };
-            });
-          },
-          mapRow: (
-            post: ReturnPost
-          ): ReturnPost & { _extraPropAfterMap: true } => {
-            return {
-              ...post,
-              _extraPropAfterMap: true,
-            };
-          },
+          transformRow: transformPost,
         }
       );
       return NextResponse.json(result);
@@ -95,21 +87,7 @@ const route = async (req: Request) => {
             tags: true,
             postToMediaRels: { include: { media: true } },
           },
-          transform: (post: any) => {
-            post.tagIds = post.tags.map((tag: any) => tag.id);
-            post.mediaIds = post.postToMediaRels.map(
-              ({ media }: any) => media.id
-            );
-            post._tags_count = post.tagIds.length;
-          },
-          mapRow: (
-            post: QueryPost
-          ): QueryPost & { _extraPropAfterTransform: true } => {
-            return {
-              ...post,
-              _extraPropAfterTransform: true,
-            };
-          },
+          transform: transformPost,
         }
       );
       return NextResponse.json(result);
