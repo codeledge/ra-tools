@@ -88,7 +88,7 @@ export const getListHandler = async <Args extends GetListArgs>(
   }
 
   // GET DATA
-  const [data, total] = await Promise.all([
+  const [rows, total] = await Promise.all([
     model.findMany(queryArgs.findManyArg),
     model.count(queryArgs.countArg),
   ]);
@@ -98,13 +98,13 @@ export const getListHandler = async <Args extends GetListArgs>(
   }
 
   // TRANSFORM DATA
-  const mappedData = options?.transformRow
-    ? await Promise.all(data.map(options.transformRow))
-    : data;
+  const data = options?.transformRow
+    ? await Promise.all(rows.map(options.transformRow))
+    : rows;
 
   // RESPOND WITH DATA
   const response = {
-    data: mappedData,
+    data,
     total,
   };
 

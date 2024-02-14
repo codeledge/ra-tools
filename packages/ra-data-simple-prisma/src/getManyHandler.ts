@@ -7,7 +7,7 @@ export type GetManyArgs = {
 
 export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = Args & {
   debug?: boolean;
-  transform?: (data: any) => any;
+  transformRow?: (data: any) => any | Promise<any>;
 };
 
 export const getManyHandler = async <Args extends GetManyArgs>(
@@ -18,14 +18,16 @@ export const getManyHandler = async <Args extends GetManyArgs>(
   const { ids } = req.params;
 
   // GET DATA
-  const data = await model.findMany({
+  const rows = await model.findMany({
     include: options?.include,
     select: options?.select,
     where: { id: { in: ids } },
   });
 
   // TRANSFORM
-  await options?.transform?.(data);
+  const data = options?.transformRow
+    ? await Promise.all(rows.map(options.transformRow))
+    : rows;
 
   const response = { data };
 

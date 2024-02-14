@@ -12,7 +12,7 @@ export type GetManyReferenceOptions<
   Args extends GetManyRefernceArgs = GetManyRefernceArgs
 > = Args & {
   debug?: boolean;
-  transform?: (data: any) => any;
+  transformRow?: (data: any) => any | Promise<any>;
   filterMode?: FilterMode;
 };
 
@@ -32,7 +32,7 @@ export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
   const { skip, take } = extractSkipTake(req);
 
   // GET DATA
-  const data = await model.findMany({
+  const rows = await model.findMany({
     include: options?.include,
     select: options?.select,
     where: { [target]: id, ...where },
@@ -42,7 +42,9 @@ export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
   });
 
   // TRANSFORM
-  await options?.transform?.(data);
+  const data = options?.transformRow
+    ? await Promise.all(rows.map(options.transformRow))
+    : rows;
 
   const response = { data, total: data.length };
 
