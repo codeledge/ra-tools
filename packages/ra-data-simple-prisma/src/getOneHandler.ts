@@ -8,7 +8,7 @@ export type GetOneArgs = {
 
 export type GetOneOptions<Args extends GetOneArgs = GetOneArgs> = Args & {
   debug?: boolean;
-  transform?: (row: any) => any;
+  transform?: (row: any) => any | Promise<any>;
 };
 
 export const getOneHandler = async <Args extends GetOneArgs>(
@@ -28,13 +28,18 @@ export const getOneHandler = async <Args extends GetOneArgs>(
     include: options?.include ?? undefined,
   });
 
+  // TRANSFORM STAGE
   if (options?.debug) console.log("getOneHandler:beforeTransform", row);
 
-  await options?.transform?.(row);
+  const transformedRow = options?.transform
+    ? await options.transform(row)
+    : row;
 
-  if (options?.debug) console.log("getOneHandler:afterTransform", row);
+  if (options?.debug)
+    console.log("getOneHandler:afterTransform", transformedRow);
 
-  const response = { data: row };
+  // RESPONSE STAGE
+  const response = { data: transformedRow };
 
   return response;
 };

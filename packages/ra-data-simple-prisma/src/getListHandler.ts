@@ -15,8 +15,11 @@ export type GetListArgs = {
 export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
   noNullsOnSort?: string[]; // TODO: to be keyof Args["orderBy"]
   debug?: boolean;
-  transform?: (data: any) => any;
-  map?: (data: any) => any;
+  transformRow?: (
+    row: any,
+    rowIndex: number,
+    rows: any[]
+  ) => any | Promise<any>;
   filterMode?: FilterMode;
 };
 
@@ -90,15 +93,18 @@ export const getListHandler = async <Args extends GetListArgs>(
     model.count(queryArgs.countArg),
   ]);
 
-  // TRANSFORM
-  await options?.transform?.(data);
+  if (options?.debug) {
+    console.log("getListHandler:total", total);
+  }
 
-  // MAP
-  const mappedData = await options?.map?.(data);
+  // TRANSFORM DATA
+  const mappedData = options?.transformRow
+    ? await Promise.all(data.map(options.transformRow))
+    : data;
 
   // RESPOND WITH DATA
   const response = {
-    data: mappedData || data,
+    data: mappedData,
     total,
   };
 
