@@ -65,9 +65,9 @@ export const extractWhere = (
         colName.endsWith("_id") ||
         colName.endsWith("Id") ||
         typeof value === "number" ||
-        typeof value === "boolean"
+        typeof value === "boolean" ||
+        value === null // if the client sends null, than that is also a valid (exact) filter!
       ) {
-        // TODO: if the client sends null, than that is also a valid (exact) filter!
         setObjectProp(where, colName, value);
       } else if (Array.isArray(value)) {
         setObjectProp(where, colName, { in: value });

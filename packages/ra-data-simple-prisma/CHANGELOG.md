@@ -2,6 +2,12 @@
 
 ## 4.0.1
 
+### Fix null not added to filter
+
+- in extractWhere
+
+## 4.0.1
+
 ### Fix missing transform on handlers
 
 - getMany and getManyReference
