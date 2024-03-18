@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../app/api/auth/[...nextauth]/route";
 import {
   RaPayload,
   ReactAdminFetchActions,
@@ -8,6 +7,7 @@ import {
   fetchActionToAction,
 } from "ra-data-simple-prisma";
 import { authProvider } from "../providers/authProvider";
+import { authOptions } from "./auth";
 
 export const checkAccess = async (payload: RaPayload) => {
   const session = await getServerSession(authOptions);

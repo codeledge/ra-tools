@@ -14,12 +14,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "@prisma/client": "^4.13.0"
+    "@prisma/client": "^5.11.0"
   },
   "devDependencies": {
-    "jest": "^29.5.0",
-    "prisma": "^4.13.0",
-    "tsup": "^6.7.0",
-    "typescript": "^5.0.4"
+    "jest": "^29.7.0",
+    "prisma": "^5.11.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.2"
   }
 }
