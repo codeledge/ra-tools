@@ -6,6 +6,7 @@
   "module": "./dist/prismaClient.mjs",
   "types": "./dist/prismaClient.d.ts",
   "scripts": {
+    "build": "tsup prisma/prismaClient.ts --format esm,cjs",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "dev": "tsup prisma/prismaClient.ts --format esm,cjs --watch --dts",
     "lint": "TIMING=1 eslint src --fix",
