@@ -1,7 +1,6 @@
-import { PlainObject, isObject } from "deverything";
+import { PlainObject, isObject, setObjectPath } from "deverything";
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
-import setObjectProp from "set-value";
 
 const prismaOperators = [
   "contains",
@@ -42,7 +41,7 @@ export const extractWhere = (
       const hasOperator = prismaOperators.some((operator) => {
         if (colName.endsWith(`_${operator}`)) {
           [colName] = colName.split(`_${operator}`);
-          setObjectProp(where, colName, { [operator]: value }, { merge: true });
+          setObjectPath(where, colName, { [operator]: value });
           return true;
         }
       });
@@ -55,9 +54,10 @@ export const extractWhere = (
         colName.endsWith(`_eq`)
       ) {
         const [cleanColName] = colName.split(/(_enum|_exact|_eq)$/);
-        setObjectProp(where, cleanColName, value);
+        setObjectPath(where, cleanColName, value);
       } else if (colName === "q") {
-        // i.e. full-text search, not sure why this has come as a column name?
+        // i.e. when filterToQuery is not set on AutoCompleteInput, but we don't know all the fields to search against
+        console.info("Filter not handled:", colName, value);
       } else if (
         colName === "id" ||
         colName === "uuid" ||
@@ -68,11 +68,11 @@ export const extractWhere = (
         typeof value === "boolean" ||
         value === null // if the client sends null, than that is also a valid (exact) filter!
       ) {
-        setObjectProp(where, colName, value);
+        setObjectPath(where, colName, value);
       } else if (Array.isArray(value)) {
-        setObjectProp(where, colName, { in: value });
+        setObjectPath(where, colName, { in: value });
       } else if (typeof value === "string") {
-        setObjectProp(where, colName, {
+        setObjectPath(where, colName, {
           contains: value,
           mode: options?.filterMode,
         });
@@ -81,7 +81,7 @@ export const extractWhere = (
         // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filter-on-object-property
         const { path, equals } = formatPrismaPostgresNestedJsonFilter(value);
         if (path.length && equals) {
-          setObjectProp(where, colName, { path, equals });
+          setObjectPath(where, colName, { path, equals });
         }
       } else {
         console.info("Filter not handled:", colName, value);
