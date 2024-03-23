@@ -1,29 +1,26 @@
 import { FC } from "react";
 import { FunctionField, FunctionFieldProps } from "react-admin";
-import { JsonField } from "react-admin-json-view";
+import ReactJson from "react18-json-view";
 import get from "lodash/get";
-import { isServer } from "deverything";
+import { useTheme } from "@mui/material";
+import "react18-json-view/src/style.css";
 
 export const ExtendedJsonField: FC<
-  Omit<FunctionFieldProps, "render"> & { source: string }
-> = ({ source, ...props }) => {
-  if (isServer()) return null; // next not able to compile, seems it uses document under the hood
+  Omit<FunctionFieldProps, "render"> & { source: string; expanded?: boolean }
+> = ({ source, expanded, ...props }) => {
+  const theme = useTheme();
+
   return (
     <FunctionField
       render={(record: any) => {
         const value = get(record, source!);
 
         return (
-          <JsonField
-            source={source!}
-            record={record}
-            jsonString={typeof value === "string"}
-            reactJsonOptions={{
-              name: null,
-              collapsed: true,
-              enableClipboard: false,
-              displayDataTypes: false,
-            }}
+          <ReactJson
+            src={typeof value === "string" ? JSON.parse(value) : value}
+            collapsed={!expanded}
+            theme="vscode"
+            enableClipboard={false}
           />
         );
       }}

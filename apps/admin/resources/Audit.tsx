@@ -14,7 +14,7 @@ export const AuditList = (props: ListProps) => (
       <ReferenceField label="Author" source="authorId" reference="adminUser">
         <TextField source="name" />
       </ReferenceField>
-      {/* <ExtendedJsonField source="payload" /> */}
+      <ExtendedJsonField source="payload" />
       <DateField source="date" showTime />
       <TextField source="action" />
       <TextField source="resource" />
