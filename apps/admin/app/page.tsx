@@ -3,7 +3,11 @@ import { SessionProvider } from "next-auth/react";
 import ReactAdmin from "./ReactAdmin";
 
 const HomePage = () => {
-  return null;
+  return (
+    <SessionProvider>
+      <ReactAdmin />
+    </SessionProvider>
+  );
 };
 
 export default HomePage;

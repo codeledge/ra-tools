@@ -1,5 +1,4 @@
 import {
-  ChipField,
   Create,
   CreateProps,
   Datagrid,
@@ -8,12 +7,9 @@ import {
   EditProps,
   List,
   ListProps,
-  NumberInput,
-  ReferenceManyField,
   Show,
   SimpleForm,
   SimpleShowLayout,
-  SingleFieldList,
   SelectInput,
   TextField,
   TextInput,
@@ -30,10 +26,7 @@ export const AdminCreate = (props: CreateProps) => (
 );
 
 export const AdminEdit = (props: EditProps) => (
-  <Edit
-    {...props}
-    mutationMode="pessimistic"
-  >
+  <Edit {...props} mutationMode="pessimistic">
     <SimpleForm>
       <TextInput source="name" />
       <SelectInput
