@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { FunctionField, FunctionFieldProps } from "react-admin";
-import ReactJson from "react18-json-view";
+import { JsonView, defaultStyles } from "react-json-view-lite";
 import get from "lodash/get";
 import { useTheme } from "@mui/material";
-import "react18-json-view/src/style.css";
+import "react-json-view-lite/dist/index.css";
 
 export const ExtendedJsonField: FC<
   Omit<FunctionFieldProps, "render"> & { source: string; expanded?: boolean }
@@ -16,11 +16,10 @@ export const ExtendedJsonField: FC<
         const value = get(record, source!);
 
         return (
-          <ReactJson
-            src={typeof value === "string" ? JSON.parse(value) : value}
-            collapsed={!expanded}
-            theme="vscode"
-            enableClipboard={false}
+          <JsonView
+            data={typeof value === "string" ? JSON.parse(value) : value}
+            style={defaultStyles}
+            shouldExpandNode={() => false}
           />
         );
       }}
