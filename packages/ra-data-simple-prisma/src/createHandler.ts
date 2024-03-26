@@ -102,7 +102,7 @@ export const createHandler = async <Args extends CreateArgs>(
         //    });
         // (data) mediaIds: [1, 2, 3] => postToMediaRels: { create: [{connect: {media: {id: 1}}}, {connect: {media: {id: 2}}}, {connect: {media: {id: 3}}}] }
 
-        const foreignCreateKey = Object.keys(foreignConnect)[0]; // => postToMediaRels
+        const foreignCreateKey = firstKey(foreignConnect); // => postToMediaRels
         const foreignConnectObject = firstValue(foreignConnect); // => { media: "id" }
         const foreignConnectModel = firstKey(foreignConnectObject); // => media
         const foreignConnectField = firstValue(foreignConnectObject); // => id
@@ -126,7 +126,7 @@ export const createHandler = async <Args extends CreateArgs>(
         //    });
         // (data) tagIds: [1, 2, 3] => tags: { connect: [{id: 1}, {id: 2}, {id: 3}] }
 
-        const foreignConnectKey = Object.keys(foreignConnect)[0]; // => tags
+        const foreignConnectKey = firstKey(foreignConnect); // => tags
         const foreignConnectField = foreignConnect[foreignConnectKey] as string; // => id
 
         data[foreignConnectKey] = {

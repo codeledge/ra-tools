@@ -35,7 +35,7 @@ const transformPost = async (post: QueryPost): Promise<ReturnPost> => {
 };
 
 const route = async (req: Request) => {
-  const body = (await req.json()) as RaPayload<Prisma.ModelName>;
+  const body: RaPayload<Prisma.ModelName> = await req.json();
 
   const { sessionAuthProvider: authProvider } = await checkAccess(body);
 
