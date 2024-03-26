@@ -1,5 +1,5 @@
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
-import setObjectProp from "set-value";
+import { setObjectPath } from "deverything";
 
 export const extractOrderBy = (
   req: GetListRequest | GetManyReferenceRequest
@@ -12,7 +12,7 @@ export const extractOrderBy = (
     const { field, order } = sort;
     // TODO: use isField() or you will sort underscore fields
     if (field && order) {
-      setObjectProp(orderBy, field, order.toLowerCase());
+      setObjectPath(orderBy, field, order.toLowerCase());
     }
   }
 
