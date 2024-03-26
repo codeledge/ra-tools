@@ -29,19 +29,18 @@ export const extractWhere = (
 
   const where = {};
 
-  if (filter) {
-    Object.entries(filter).forEach(([colName, value]) => {
+  const handleFilter = (filterObject: any, parentKey?: string) => {
+    Object.entries(filterObject).forEach(([key, value]) => {
+      const colName = parentKey ? `${parentKey}.${key}` : key;
+
       if (isNotField(colName)) return;
 
-      //TODO: *consider* to move into `isNotField` (but maybe to reset dates is the only way to do it)
-      if (value === "")
-        //react-admin does send empty strings in empty filters :(
-        return;
+      if (value === "") return; // Ignore empty values
 
       const hasOperator = prismaOperators.some((operator) => {
         if (colName.endsWith(`_${operator}`)) {
-          [colName] = colName.split(`_${operator}`);
-          setObjectPath(where, colName, { [operator]: value });
+          const [cleanColName] = colName.split(`_${operator}`);
+          setObjectPath(where, cleanColName, { [operator]: value });
           return true;
         }
       });
@@ -77,16 +76,13 @@ export const extractWhere = (
           mode: options?.filterMode,
         });
       } else if (isObject(value)) {
-        // if object then it's a Json field, this is EXPERIMENTAL and works only for Postgres
-        // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filter-on-object-property
-        const { path, equals } = formatPrismaPostgresNestedJsonFilter(value);
-        if (path.length && equals) {
-          setObjectPath(where, colName, { path, equals });
-        }
-      } else {
-        console.info("Filter not handled:", colName, value);
+        handleFilter(value, colName); // Recursively handle nested objects
       }
     });
+  };
+
+  if (filter) {
+    handleFilter(filter);
   }
 
   return where;
