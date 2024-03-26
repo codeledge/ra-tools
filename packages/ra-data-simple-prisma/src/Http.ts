@@ -10,76 +10,76 @@ import {
   UpdateParams,
 } from "react-admin";
 
-export type RaPayload =
-  | GetListRequest
-  | GetOneRequest
-  | GetManyRequest
-  | GetManyReferenceRequest
-  | CreateRequest
-  | UpdateRequest
-  | UpdateManyRequest
-  | DeleteRequest
-  | DeleteManyRequest;
+export type RaPayload<T = string> =
+  | GetListRequest<T>
+  | GetOneRequest<T>
+  | GetManyRequest<T>
+  | GetManyReferenceRequest<T>
+  | CreateRequest<T>
+  | UpdateRequest<T>
+  | UpdateManyRequest<T>
+  | DeleteRequest<T>
+  | DeleteManyRequest<T>;
 
-export type GetListRequest = {
+export type GetListRequest<T = string> = {
   method: "getList";
   params: GetListParams;
-  resource: string;
+  resource: T;
   model?: string;
 };
 
-export type GetOneRequest = {
+export type GetOneRequest<T = string> = {
   method: "getOne";
   params: GetOneParams;
-  resource: string;
+  resource: T;
   model?: string;
 };
 
-export type GetManyRequest = {
+export type GetManyRequest<T = string> = {
   method: "getMany";
   params: GetManyParams;
-  resource: string;
+  resource: T;
   model?: string;
 };
 
-export type GetManyReferenceRequest = {
+export type GetManyReferenceRequest<T = string> = {
   method: "getManyReference";
   params: GetManyReferenceParams;
-  resource: string;
+  resource: T;
   model?: string;
 };
 
-export type CreateRequest = {
+export type CreateRequest<T = string> = {
   method: "create";
   params: CreateParams;
-  resource: string;
+  resource: T;
   model?: string;
 };
 
-export type UpdateRequest = {
+export type UpdateRequest<T = string> = {
   method: "update";
   params: UpdateParams;
-  resource: string;
+  resource: T;
   model?: string;
 };
 
-export type UpdateManyRequest = {
+export type UpdateManyRequest<T = string> = {
   method: "updateMany";
   params: UpdateManyParams;
-  resource: string;
+  resource: T;
   model?: string;
 };
 
-export type DeleteRequest = {
+export type DeleteRequest<T = string> = {
   method: "delete";
   params: DeleteParams;
-  resource: string;
+  resource: T;
   model?: string;
 };
 
-export type DeleteManyRequest = {
+export type DeleteManyRequest<T = string> = {
   method: "deleteMany";
   params: DeleteManyParams;
-  resource: string;
+  resource: T;
   model?: string;
 };

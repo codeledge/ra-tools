@@ -8,6 +8,7 @@ import {
   getOneHandler,
   updateHandler,
   UpdateRequest,
+  RaPayload,
 } from "ra-data-simple-prisma";
 import { Prisma, Post, Tag, Media } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -34,7 +35,7 @@ const transformPost = async (post: QueryPost): Promise<ReturnPost> => {
 };
 
 const route = async (req: Request) => {
-  const body = await req.json();
+  const body: RaPayload<Prisma.ModelName> = await req.json();
 
   const { sessionAuthProvider: authProvider } = await checkAccess(body);
 

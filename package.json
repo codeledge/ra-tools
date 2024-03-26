@@ -13,6 +13,6 @@
     "kill": "pnpm run kill --filter apps/*"
   },
   "devDependencies": {
-    "turbo": "^1.9.3"
+    "turbo": "^1.13.0"
   }
 }
