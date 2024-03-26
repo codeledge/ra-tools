@@ -35,7 +35,7 @@
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "@prisma/client": ">=3"
+    "@prisma/client": ">=5"
   },
   "dependencies": {
     "axios": "^1.6.8",
