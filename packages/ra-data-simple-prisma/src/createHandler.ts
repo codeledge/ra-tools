@@ -108,7 +108,7 @@ export const createHandler = async <Args extends CreateArgs>(
         const foreignConnectField = firstValue(foreignConnectObject); // => id
 
         data[foreignCreateKey] = {
-          create: value.map((val) => ({
+          create: (value as any[]).map((val) => ({
             [foreignConnectModel]: { connect: { [foreignConnectField]: val } },
           })),
         };
