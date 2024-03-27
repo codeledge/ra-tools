@@ -7,6 +7,7 @@ export * from "./extractOrderBy";
 export * from "./extractSkipTake";
 export * from "./extractWhere";
 export * from "./getListHandler";
+export * from "./getInfiniteListHandler";
 export * from "./getManyHandler";
 export * from "./getManyReferenceHandler";
 export * from "./getOneHandler";

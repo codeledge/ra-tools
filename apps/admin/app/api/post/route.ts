@@ -1,7 +1,7 @@
 import { prismaClient } from "db";
 import {
   defaultHandler,
-  getListHandler,
+  getInfiniteListHandler,
   GetListRequest,
   createHandler,
   GetOneRequest,
@@ -65,7 +65,7 @@ const route = async (req: Request) => {
       return NextResponse.json(result);
     }
     case "getList": {
-      const result = await getListHandler<Prisma.PostFindManyArgs>(
+      const result = await getInfiniteListHandler<Prisma.PostFindManyArgs>(
         body as GetListRequest,
         prismaClient.post,
         {
