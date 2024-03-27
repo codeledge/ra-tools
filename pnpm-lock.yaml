@@ -229,8 +229,8 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1
       deverything:
-        specifier: ^0.48.0
-        version: 0.48.0
+        specifier: ^0.48.1
+        version: 0.48.1
     devDependencies:
       '@types/node':
         specifier: ^20.11.30
@@ -2707,8 +2707,8 @@ packages:
   /detect-node@2.1.0:
     resolution: {integrity: sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==}
 
-  /deverything@0.48.0:
-    resolution: {integrity: sha512-lT1jN6rm/ww0b3Dgfwk2UD5k72Qbh1yMb0tM0uKc0bBmIC81vpPZKU4V08hv6Yu6s10U9wJgtcx+YkwNqWSUsw==}
+  /deverything@0.48.1:
+    resolution: {integrity: sha512-FXjuq7ODrCIMA6Su0I1yDvz8dNC4jDeDKbTmeVzMhLoQtUZ2kCuLhuUMhBmUBCA2T3qbVGRRYJWr255YCbXZVw==}
     dev: false
 
   /diff-sequences@29.6.3:
