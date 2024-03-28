@@ -27,7 +27,7 @@ import { updateManyHandler } from "./updateManyHandler";
 
 export const defaultHandler = async (
   req: RaPayload,
-  prisma: Omit<PrismaClient, "$on" | "$use">,
+  prisma: PrismaClient,
   options?: {
     audit?: AuditOptions;
     create?: CreateOptions;
