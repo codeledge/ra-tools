@@ -5,7 +5,6 @@ import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere } from "./extractWhere";
 import deepmerge from "deepmerge";
 import { GetListArgs, GetListOptions } from "./getListHandler";
-import { Prisma } from "@prisma/client";
 
 export const getInfiniteListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
@@ -23,16 +22,10 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
       take?: number;
       where: object;
     };
-    countArg: {
-      where: object;
-    };
   } = {
     findManyArg: {
       select: options?.select ?? undefined,
       include: options?.include ?? undefined,
-      where: options?.where ?? {},
-    },
-    countArg: {
       where: options?.where ?? {},
     },
   };
@@ -47,7 +40,6 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   }
 
   queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, where);
-  queryArgs.countArg.where = deepmerge(queryArgs.countArg.where, where);
 
   // PAGINATION STAGE
   const { skip, take } = extractSkipTake(req);
@@ -63,9 +55,6 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
 
     if (field && options?.noNullsOnSort?.includes(field)) {
       queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, {
-        [field]: { not: null },
-      });
-      queryArgs.countArg.where = deepmerge(queryArgs.countArg.where, {
         [field]: { not: null },
       });
     }
