@@ -26,6 +26,9 @@ importers:
       '@mui/styles':
         specifier: ^5.15.14
         version: 5.15.14(@types/react@18.2.70)(react@18.2.0)
+      '@prisma/extension-read-replicas':
+        specifier: ^0.3.0
+        version: 0.3.0(@prisma/client@5.11.0)
       axios:
         specifier: ^1.6.8
         version: 1.6.8
@@ -1655,6 +1658,14 @@ packages:
       '@prisma/engines-version': 5.11.0-15.efd2449663b3d73d637ea1fd226bafbcf45b3102
       '@prisma/fetch-engine': 5.11.0
       '@prisma/get-platform': 5.11.0
+
+  /@prisma/extension-read-replicas@0.3.0(@prisma/client@5.11.0):
+    resolution: {integrity: sha512-F9+rSmYday6GT2qjhJtkZcBOpLO5LtpvFcMGqrBDHf+78LEdSuxfFjOxYlNuqk4B+th62yxpbhfpmB9/Mca14Q==}
+    peerDependencies:
+      '@prisma/client': ^5.2.0
+    dependencies:
+      '@prisma/client': 5.11.0(prisma@5.11.0)
+    dev: false
 
   /@prisma/fetch-engine@5.11.0:
     resolution: {integrity: sha512-994viazmHTJ1ymzvWugXod7dZ42T2ROeFuH6zHPcUfp/69+6cl5r9u3NFb6bW8lLdNjwLYEVPeu3hWzxpZeC0w==}

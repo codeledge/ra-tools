@@ -2,33 +2,16 @@ import { pretty } from "deverything";
 import { GetListRequest } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
-import { extractWhere, FilterMode } from "./extractWhere";
+import { extractWhere } from "./extractWhere";
 import deepmerge from "deepmerge";
+import { GetListArgs, GetListOptions } from "./getListHandler";
 
-export type GetListArgs = {
-  include?: object | null;
-  select?: object | null;
-  where?: object | null;
-  orderBy?: object | null;
-};
-
-export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
-  noNullsOnSort?: string[]; // TODO: to be keyof Args["orderBy"] CAREFUL field must be nullable, or prisma will throw
-  debug?: boolean;
-  transformRow?: (
-    row: any,
-    rowIndex: number,
-    rows: any[]
-  ) => any | Promise<any>;
-  filterMode?: FilterMode;
-};
-
-export const getListHandler = async <Args extends GetListArgs>(
+export const getInfiniteListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
   model: { findMany: Function; count: Function },
   options?: GetListOptions<Args>
 ) => {
-  if (!model) throw new Error(`missing model in getListHandler`);
+  if (!model) throw new Error(`missing model in getInfiniteListHandler`);
 
   let queryArgs: {
     findManyArg: {
@@ -39,16 +22,10 @@ export const getListHandler = async <Args extends GetListArgs>(
       take?: number;
       where: object;
     };
-    countArg: {
-      where: object;
-    };
   } = {
     findManyArg: {
       select: options?.select ?? undefined,
       include: options?.include ?? undefined,
-      where: options?.where ?? {},
-    },
-    countArg: {
       where: options?.where ?? {},
     },
   };
@@ -59,16 +36,15 @@ export const getListHandler = async <Args extends GetListArgs>(
   });
 
   if (options?.debug) {
-    console.log("getListHandler:where", pretty(where));
+    console.log("getInfiniteListHandler:where", pretty(where));
   }
 
   queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, where);
-  queryArgs.countArg.where = deepmerge(queryArgs.countArg.where, where);
 
   // PAGINATION STAGE
   const { skip, take } = extractSkipTake(req);
   queryArgs.findManyArg.skip = skip;
-  queryArgs.findManyArg.take = take;
+  queryArgs.findManyArg.take = take + 1; // +1 to check for next page
 
   // SORT STAGE
   const { sort } = req.params;
@@ -81,24 +57,20 @@ export const getListHandler = async <Args extends GetListArgs>(
       queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, {
         [field]: { not: null },
       });
-      queryArgs.countArg.where = deepmerge(queryArgs.countArg.where, {
-        [field]: { not: null },
-      });
     }
   }
 
   if (options?.debug) {
-    console.log("getListHandler:queryArgs", pretty(queryArgs));
+    console.log("getInfiniteListHandler:queryArgs", pretty(queryArgs));
   }
 
   // GET DATA
-  const [rows, total] = await Promise.all([
-    model.findMany(queryArgs.findManyArg),
-    model.count(queryArgs.countArg),
-  ]);
+  let rows = await model.findMany(queryArgs.findManyArg);
 
-  if (options?.debug) {
-    console.log("getListHandler:total", total);
+  const hasNextPage = rows.length > take;
+
+  if (hasNextPage) {
+    rows = rows.slice(0, take);
   }
 
   // TRANSFORM DATA
@@ -109,7 +81,10 @@ export const getListHandler = async <Args extends GetListArgs>(
   // RESPOND WITH DATA
   const response = {
     data,
-    total,
+    pageInfo: {
+      hasPreviousPage: skip > 0,
+      hasNextPage,
+    },
   };
 
   return response;

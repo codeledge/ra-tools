@@ -147,7 +147,7 @@ export default function handler(req) {
         audit: ...
         debug: ...
       });
-      break;
+      return NextResponse.json(...);
     case "delete":
       await deleteHandler<Prisma.PostDeleteArgs>(req, prismaClient.post, {
         softDeleteField: "deletedAt",
@@ -164,6 +164,25 @@ export default function handler(req) {
       break;
     case "getList":
       await getListHandler<Prisma.PostFindManyArgs>(
+        req,
+        prismaClient.post,
+        {
+          select: ...
+          where: ...
+          noNullsOnSort: ...
+          filterMode: ...
+          debug: ...
+          include: { tags: true },
+          transformRow: (post: ServerPost, postIndex: number, posts: ServerPost[]): AugmentedPost => {
+            return {
+                ...post
+                tagIds: post.tags.map((tag) => tag.id);
+              }
+          },
+        }
+      );
+      // OR, if using InfiniteList compoenent
+      await getInfiniteListHandler<Prisma.PostFindManyArgs>(
         req,
         prismaClient.post,
         {

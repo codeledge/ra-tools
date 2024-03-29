@@ -21,6 +21,8 @@ import {
   ReferenceManyField,
   SingleFieldList,
   BulkUpdateButton,
+  InfiniteList,
+  InfiniteListProps,
 } from "react-admin";
 
 export const CategoryCreate = (props: CreateProps) => {
@@ -91,8 +93,11 @@ const PostBulkActionButtons = () => (
   </>
 );
 
-export const CategoryList = (props: ListProps) => (
-  <List {...props}>
+export const CategoryList = (props: InfiniteListProps) => (
+  <InfiniteList
+    {...props}
+    filters={[<TextInput key={`name`} label="Name" source={"name"} alwaysOn />]}
+  >
     <Datagrid rowClick={"edit"} bulkActionButtons={<PostBulkActionButtons />}>
       <TextField source="id" />
       <TextField source="name" />
@@ -115,5 +120,5 @@ export const CategoryList = (props: ListProps) => (
       <DateField source="createdAt" />
       <DateField source="updatedAt" showTime />
     </Datagrid>
-  </List>
+  </InfiniteList>
 );
