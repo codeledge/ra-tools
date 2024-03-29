@@ -40,7 +40,11 @@ const route = apiHandler(async (req: NextRequest) => {
       return NextResponse.json(result);
     }
     default: {
-      const result = await defaultHandler(body, prismaClient);
+      const result = await defaultHandler(body, prismaClient, {
+        getList: {
+          // debug: true,
+        },
+      });
       return NextResponse.json(result);
     }
   }

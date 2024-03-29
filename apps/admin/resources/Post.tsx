@@ -20,6 +20,8 @@ import {
   NumberInput,
   ReferenceField,
   CloneButton,
+  DateInput,
+  DateTimeInput,
 } from "react-admin";
 import { AutocompleteFilter } from "../filters/AutocompleteFilter";
 
@@ -38,6 +40,19 @@ export const PostList = (props: ListProps) => (
         key={`2`}
         label="Full-text search"
         source={"text_search"}
+        alwaysOn
+      />,
+      <DateInput
+        key={`3`}
+        label="Created after"
+        source={"createdAt.gte"} // Can use like this
+        parse={(v) => new Date(v)} // Get the local time zone in
+        alwaysOn
+      />,
+      <DateTimeInput
+        key={`4`}
+        label="Created before"
+        source={"createdAt_pgjson"} // ... or like operator
         alwaysOn
       />,
     ]}

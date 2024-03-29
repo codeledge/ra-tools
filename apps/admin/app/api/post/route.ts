@@ -75,6 +75,7 @@ const route = async (req: Request) => {
             postToMediaRels: { include: { media: true } },
           },
           transformRow: transformPost,
+          debug: true,
         }
       );
       return NextResponse.json(result);

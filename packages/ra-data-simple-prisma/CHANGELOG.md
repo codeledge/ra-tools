@@ -1,6 +1,14 @@
 # ra-data-simple-prisma
 
-## 4.0.1
+## 4.1.0
+
+### Infinite List and nested where
+
+- \_pgjson operator
+- nested where
+- getInfinitListHandler
+
+## 4.0.2
 
 ### Fix null not added to filter
 

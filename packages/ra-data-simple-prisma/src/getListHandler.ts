@@ -59,7 +59,7 @@ export const getListHandler = async <Args extends GetListArgs>(
   });
 
   if (options?.debug) {
-    console.log("getListHandler:where", pretty(where));
+    console.debug("getListHandler:where", pretty(where));
   }
 
   queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, where);
