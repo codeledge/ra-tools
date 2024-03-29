@@ -34,8 +34,6 @@ export const extractWhere = (
 ) => {
   const { filter } = req.params;
 
-  console.debug("extractWhere:filter", filter);
-
   const where = {};
 
   const setWhere = (filter: PlainObject, currentFilterPath?: string) => {
