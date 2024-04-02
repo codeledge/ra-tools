@@ -45,14 +45,14 @@ export const PostList = (props: ListProps) => (
       <DateInput
         key={`3`}
         label="Created after"
-        source={"createdAt.gte"} // Can use like this
+        source={"createdAt.gte"} // equivalent to _gte
         parse={(v) => new Date(v)} // Get the local time zone in
         alwaysOn
       />,
       <DateTimeInput
         key={`4`}
         label="Created before"
-        source={"createdAt_pgjson"} // ... or like operator
+        source={"createdAt_lt"} // equivalent to .lt
         alwaysOn
       />,
     ]}

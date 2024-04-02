@@ -10,7 +10,6 @@
     "dev": "tsup prisma/prismaClient.ts --format esm,cjs --watch --dts",
     "lint": "TIMING=1 eslint src --fix",
     "migrate:dev": "prisma migrate dev",
-    "postinstall": "prisma generate",
     "test": "jest"
   },
   "dependencies": {

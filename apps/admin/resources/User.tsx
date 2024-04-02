@@ -45,7 +45,7 @@ export const UserList = (props: ListProps) => (
       <DateField source="updatedAt" />
       <ReferenceManyField label="Posts" reference="post" target="userId">
         <SingleFieldList>
-          <ChipField source="id" />
+          <ChipField source="id" /> {/* Figure out somethign smarter */}
         </SingleFieldList>
       </ReferenceManyField>
     </Datagrid>

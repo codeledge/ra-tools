@@ -1,11 +1,11 @@
 # ra-data-simple-prisma
 
-## 4.1.0
+## 5.0.0
 
-### Infinite List and nested where
+### Breaking changes: Infinite List and nested where
 
-- \_pgjson operator
-- nested where
+- nested where (default dot notation)
+- \_pgjson operator to drill down a postgres json field
 - getInfinitListHandler
 
 ## 4.0.2

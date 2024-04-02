@@ -23,7 +23,7 @@ const prismaOperators = [
 
 export type FilterMode = "insensitive" | "default" | undefined;
 
-type ExtractWhereOptions = {
+export type ExtractWhereOptions = {
   filterMode?: FilterMode;
   debug?: boolean;
 };
@@ -108,7 +108,7 @@ export const extractWhere = (
     setWhere(filter);
   }
 
-  console.debug("extractWhere:where", where);
+  if (options?.debug) console.debug("extractWhere:where", where);
 
   return where;
 };
