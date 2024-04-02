@@ -65,17 +65,21 @@ export { handler as GET, handler as POST };
 
 To be used with an underscore after the `source` name
 
-- endsWith
-- enum
-- eq
-- exact
-- gt
-- gte
-- lt
-- lte
-- not
-- search
-- startsWith
+- contains: prisma native operator (Default for string)
+- endsWith: prisma native operator
+- enum: to be used with enums, where exact match is required
+- eq: equals
+- exact: equals
+- gt: prisma native operator
+- gte: prisma native operator
+- lt: prisma native operator
+- lte: prisma native operator
+- not: prisma native operator
+- search: prisma native operator
+- startsWith: prisma native operator
+- pgjson: if using postgres drill down the json field
+
+Example
 
 ```ts
 <List
@@ -92,6 +96,14 @@ To be used with an underscore after the `source` name
       <TextInput
         label="Full-text Body search"
         source={"body_search"}
+      />,
+      <TextInput
+        label="User's language"
+        source={"user.settings.language_enum"} // <= drill down in relationships
+      />,
+      <TextInput
+        label="Metadata's subkey"
+        source={"metadata_pgjson.key.subkey"}
       />,
     ]}
   >
