@@ -1,6 +1,14 @@
 # ra-data-simple-prisma
 
-## 4.0.1
+## 5.0.0
+
+### Breaking changes: Infinite List and nested where
+
+- nested where (default dot notation)
+- \_pgjson operator to drill down a postgres json field
+- getInfinitListHandler
+
+## 4.0.2
 
 ### Fix null not added to filter
 

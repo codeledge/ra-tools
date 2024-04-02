@@ -28,6 +28,12 @@ export const UserCreate = (props: CreateProps) => (
 const userFilters = [
   <TextInput key="id" label="Id (exact by convention)" source="id" alwaysOn />,
   <TextInput key="name" label="Name (contains)" source="name" alwaysOn />,
+  <TextInput
+    key="settings.language"
+    label="Language (settings)"
+    source="settings.language_eq"
+    alwaysOn
+  />,
 ];
 
 export const UserList = (props: ListProps) => (
@@ -39,7 +45,7 @@ export const UserList = (props: ListProps) => (
       <DateField source="updatedAt" />
       <ReferenceManyField label="Posts" reference="post" target="userId">
         <SingleFieldList>
-          <ChipField source="text" />
+          <ChipField source="id" /> {/* Figure out somethign smarter */}
         </SingleFieldList>
       </ReferenceManyField>
     </Datagrid>
