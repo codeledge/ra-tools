@@ -10,7 +10,7 @@
 
 - nested where (default dot notation)
 - \_pgjson operator to drill down a postgres json field
-- getInfinitListHandler
+- getInfiniteListHandler
 
 ## 4.0.2
 
