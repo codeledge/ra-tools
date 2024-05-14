@@ -32,6 +32,9 @@ export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
   skipFields?: {
     [key: string]: boolean;
   };
+  allowOnlyFields?: {
+    [key: string]: boolean;
+  };
   set?: {
     // TODO: Make this work UpdateImplicitConnectionShortcut | UpdateImplicitConnection | CreateExplicitConnection;
     [key: string]:
@@ -60,6 +63,10 @@ export const reduceData = (data, options: UpdateOptions) => {
   return Object.entries(data).reduce((fields, [key, value]) => {
     if (isNotField(key)) return fields;
     if (options?.skipFields?.[key]) return fields;
+
+    if (options?.allowOnlyFields && !options.allowOnlyFields[key]) {
+      throw new Error(`updateHandler: Field ${key} is not allowed in update`);
+    }
 
     const foreignSet = options?.set?.[key];
     if (foreignSet) {

@@ -1,5 +1,9 @@
 # ra-data-simple-prisma
 
+## 5.1.0
+
+### allowKeys in update
+
 ## 5.0.0
 
 ### Breaking changes: Infinite List and nested where
