@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Simple react-admin dataprovider for prisma, supporting audit logs and roles",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

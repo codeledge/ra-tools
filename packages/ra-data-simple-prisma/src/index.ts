@@ -13,6 +13,7 @@ export * from "./getManyHandler";
 export * from "./getManyReferenceHandler";
 export * from "./getOneHandler";
 export * from "./Http";
+export * from "./isExport";
 export * from "./permissions";
 export * from "./updateHandler";
 export * from "./updateManyHandler";
