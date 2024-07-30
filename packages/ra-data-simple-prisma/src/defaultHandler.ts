@@ -13,7 +13,6 @@ import {
 } from "./Http";
 import { DeleteOptions, deleteHandler } from "./deleteHandler";
 import { GetListOptions, getListHandler } from "./getListHandler";
-import { PrismaClient } from "@prisma/client";
 import { UpdateOptions, updateHandler } from "./updateHandler";
 import { createHandler, CreateOptions } from "./createHandler";
 import { deleteManyHandler } from "./deleteManyHandler";
@@ -24,10 +23,11 @@ import {
 } from "./getManyReferenceHandler";
 import { getOneHandler, GetOneOptions } from "./getOneHandler";
 import { updateManyHandler } from "./updateManyHandler";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export const defaultHandler = async (
   req: RaPayload,
-  prisma: PrismaClient,
+  prisma: PrismaClientOrDynamicClientExtension,
   options?: {
     audit?: AuditOptions;
     create?: CreateOptions;

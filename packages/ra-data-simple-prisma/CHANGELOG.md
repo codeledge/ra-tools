@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 5.2.1
+
+### Patch Changes
+
+- allow extended client
+
 ## 5.1.0
 
 ### allowKeys in update
