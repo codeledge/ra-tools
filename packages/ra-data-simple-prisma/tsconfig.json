@@ -13,7 +13,7 @@
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": false
+    "strict": true
   },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
