@@ -1,10 +1,10 @@
-import { pretty } from "deverything";
 import { GetListRequest } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere } from "./extractWhere";
 import deepmerge from "deepmerge";
 import { GetListArgs, GetListOptions } from "./getListHandler";
+import { stringify } from "deverything";
 
 export const getInfiniteListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
@@ -36,7 +36,7 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   });
 
   if (options?.debug) {
-    console.log("getInfiniteListHandler:where", pretty(where));
+    console.log("getInfiniteListHandler:where", stringify(where));
   }
 
   queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, where);
@@ -61,7 +61,7 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   }
 
   if (options?.debug) {
-    console.log("getInfiniteListHandler:queryArgs", pretty(queryArgs));
+    console.log("getInfiniteListHandler:queryArgs", stringify(queryArgs));
   }
 
   // GET DATA

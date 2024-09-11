@@ -40,10 +40,10 @@ importers:
         version: 4.17.21
       next:
         specifier: 14.1.4
-        version: 14.1.4(@babel/core@7.24.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next-auth:
         specifier: ^4.24.7
-        version: 4.24.7(next@14.1.4(@babel/core@7.24.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 4.24.7(next@14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next-auth-prisma-adapter:
         specifier: workspace:*
         version: link:../../packages/next-auth-prisma-adapter
@@ -104,10 +104,10 @@ importers:
         version: link:../../packages/db
       next:
         specifier: 14.1.4
-        version: 14.1.4(@babel/core@7.24.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next-auth:
         specifier: ^4.24.7
-        version: 4.24.7(next@14.1.4(@babel/core@7.24.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 4.24.7(next@14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -150,7 +150,7 @@ importers:
         version: 9.1.0(eslint@8.57.0)
       next:
         specifier: 14.1.4
-        version: 14.1.4(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -169,13 +169,13 @@ importers:
     devDependencies:
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))
+        version: 29.7.0(@types/node@20.11.30)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.11.30)(typescript@5.4.3))
       prisma:
         specifier: ^5.11.0
         version: 5.11.0
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.31)(ts-node@10.9.2(typescript@5.4.3))(typescript@5.4.3)
+        version: 8.0.2(postcss@8.4.31)(ts-node@10.9.2(@types/node@20.11.30)(typescript@5.4.3))(typescript@5.4.3)
       typescript:
         specifier: ^5.4.3
         version: 5.4.3
@@ -209,13 +209,13 @@ importers:
         version: link:../eslint-config-custom
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))
+        version: 29.7.0(@types/node@20.11.30)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.11.30)(typescript@5.4.3))
       next-auth:
         specifier: ^4.24.7
-        version: 4.24.7(next@14.1.4(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 4.24.7(next@14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.31)(ts-node@10.9.2(typescript@5.4.3))(typescript@5.4.3)
+        version: 8.0.2(postcss@8.4.31)(ts-node@10.9.2(@types/node@20.11.30)(typescript@5.4.3))(typescript@5.4.3)
       typescript:
         specifier: ^5.4.3
         version: 5.4.3
@@ -232,8 +232,8 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1
       deverything:
-        specifier: ^0.48.1
-        version: 0.48.1
+        specifier: ^1.5.0
+        version: 1.5.0
     devDependencies:
       '@babel/core':
         specifier: 7.24.3
@@ -267,7 +267,7 @@ importers:
         version: 10.9.2(@types/node@20.11.30)(typescript@5.4.3)
       tsup:
         specifier: ^8.0.2
-        version: 8.0.2(postcss@8.4.31)(ts-node@10.9.2(typescript@5.4.3))(typescript@5.4.3)
+        version: 8.0.2(postcss@8.4.31)(ts-node@10.9.2(@types/node@20.11.30)(typescript@5.4.3))(typescript@5.4.3)
       typescript:
         specifier: ^5.4.3
         version: 5.4.3
@@ -2189,8 +2189,8 @@ packages:
   detect-node@2.1.0:
     resolution: {integrity: sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==}
 
-  deverything@0.48.1:
-    resolution: {integrity: sha512-FXjuq7ODrCIMA6Su0I1yDvz8dNC4jDeDKbTmeVzMhLoQtUZ2kCuLhuUMhBmUBCA2T3qbVGRRYJWr255YCbXZVw==}
+  deverything@1.5.0:
+    resolution: {integrity: sha512-ct6qTOxI45KzbRxU+Ot7ug6vby8+e8o7HlshhtzhVS45uC0lBucpsSX0qQ5sqW1cJhsf8XS0jzFzTRGrzTTH5g==}
 
   diff-sequences@29.6.3:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
@@ -5453,41 +5453,6 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@jest/core@29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))':
-    dependencies:
-      '@jest/console': 29.7.0
-      '@jest/reporters': 29.7.0
-      '@jest/test-result': 29.7.0
-      '@jest/transform': 29.7.0
-      '@jest/types': 29.6.3
-      '@types/node': 20.11.30
-      ansi-escapes: 4.3.2
-      chalk: 4.1.2
-      ci-info: 3.9.0
-      exit: 0.1.2
-      graceful-fs: 4.2.11
-      jest-changed-files: 29.7.0
-      jest-config: 29.7.0(@types/node@20.11.30)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))
-      jest-haste-map: 29.7.0
-      jest-message-util: 29.7.0
-      jest-regex-util: 29.6.3
-      jest-resolve: 29.7.0
-      jest-resolve-dependencies: 29.7.0
-      jest-runner: 29.7.0
-      jest-runtime: 29.7.0
-      jest-snapshot: 29.7.0
-      jest-util: 29.7.0
-      jest-validate: 29.7.0
-      jest-watcher: 29.7.0
-      micromatch: 4.0.5
-      pretty-format: 29.7.0
-      slash: 3.0.0
-      strip-ansi: 6.0.1
-    transitivePeerDependencies:
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
-
   '@jest/environment@29.7.0':
     dependencies:
       '@jest/fake-timers': 29.7.0
@@ -6325,7 +6290,7 @@ snapshots:
       '@babel/helper-module-imports': 7.24.3
       '@babel/types': 7.24.0
       hoist-non-react-statics: 3.3.2
-      next: 14.1.4(@babel/core@7.24.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      next: 14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       superjson: 2.2.1
 
   babel-preset-current-node-syntax@1.0.1(@babel/core@7.24.3):
@@ -6528,21 +6493,6 @@ snapshots:
       - supports-color
       - ts-node
 
-  create-jest@29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3)):
-    dependencies:
-      '@jest/types': 29.6.3
-      chalk: 4.1.2
-      exit: 0.1.2
-      graceful-fs: 4.2.11
-      jest-config: 29.7.0(@types/node@20.11.30)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))
-      jest-util: 29.7.0
-      prompts: 2.4.2
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
-
   create-require@1.1.1: {}
 
   cross-spawn@5.1.0:
@@ -6630,7 +6580,7 @@ snapshots:
 
   detect-node@2.1.0: {}
 
-  deverything@0.48.1: {}
+  deverything@1.5.0: {}
 
   diff-sequences@29.6.3: {}
 
@@ -7543,57 +7493,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest-cli@29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3)):
-    dependencies:
-      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))
-      '@jest/test-result': 29.7.0
-      '@jest/types': 29.6.3
-      chalk: 4.1.2
-      create-jest: 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))
-      exit: 0.1.2
-      import-local: 3.1.0
-      jest-config: 29.7.0(@types/node@20.11.30)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))
-      jest-util: 29.7.0
-      jest-validate: 29.7.0
-      yargs: 17.7.2
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
-
   jest-config@29.7.0(@types/node@20.11.30)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.11.30)(typescript@5.4.3)):
-    dependencies:
-      '@babel/core': 7.24.3
-      '@jest/test-sequencer': 29.7.0
-      '@jest/types': 29.6.3
-      babel-jest: 29.7.0(@babel/core@7.24.3)
-      chalk: 4.1.2
-      ci-info: 3.9.0
-      deepmerge: 4.3.1
-      glob: 7.2.3
-      graceful-fs: 4.2.11
-      jest-circus: 29.7.0(babel-plugin-macros@3.1.0)
-      jest-environment-node: 29.7.0
-      jest-get-type: 29.6.3
-      jest-regex-util: 29.6.3
-      jest-resolve: 29.7.0
-      jest-runner: 29.7.0
-      jest-util: 29.7.0
-      jest-validate: 29.7.0
-      micromatch: 4.0.5
-      parse-json: 5.2.0
-      pretty-format: 29.7.0
-      slash: 3.0.0
-      strip-json-comments: 3.1.1
-    optionalDependencies:
-      '@types/node': 20.11.30
-      ts-node: 10.9.2(@types/node@20.11.30)(typescript@5.4.3)
-    transitivePeerDependencies:
-      - babel-plugin-macros
-      - supports-color
-
-  jest-config@29.7.0(@types/node@20.11.30)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3)):
     dependencies:
       '@babel/core': 7.24.3
       '@jest/test-sequencer': 29.7.0
@@ -7851,18 +7751,6 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest@29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3)):
-    dependencies:
-      '@jest/core': 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))
-      '@jest/types': 29.6.3
-      import-local: 3.1.0
-      jest-cli: 29.7.0(babel-plugin-macros@3.1.0)(ts-node@10.9.2(typescript@5.4.3))
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
-
   jose@4.15.5: {}
 
   joycon@3.1.1: {}
@@ -8096,13 +7984,13 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  next-auth@4.24.7(next@14.1.4(@babel/core@7.24.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  next-auth@4.24.7(next@14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@babel/runtime': 7.24.1
       '@panva/hkdf': 1.1.1
       cookie: 0.5.0
       jose: 4.15.5
-      next: 14.1.4(@babel/core@7.24.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      next: 14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       oauth: 0.9.15
       openid-client: 5.6.5
       preact: 10.20.1
@@ -8111,22 +7999,7 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       uuid: 8.3.2
 
-  next-auth@4.24.7(next@14.1.4(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
-    dependencies:
-      '@babel/runtime': 7.24.1
-      '@panva/hkdf': 1.1.1
-      cookie: 0.5.0
-      jose: 4.15.5
-      next: 14.1.4(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      oauth: 0.9.15
-      openid-client: 5.6.5
-      preact: 10.20.1
-      preact-render-to-string: 5.2.6(preact@10.20.1)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      uuid: 8.3.2
-
-  next@14.1.4(@babel/core@7.24.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  next@14.1.4(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@next/env': 14.1.4
       '@swc/helpers': 0.5.2
@@ -8136,32 +8009,7 @@ snapshots:
       postcss: 8.4.31
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.1(@babel/core@7.24.3)(react@18.2.0)
-    optionalDependencies:
-      '@next/swc-darwin-arm64': 14.1.4
-      '@next/swc-darwin-x64': 14.1.4
-      '@next/swc-linux-arm64-gnu': 14.1.4
-      '@next/swc-linux-arm64-musl': 14.1.4
-      '@next/swc-linux-x64-gnu': 14.1.4
-      '@next/swc-linux-x64-musl': 14.1.4
-      '@next/swc-win32-arm64-msvc': 14.1.4
-      '@next/swc-win32-ia32-msvc': 14.1.4
-      '@next/swc-win32-x64-msvc': 14.1.4
-    transitivePeerDependencies:
-      - '@babel/core'
-      - babel-plugin-macros
-
-  next@14.1.4(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
-    dependencies:
-      '@next/env': 14.1.4
-      '@swc/helpers': 0.5.2
-      busboy: 1.6.0
-      caniuse-lite: 1.0.30001600
-      graceful-fs: 4.2.11
-      postcss: 8.4.31
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.1(babel-plugin-macros@3.1.0)(react@18.2.0)
+      styled-jsx: 5.1.1(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react@18.2.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 14.1.4
       '@next/swc-darwin-x64': 14.1.4
@@ -8343,7 +8191,7 @@ snapshots:
 
   possible-typed-array-names@1.0.0: {}
 
-  postcss-load-config@4.0.2(postcss@8.4.31)(ts-node@10.9.2(typescript@5.4.3)):
+  postcss-load-config@4.0.2(postcss@8.4.31)(ts-node@10.9.2(@types/node@20.11.30)(typescript@5.4.3)):
     dependencies:
       lilconfig: 3.1.1
       yaml: 2.4.1
@@ -8954,18 +8802,12 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  styled-jsx@5.1.1(@babel/core@7.24.3)(react@18.2.0):
+  styled-jsx@5.1.1(@babel/core@7.24.3)(babel-plugin-macros@3.1.0)(react@18.2.0):
     dependencies:
       client-only: 0.0.1
       react: 18.2.0
     optionalDependencies:
       '@babel/core': 7.24.3
-
-  styled-jsx@5.1.1(babel-plugin-macros@3.1.0)(react@18.2.0):
-    dependencies:
-      client-only: 0.0.1
-      react: 18.2.0
-    optionalDependencies:
       babel-plugin-macros: 3.1.0
 
   stylis@4.2.0: {}
@@ -9071,7 +8913,7 @@ snapshots:
 
   tslib@2.6.2: {}
 
-  tsup@8.0.2(postcss@8.4.31)(ts-node@10.9.2(typescript@5.4.3))(typescript@5.4.3):
+  tsup@8.0.2(postcss@8.4.31)(ts-node@10.9.2(@types/node@20.11.30)(typescript@5.4.3))(typescript@5.4.3):
     dependencies:
       bundle-require: 4.0.2(esbuild@0.19.12)
       cac: 6.7.14
@@ -9081,7 +8923,7 @@ snapshots:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 4.0.2(postcss@8.4.31)(ts-node@10.9.2(typescript@5.4.3))
+      postcss-load-config: 4.0.2(postcss@8.4.31)(ts-node@10.9.2(@types/node@20.11.30)(typescript@5.4.3))
       resolve-from: 5.0.0
       rollup: 4.13.0
       source-map: 0.8.0-beta.0

@@ -1,4 +1,4 @@
-import { pretty } from "deverything";
+import { stringify } from "deverything";
 import { GetListRequest } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
@@ -59,7 +59,7 @@ export const getListHandler = async <Args extends GetListArgs>(
   });
 
   if (options?.debug) {
-    console.debug("getListHandler:where", pretty(where));
+    console.debug("getListHandler:where", stringify(where));
   }
 
   queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, where);
@@ -88,7 +88,7 @@ export const getListHandler = async <Args extends GetListArgs>(
   }
 
   if (options?.debug) {
-    console.log("getListHandler:queryArgs", pretty(queryArgs));
+    console.log("getListHandler:queryArgs", stringify(queryArgs));
   }
 
   // GET DATA
