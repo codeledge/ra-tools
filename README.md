@@ -1,5 +1,7 @@
 # React Admin & Prisma (& Next.js)
 
+[![react-admin-prisma-video](https://github.com/user-attachments/assets/2bb694a5-a70b-48c5-887c-208666f8aa99)](https://youtu.be/MMcRLwhmcIs?feature=shared)
+
 Check the example apps to see common usages or use them as a boilerplate.
 
 # Packages
