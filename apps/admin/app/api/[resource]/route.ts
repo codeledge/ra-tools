@@ -1,10 +1,10 @@
-import { defaultHandler } from "ra-data-simple-prisma";
+import { RaPayload, defaultHandler } from "ra-data-simple-prisma";
 import { prismaClient } from "db";
 import { NextResponse } from "next/server";
 import { checkAccess } from "../../../auth/checkAccess";
 
 const route = async (req: Request) => {
-  const body = await req.json();
+  const body = (await req.json()) as RaPayload;
 
   const access = await checkAccess(body);
 

@@ -18,7 +18,6 @@ export const MediaList = (props: ListProps) => (
         key="createdAt_gte"
         label="Created after"
         source="createdAt_gte"
-        alwaysOn
       />,
     ]}
   >
@@ -32,7 +31,10 @@ export const MediaList = (props: ListProps) => (
 );
 
 export const MediaCreate = (props: CreateProps) => (
-  <Create title="New media" {...props}>
+  <Create
+    title="New media"
+    {...props}
+  >
     <SimpleForm>
       <TextInput source="url" />
     </SimpleForm>
