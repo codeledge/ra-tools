@@ -83,6 +83,8 @@ export const extractWhere = (
         field === "uuid" ||
         field === "cuid" ||
         field.endsWith("_id") ||
+        field.endsWith("_uuid") ||
+        field.endsWith("_cuid") ||
         field.endsWith("Id") ||
         typeof value === "number" ||
         typeof value === "boolean" ||

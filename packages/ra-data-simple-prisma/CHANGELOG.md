@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 5.3.0
+
+### Minor Changes
+
+- whitelist ids
+
 ## 5.2.1
 
 ### Patch Changes
