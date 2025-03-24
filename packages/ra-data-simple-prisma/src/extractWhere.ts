@@ -81,9 +81,11 @@ export const extractWhere = (
       } else if (
         field === "id" || // careful not to use filterPath here
         field === "uuid" ||
+        field === "uid" ||
         field === "cuid" ||
         field.endsWith("_id") ||
         field.endsWith("_uuid") ||
+        field.endsWith("_uid") ||
         field.endsWith("_cuid") ||
         field.endsWith("Id") ||
         typeof value === "number" ||
