@@ -1,7 +1,8 @@
 import { GetListRequest } from "./Http";
 
-export const isExport = (req: GetListRequest): boolean => {
-  const { pagination } = req.params;
+export const isExport = (getListRequest: GetListRequest): boolean => {
+  // Keep ? in case getListRequest is not a GetListRequest or not even defined
+  const pagination = getListRequest?.params?.pagination;
 
   if (pagination) {
     const { page, perPage } = pagination;

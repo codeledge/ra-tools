@@ -4,7 +4,6 @@ import { expect, describe, test } from "@jest/globals";
 
 describe("extractWhere", () => {
   test("should extract where", () => {
-    // Arrange
     const req: GetListRequest = {
       method: "getList",
       resource: "resource",
@@ -20,6 +19,12 @@ describe("extractWhere", () => {
           bool: true,
           json_pgjson: {
             field: "value",
+          },
+          relationship_some: {
+            value_enum: "ENUM",
+          },
+          other_rel_every: {
+            value_startsWith: "startsWith",
           },
         },
         pagination: {
@@ -37,10 +42,8 @@ describe("extractWhere", () => {
       filterMode: "insensitive",
     };
 
-    // Act
     const result = extractWhere(req, options);
 
-    // Assert
     expect(result).toEqual({
       id: "1",
       name: {
@@ -54,6 +57,19 @@ describe("extractWhere", () => {
       json: {
         equals: "value",
         path: ["field"],
+      },
+      relationship: {
+        some: {
+          value_enum: "ENUM",
+        },
+      },
+      other_rel: {
+        every: {
+          value: {
+            startsWith: "startsWith",
+            mode: "insensitive",
+          },
+        },
       },
     });
   });

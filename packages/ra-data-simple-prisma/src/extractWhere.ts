@@ -8,9 +8,7 @@ import {
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
 
-const prismaOperators = [
-  "contains",
-  "endsWith",
+const prismaScalarOperators = [
   "equals",
   "gt",
   "gte",
@@ -18,8 +16,11 @@ const prismaOperators = [
   "lte",
   "not",
   "search",
-  "startsWith",
 ];
+
+const prismaStringOperators = ["contains", "endsWith", "startsWith"];
+
+const prismaRelationshipOperators = ["some", "every", "none"];
 
 export type FilterMode = "insensitive" | "default" | undefined;
 
@@ -35,7 +36,7 @@ export const extractWhere = (
   const { filter } = req.params;
 
   const where = {};
-
+  console.log("filter", filter);
   const setWhere = (filter: PlainObject, currentFilterPath?: string) => {
     Object.entries(filter).forEach(([field, value]) => {
       if (isNotField(field)) return;
@@ -49,14 +50,38 @@ export const extractWhere = (
         ? `${currentFilterPath}.${field}`
         : field;
 
-      const hasOperator = prismaOperators.some((operator) => {
+      const hasScalarOperator = prismaScalarOperators.some((operator) => {
         if (field.endsWith(`_${operator}`)) {
           const [wherePath] = filterPath.split(`_${operator}`);
           setObjectPath(where, wherePath + `.${operator}`, value);
           return true;
         }
       });
-      if (hasOperator) return;
+      if (hasScalarOperator) return;
+
+      // For relationships for now duplicate logic but seems to be the same as above
+      const hasRelationshipOperator = prismaRelationshipOperators.some(
+        (operator) => {
+          if (field.endsWith(`_${operator}`)) {
+            const [wherePath] = filterPath.split(`_${operator}`);
+            setObjectPath(where, wherePath + `.${operator}`, value);
+            return true;
+          }
+        }
+      );
+      if (hasRelationshipOperator) return;
+
+      const hasStringOperator = prismaStringOperators.some((operator) => {
+        if (field.endsWith(`_${operator}`)) {
+          const [wherePath] = filterPath.split(`_${operator}`);
+          setObjectPath(where, wherePath, {
+            [operator]: value,
+            mode: options?.filterMode,
+          });
+          return true;
+        }
+      });
+      if (hasStringOperator) return;
 
       if (
         // Custom operators
@@ -77,12 +102,15 @@ export const extractWhere = (
         }
       } else if (field === "q") {
         // i.e. when filterToQuery is not set on AutoCompleteInput, but we don't know all the fields to search against
-        console.info("Filter not handled:", field, value);
+        console.warn("Filter not handled:", field, value);
       } else if (
         field === "id" || // careful not to use filterPath here
         field === "uuid" ||
         field === "cuid" ||
         field.endsWith("_id") ||
+        field.endsWith("_uid") ||
+        field.endsWith("_cuid") ||
+        field.endsWith("_uuid") ||
         field.endsWith("Id") ||
         typeof value === "number" ||
         typeof value === "boolean" ||
@@ -92,6 +120,7 @@ export const extractWhere = (
       } else if (isArray(value)) {
         setObjectPath(where, filterPath, { in: value });
       } else if (isString(value)) {
+        // NOTE: for strings the default is contains insensitive (like hasStringOperator)
         setObjectPath(where, filterPath, {
           contains: value,
           mode: options?.filterMode,
