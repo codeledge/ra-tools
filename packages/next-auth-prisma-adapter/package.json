@@ -32,8 +32,8 @@
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
     "jest": "^29.7.0",
-    "next-auth": "^4.24.7",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.3"
+    "next-auth": "^4.24.11",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3"
   }
 }

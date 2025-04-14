@@ -39,22 +39,22 @@
     "@prisma/client": ">=5"
   },
   "dependencies": {
-    "axios": "^1.6.8",
+    "axios": "^1.8.4",
     "deepmerge": "^4.3.1",
-    "deverything": "^1.5.0"
+    "deverything": "^3.2.0"
   },
   "devDependencies": {
-    "@babel/core": "7.24.3",
-    "@babel/preset-env": "^7.24.3",
-    "@babel/preset-typescript": "^7.24.1",
-    "@changesets/cli": "^2.27.7",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.30",
+    "@babel/core": "7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.27.0",
+    "@changesets/cli": "^2.28.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.14.1",
     "eslint-config-custom": "workspace:*",
     "jest": "^29.7.0",
-    "react-admin": "^4.16.13",
+    "react-admin": "^5.7.2",
     "ts-node": "^10.9.2",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.3"
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3"
   }
 }

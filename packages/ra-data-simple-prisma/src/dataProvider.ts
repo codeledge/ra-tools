@@ -52,8 +52,7 @@ export const dataProvider = (
       options.axiosInterceptors.response.forEach((value) =>
         apiService.interceptors.response.use(
           value.onFulfilled,
-          value.onRejected,
-          value.options
+          value.onRejected
         )
       );
   }
