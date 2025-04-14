@@ -27,7 +27,7 @@
     "@types/react-dom": "19.1.2",
     "babel-plugin-superjson-next": "^0.4.5",
     "eslint-config-custom": "workspace:*",
-    "superjson": "^2.2.2",
+    "superjson": "^1.9.0",
     "typescript": "5.8.3"
   }
 }
