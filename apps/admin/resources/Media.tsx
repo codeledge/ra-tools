@@ -8,13 +8,14 @@ import {
   SimpleForm,
   Create,
   TextInput,
+  DateInput,
 } from "react-admin";
 
 export const MediaList = (props: ListProps) => (
   <List
     {...props}
     filters={[
-      <DateField
+      <DateInput
         key="createdAt_gte"
         label="Created after"
         source="createdAt_gte"
