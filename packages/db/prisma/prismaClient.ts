@@ -13,15 +13,6 @@ export const prismaClient: PrismaClient =
 
 if (process.env.NODE_ENV !== "production") global.prismaClient = prismaClient;
 
-export const prismaLogClient = prismaClient.$extends({
-  query: {
-    beforeAll: async (params) => {
-      console.info("$extends beforeAll", params);
-      return params;
-    },
-  },
-});
-
 export const prismaReadClient = prismaClient
   .$extends(
     readReplicas({
