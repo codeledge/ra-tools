@@ -1,7 +1,7 @@
 import { prismaClient } from "./prismaClient";
 import {
   array,
-  seriesAll,
+  seriesAsync,
   randomEmail,
   randomFullName,
   randomParagraph,
@@ -28,7 +28,7 @@ async function main() {
   }
 
   // Use seriesAll as createMany does not support nested create
-  await seriesAll(
+  await seriesAsync(
     array(100, (_, index) => {
       return () =>
         prismaClient.user.create({
