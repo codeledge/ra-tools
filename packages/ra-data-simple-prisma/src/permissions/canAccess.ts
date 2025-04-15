@@ -29,11 +29,13 @@ export const canAccess = ({
   permissions,
   resource,
   record,
+  field,
 }: {
   action: Action;
   permissions: Permissions<string>;
   resource: string; //better type is Permission["resource"] but ra's resource is string
   record?: any;
+  field?: string;
 }): boolean => {
   if (!permissions || permissions.length === 0) return false;
 
@@ -41,7 +43,7 @@ export const canAccess = ({
   for (const permission of permissions.filter(
     (p) => p !== null && p.type === "deny"
   )) {
-    if (matchTarget(permission, resource, action, record)) {
+    if (matchTarget(permission, resource, action, record, field)) {
       return false;
     }
   }
@@ -49,7 +51,7 @@ export const canAccess = ({
   for (const permission of permissions.filter(
     (p) => p !== null && p.type !== "deny"
   )) {
-    if (matchTarget(permission, resource, action, record)) {
+    if (matchTarget(permission, resource, action, record, field)) {
       return true;
     }
   }
@@ -60,7 +62,8 @@ const matchTarget = (
   permission: Permission<string>,
   resource: string,
   action: Action,
-  record?: any
+  record?: any,
+  field?: string
 ) => {
   if (permission === null || !matchWildcard(permission.resource, resource)) {
     return false;
@@ -77,6 +80,14 @@ const matchTarget = (
   }
   if (permission.record && record) {
     if (!isMatch(record, permission.record)) {
+      return false;
+    }
+  }
+  if (permission.field && field) {
+    if (Array.isArray(permission.field) && !permission.field.includes(field)) {
+      return false;
+    }
+    if (typeof permission.field === "string" && permission.field !== field) {
       return false;
     }
   }
