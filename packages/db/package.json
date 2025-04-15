@@ -13,15 +13,15 @@
     "test": "jest"
   },
   "dependencies": {
-    "@prisma/client": "^5.11.0"
+    "@prisma/client": "^6.6.0"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "prisma": "^5.11.0",
-    "tsup": "^8.0.2",
-    "typescript": "^5.4.3"
+    "prisma": "^6.6.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3"
   }
 }

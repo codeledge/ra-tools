@@ -1,19 +1,14 @@
 import UpdateIcon from "@mui/icons-material/Update";
-import { Typography } from "@mui/material";
 import {
-  List,
   Datagrid,
   TextField,
   DateField,
-  ListProps,
   CreateProps,
-  useRecordContext,
   AutocompleteInput,
   Create,
   ReferenceInput,
   SimpleForm,
   TextInput,
-  ListBase,
   Edit,
   EditProps,
   ReferenceField,
@@ -58,27 +53,28 @@ export const CategoryEdit = (props: EditProps) => (
 );
 
 // TODO: invent a child record Datagrid
-export const CategoryChild = (props: CreateProps) => {
-  const record = useRecordContext();
-  return (
-    <ListBase {...props} filter={{ parentCategoryId: record.id }}>
-      <Datagrid
-        bulkActionButtons={false}
-        expand={CategoryChild}
-        sx={{
-          border: "1px solid grey",
-          marginLeft: 2,
-        }}
-        empty={<Typography variant="caption">No child categories</Typography>}
-      >
-        <TextField source="id" sortable={false} />
-        <TextField source="name" sortable={false} />
-        <DateField source="createdAt" sortable={false} />
-        <DateField source="updatedAt" sortable={false} />
-      </Datagrid>
-    </ListBase>
-  );
-};
+// export const CategoryChild = (props: CreateProps) => {
+//   const record = useRecordContext();
+//   if (!record) return null;
+//   return (
+//     <ListBase {...props} filter={{ parentCategoryId: record.id }}>
+//       <Datagrid
+//         bulkActionButtons={false}
+//         expand={CategoryChild}
+//         sx={{
+//           border: "1px solid grey",
+//           marginLeft: 2,
+//         }}
+//         empty={<Typography variant="caption">No child categories</Typography>}
+//       >
+//         <TextField source="id" sortable={false} />
+//         <TextField source="name" sortable={false} />
+//         <DateField source="createdAt" sortable={false} />
+//         <DateField source="updatedAt" sortable={false} />
+//       </Datagrid>
+//     </ListBase>
+//   );
+// };
 
 const PostBulkActionButtons = () => (
   <>

@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "eslint": "^8.57.0",
-    "eslint-config-next": "^14.1.4",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-turbo": "^1.13.0",
-    "eslint-plugin-react": "^7.34.1"
+    "eslint": "^9.24.0",
+    "eslint-config-next": "^15.3.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-config-turbo": "^2.5.0",
+    "eslint-plugin-react": "^7.37.5"
   }
 }
