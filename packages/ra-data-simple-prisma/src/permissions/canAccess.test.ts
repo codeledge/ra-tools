@@ -23,7 +23,43 @@ describe("canAccess", () => {
       resource: "comments",
       action: ["create", "edit"],
     },
+    {
+      type: "allow",
+      resource: "image",
+      action: ["edit"],
+      field: ["comment"],
+    },
   ];
+
+  it("should deny access if no resource is specified", () => {
+    expect(
+      canAccess({
+        action: "edit",
+        permissions: mockPermissions,
+        resource: undefined as any,
+      })
+    ).toBe(false);
+  });
+
+  it("should deny access to 'image.createdAt' via resource.field syntax", () => {
+    expect(
+      canAccess({
+        action: "edit",
+        permissions: mockPermissions,
+        resource: "image.createdAt",
+      })
+    ).toBe(false);
+  });
+
+  it("should allow access to 'image.comment' via resource.field syntax", () => {
+    expect(
+      canAccess({
+        action: "edit",
+        permissions: mockPermissions,
+        resource: "image.comment",
+      })
+    ).toBe(true);
+  });
 
   it("should return false when no permissions are provided", () => {
     expect(
