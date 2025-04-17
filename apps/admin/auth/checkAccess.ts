@@ -19,17 +19,17 @@ export const checkAccess = async (payload: RaPayload) => {
 
   const sessionAuthProvider = authProvider(session);
 
-  //check permissions
-  const permissions: Permissions<string> =
-    await sessionAuthProvider.getPermissions(null);
-
-  //convert getList to list, and updateMany to edit
   const method = payload.method as ReactAdminFetchActions;
   const action = fetchActionToAction[method];
 
   const resource = payload.model ?? payload.resource; //model can be undefined
 
-  if (!canAccess({ permissions, action, resource })) {
+  const canAccess = await sessionAuthProvider.canAccess?.({
+    action,
+    resource,
+  });
+
+  if (!canAccess) {
     throw {
       message:
         "You do not have permission to " +
@@ -40,5 +40,5 @@ export const checkAccess = async (payload: RaPayload) => {
     };
   }
 
-  return { permissions, action, resource, sessionAuthProvider, session };
+  return { action, resource, sessionAuthProvider, session };
 };
