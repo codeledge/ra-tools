@@ -1,5 +1,12 @@
 # ra-data-simple-prisma
 
+## 5.4.0
+
+### Minor Changes
+
+- Allow inline field perms
+- whitelist ids
+
 ## 5.3.0
 
 ### Minor Changes

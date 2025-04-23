@@ -32,12 +32,15 @@ export const canAccess = ({
   field,
 }: {
   action: Action;
-  permissions: Permissions<string>;
-  resource: string; //better type is Permission["resource"] but ra's resource is string
+  permissions: Permissions<any>;
+  resource: string;
   record?: any;
   field?: string;
 }): boolean => {
-  if (!permissions || permissions.length === 0) return false;
+  if (!permissions || permissions.length === 0 || !resource) return false;
+
+  // Support resource.field pattern
+  if (!field && resource.includes(".")) [resource, field] = resource.split(".");
 
   // if any deny permission matches => false
   for (const permission of permissions.filter(
@@ -47,6 +50,7 @@ export const canAccess = ({
       return false;
     }
   }
+
   // if any allow permission matches => true
   for (const permission of permissions.filter(
     (p) => p !== null && p.type !== "deny"
@@ -55,6 +59,7 @@ export const canAccess = ({
       return true;
     }
   }
+
   return false;
 };
 

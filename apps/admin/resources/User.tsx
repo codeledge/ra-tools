@@ -15,6 +15,7 @@ import {
   SingleFieldList,
   TextField,
   TextInput,
+  useCanAccess,
 } from "react-admin";
 
 export const UserCreate = (props: CreateProps) => (
@@ -61,14 +62,25 @@ export const UserEdit = (props: EditProps) => (
   </Edit>
 );
 
-export const UserShow = () => (
-  <Show>
-    <SimpleShowLayout>
-      <TextField source="id" />
-      <TextField source="name" />
-      <TextField source="settings.language" />
-      <DateField source="createdAt" />
-      <DateField source="updatedAt" />
-    </SimpleShowLayout>
-  </Show>
-);
+export const UserShow = () => {
+  const canReadCreatedAt = useCanAccess({
+    action: "show",
+    resource: "adminUser.createdAt",
+  });
+  const canReadUpdatedAt = useCanAccess({
+    action: "show",
+    resource: "adminUser.updatedAt",
+  });
+
+  return (
+    <Show>
+      <SimpleShowLayout>
+        <TextField source="id" />
+        <TextField source="name" />
+        <TextField source="settings.language" />
+        {canReadCreatedAt.canAccess && <DateField source="createdAt" />}
+        {canReadUpdatedAt.canAccess && <DateField source="updatedAt" />}
+      </SimpleShowLayout>
+    </Show>
+  );
+};
