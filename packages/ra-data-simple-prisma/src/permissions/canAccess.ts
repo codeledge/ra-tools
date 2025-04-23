@@ -32,7 +32,7 @@ export const canAccess = ({
   field,
 }: {
   action: Action;
-  permissions: Permissions<string>;
+  permissions: Permissions<any>;
   resource: string;
   record?: any;
   field?: string;
@@ -40,11 +40,7 @@ export const canAccess = ({
   if (!permissions || permissions.length === 0 || !resource) return false;
 
   // Support resource.field pattern
-  if (!field && resource.includes(".")) {
-    const parts = resource.split(".");
-    resource = parts[0];
-    field = parts.slice(1).join(".");
-  }
+  if (!field && resource.includes(".")) [resource, field] = resource.split(".");
 
   // if any deny permission matches => false
   for (const permission of permissions.filter(

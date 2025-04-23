@@ -44,7 +44,7 @@ export const authProvider = (session?: Session | null): AuthProvider => ({
     if (!actions.includes(action))
       return Promise.reject(new Error("invalid action"));
     if (!session?.user.role) return Promise.reject(new Error("role not found"));
-    const permissions = permissionsConfig[session.user.role] as any;
+    const permissions = permissionsConfig[session.user.role];
 
     return canAccess({ resource, record, action, permissions });
   },
