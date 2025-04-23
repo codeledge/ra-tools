@@ -23,7 +23,7 @@ export const checkAccess = async (payload: RaPayload) => {
   const resource = payload.model ?? payload.resource; //model can be undefined
 
   // Field check done later, needs to get the diff to see if it's actually changed
-  const canAccess = await sessionAuthProvider.canAccess({
+  const canAccess = await sessionAuthProvider.canAccess?.({
     action,
     resource,
   });

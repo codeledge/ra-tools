@@ -42,12 +42,14 @@ export const authProvider = (session?: Session | null): AuthProvider => ({
   canAccess: async ({
     resource,
     record,
-    action,
+    action: actionString,
   }: {
     resource: string;
     record?: any;
-    action: Action;
+    action: string;
   }) => {
+    // Cast default string action to Action type
+    const action = actionString as Action;
     if (!actions.includes(action))
       return Promise.reject(new Error("invalid action"));
     if (!session?.user.role) return Promise.reject(new Error("role not found"));
