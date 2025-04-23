@@ -3,8 +3,6 @@ import { authOptions } from "../app/api/auth/[...nextauth]/authOptions";
 import {
   RaPayload,
   ReactAdminFetchActions,
-  canAccess,
-  Permissions,
   fetchActionToAction,
 } from "ra-data-simple-prisma";
 import { authProvider } from "../providers/authProvider";
@@ -24,7 +22,8 @@ export const checkAccess = async (payload: RaPayload) => {
 
   const resource = payload.model ?? payload.resource; //model can be undefined
 
-  const canAccess = await sessionAuthProvider.canAccess?.({
+  // Field check done later, needs to get the diff to see if it's actually changed
+  const canAccess = await sessionAuthProvider.canAccess({
     action,
     resource,
   });
