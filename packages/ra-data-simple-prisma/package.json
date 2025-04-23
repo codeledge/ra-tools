@@ -6,7 +6,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --treeshake",
+    "build": "tsup src/index.ts --format esm,cjs --dts --treeshake --external react-admin --external ra-core --external ra-ui-materialui",
     "dev": "pnpm build --watch",
     "lint": "eslint src --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
