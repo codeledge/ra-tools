@@ -18,7 +18,7 @@ export type GetManyReferenceOptions<
 
 export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
   req: GetManyReferenceRequest,
-  model: { findMany: Function },
+  model: { findMany: Function; count: Function },
   options?: GetManyReferenceOptions<Args>
 ) => {
   const { id, target } = req.params;
@@ -32,21 +32,24 @@ export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
   const { skip, take } = extractSkipTake(req);
 
   // GET DATA
-  const rows = await model.findMany({
-    include: options?.include,
-    select: options?.select,
-    where: { [target]: id, ...where },
-    orderBy,
-    skip,
-    take,
-  });
+  const [rows, total] = await Promise.all([
+    model.findMany({
+      include: options?.include,
+      select: options?.select,
+      where: { [target]: id, ...where },
+      orderBy,
+      skip,
+      take,
+    }),
+    model.count({ where: { [target]: id, ...where } }),
+  ]);
 
   // TRANSFORM
   const data = options?.transformRow
     ? await Promise.all(rows.map(options.transformRow))
     : rows;
 
-  const response = { data, total: data.length };
+  const response = { data, total };
 
   return response;
 };
