@@ -4,11 +4,6 @@
 
 ### Minor Changes
 
-- whitelist ids
-- Allow inline field perms
-
-### Patch Changes
-
 - fix: getManyReference total count
 
 ## 5.4.0
