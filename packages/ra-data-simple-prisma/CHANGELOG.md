@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 5.5.0
+
+### Minor Changes
+
+- fix: getManyReference total count
+
 ## 5.4.0
 
 ### Minor Changes
