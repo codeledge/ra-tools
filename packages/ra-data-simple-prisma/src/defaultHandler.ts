@@ -24,7 +24,6 @@ import {
 import { getOneHandler, GetOneOptions } from "./getOneHandler";
 import { updateManyHandler } from "./updateManyHandler";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
-import { getModel } from "./getModel";
 
 export const defaultHandler = async (
   req: RaPayload,
@@ -40,51 +39,57 @@ export const defaultHandler = async (
     update?: UpdateOptions;
   }
 ) => {
-  const model = getModel(req, prismaClient);
-
   switch (req.method) {
     case "create": {
-      return await createHandler(req as CreateRequest, model, {
+      return await createHandler(req as CreateRequest, prismaClient, {
         ...options?.create,
         audit: options?.audit,
       });
     }
     case "delete": {
-      return await deleteHandler(req as DeleteRequest, model, {
+      return await deleteHandler(req as DeleteRequest, prismaClient, {
         ...options?.delete,
         audit: options?.audit,
       });
     }
     case "deleteMany": {
-      return deleteManyHandler(req as DeleteManyRequest, model, {
+      return deleteManyHandler(req as DeleteManyRequest, prismaClient, {
         ...options?.delete,
         audit: options?.audit,
       });
     }
     case "getList": {
-      return getListHandler(req as GetListRequest, model, options?.getList);
+      return getListHandler(
+        req as GetListRequest,
+        prismaClient,
+        options?.getList
+      );
     }
     case "getMany": {
-      return getManyHandler(req as GetManyRequest, model, options?.getMany);
+      return getManyHandler(
+        req as GetManyRequest,
+        prismaClient,
+        options?.getMany
+      );
     }
     case "getManyReference": {
       return getManyReferenceHandler(
         req as GetManyReferenceRequest,
-        model,
+        prismaClient,
         options?.getManyReference
       );
     }
     case "getOne": {
-      return getOneHandler(req as GetOneRequest, model, options?.getOne);
+      return getOneHandler(req as GetOneRequest, prismaClient, options?.getOne);
     }
     case "update": {
-      return await updateHandler(req as UpdateRequest, model, {
+      return await updateHandler(req as UpdateRequest, prismaClient, {
         ...options?.update,
         audit: options?.audit,
       });
     }
     case "updateMany": {
-      return await updateManyHandler(req as UpdateManyRequest, model, {
+      return await updateManyHandler(req as UpdateManyRequest, prismaClient, {
         ...options?.update,
         audit: options?.audit,
       });
