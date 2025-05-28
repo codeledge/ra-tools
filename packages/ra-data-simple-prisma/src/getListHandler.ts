@@ -4,6 +4,8 @@ import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
 import deepmerge from "deepmerge";
+import { getModel } from "./getModel";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type GetListArgs = {
   include?: object | null;
@@ -25,10 +27,10 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
 
 export const getListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
-  model: { findMany: Function; count: Function },
+  prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetListOptions<Args>
 ) => {
-  if (!model) throw new Error(`missing model in getListHandler`);
+  const model = getModel(req, prismaClient);
 
   let queryArgs: {
     findManyArg: {

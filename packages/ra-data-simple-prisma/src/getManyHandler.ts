@@ -1,4 +1,6 @@
 import { GetManyRequest } from "./Http";
+import { getModel } from "./getModel";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type GetManyArgs = {
   include?: object | null;
@@ -12,10 +14,11 @@ export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = Args & {
 
 export const getManyHandler = async <Args extends GetManyArgs>(
   req: GetManyRequest,
-  model: { findMany: Function },
+  prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetManyOptions<Args>
 ) => {
   const { ids } = req.params;
+  const model = getModel(req, prismaClient);
 
   // GET DATA
   const rows = await model.findMany({

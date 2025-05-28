@@ -5,13 +5,15 @@ import { extractWhere } from "./extractWhere";
 import deepmerge from "deepmerge";
 import { GetListArgs, GetListOptions } from "./getListHandler";
 import { stringify } from "deverything";
+import { getModel } from "./getModel";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export const getInfiniteListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
-  model: { findMany: Function; count: Function },
+  prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetListOptions<Args>
 ) => {
-  if (!model) throw new Error(`missing model in getInfiniteListHandler`);
+  const model = getModel(req, prismaClient);
 
   let queryArgs: {
     findManyArg: {

@@ -192,4 +192,55 @@ describe("canAccess", () => {
       })
     ).toBe(false);
   });
+
+  describe("field overrides resource", () => {
+    const mockPermissions: Permission<string>[] = [
+      {
+        type: "allow",
+        resource: "users",
+        action: "edit",
+      },
+      {
+        type: "allow",
+        resource: "users",
+        action: "show",
+        field: "email",
+      },
+      {
+        type: "allow",
+        resource: "users.profile",
+        action: "show",
+      },
+    ];
+
+    // it("edit > allowedField > true", () => {
+    //   expect(
+    //     canAccess({
+    //       action: "edit",
+    //       permissions: mockPermissions,
+    //       resource: "users.allowedField",
+    //     })
+    //   ).toBe(true);
+    // });
+
+    // it("show > email > true", () => {
+    //   expect(
+    //     canAccess({
+    //       action: "show",
+    //       permissions: mockPermissions,
+    //       resource: "users.email",
+    //     })
+    //   ).toBe(true);
+    // });
+
+    it("edit > email > false", () => {
+      expect(
+        canAccess({
+          action: "edit",
+          permissions: mockPermissions,
+          resource: "users.email",
+        })
+      ).toBe(false);
+    });
+  });
 });

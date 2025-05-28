@@ -3,6 +3,8 @@ import { CreateRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 import { isNotField } from "./lib/isNotField";
 import { firstKey, firstValue, isObject, isString } from "deverything";
+import { getModel } from "./getModel";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type CreateArgs = {
   include?: object | null;
@@ -46,9 +48,10 @@ export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
 
 export const createHandler = async <Args extends CreateArgs>(
   req: CreateRequest,
-  model: { create: Function },
+  prismaClient: PrismaClientOrDynamicClientExtension,
   options?: CreateOptions<Omit<Args, "data">> // omit data so the Prisma.ModelCreateArgs can be passed in, without complaining about the data property missing
 ) => {
+  const model = getModel(req, prismaClient);
   const { data } = req.params;
 
   if (options?.debug) console.log("createHandler:data", data);

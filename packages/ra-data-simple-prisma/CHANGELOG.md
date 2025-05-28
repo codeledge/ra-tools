@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 6.0.0
+
+### Major Changes
+
+- No need to provide model to any handler, it is inferred from the request. createHandler(,`prisma.post`) => createHandler(,`prisma`)
+
 ## 5.5.0
 
 ### Minor Changes

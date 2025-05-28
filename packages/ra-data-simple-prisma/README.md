@@ -142,7 +142,7 @@ All dataProvider methods can be overridden for a given resource, or all.
 export default function handler(req) {
   switch (req.body.method) {
     case "create":
-      await createHandler<Prisma.PostCreateArgs>(req, prismaClient.post, {
+      await createHandler<Prisma.PostCreateArgs>(req.body, prismaClient, {
         connect: {
           tags: "id",
           // or
@@ -161,14 +161,14 @@ export default function handler(req) {
       });
       return NextResponse.json(...);
     case "delete":
-      await deleteHandler<Prisma.PostDeleteArgs>(req, prismaClient.post, {
+      await deleteHandler<Prisma.PostDeleteArgs>(req.body, prismaClient, {
         softDeleteField: "deletedAt",
         audit: ...
         debug: ...
       });
       break;
     case "deleteMany":
-      await deleteManyHandler<Prisma.PostDeleteManyArgs>(req, prismaClient.post, {
+      await deleteManyHandler<Prisma.PostDeleteManyArgs>(req.body, prismaClient, {
         softDeleteField: "deletedAt",
         audit: ...
         debug: ...
@@ -176,8 +176,8 @@ export default function handler(req) {
       break;
     case "getList":
       await getListHandler<Prisma.PostFindManyArgs>(
-        req,
-        prismaClient.post,
+        req.body,
+        prismaClient,
         {
           select: ...
           where: ...
@@ -195,8 +195,8 @@ export default function handler(req) {
       );
       // OR, if using InfiniteList compoenent
       await getInfiniteListHandler<Prisma.PostFindManyArgs>(
-        req,
-        prismaClient.post,
+        req.body,
+        prismaClient,
         {
           select: ...
           where: ...
@@ -215,20 +215,20 @@ export default function handler(req) {
       break;
     case "getMany":
       await getManyHandler<Prisma.PostFindManyArgs>(
-        req,
-        prismaClient.post,
+        req.body,
+        prismaClient,
       );
       break;
     case "getManyReference":
       await getManyReferenceHandler<Prisma.PostFindManyArgs>(
-        req,
-        prismaClient.post,
+        req.body,
+        prismaClient,
       );
       break;
     case "getOne":
       await getOneHandler<Prisma.PostFindUniqueArgs>(
-        req,
-        prismaClient.post,
+        req.body,
+        prismaClient,
         {
           select: ...
           include: ...
@@ -248,8 +248,8 @@ export default function handler(req) {
       break;
     case "update":
       await updateHandler<Prisma.PostUpdateArgs>(
-        req,
-        prismaClient.post,
+        req.body,
+        prismaClient,
         {
           skipFields: {
             computedField: true
@@ -272,8 +272,8 @@ export default function handler(req) {
       break;
     case "updateMany":
       await updateManyHandler<Prisma.PostUpdateManyArgs>(
-        req,
-        prismaClient.post,
+        req.body,
+        prismaClient,
         {
           skipFields: {
             computedField: true
@@ -285,7 +285,7 @@ export default function handler(req) {
       );
       break;
     default: // <= fall back on default handler
-      await defaultHandler(req, prismaClient, {
+      await defaultHandler(req.body, prismaClient, {
         audit: ...
         create: ...
         delete: ...

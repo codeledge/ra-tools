@@ -1,6 +1,8 @@
 import { AuditOptions } from "./audit/types";
 import { DeleteRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
+import { getModel } from "./getModel";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type DeleteOptions = {
   softDeleteField?: string;
@@ -18,9 +20,10 @@ export const deleteHandler = async <
   }
 >(
   req: DeleteRequest,
-  model: { update: Function; delete: Function },
+  prismaClient: PrismaClientOrDynamicClientExtension,
   options?: DeleteOptions
 ) => {
+  const model = getModel(req, prismaClient);
   const { id } = req.params;
 
   const deleted = options?.softDeleteField

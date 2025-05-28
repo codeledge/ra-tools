@@ -1,4 +1,6 @@
 import { GetOneRequest } from "./Http";
+import { getModel } from "./getModel";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type GetOneArgs = {
   include?: object | null;
@@ -13,11 +15,11 @@ export type GetOneOptions<Args extends GetOneArgs = GetOneArgs> = Args & {
 
 export const getOneHandler = async <Args extends GetOneArgs>(
   req: GetOneRequest,
-  model: { findUnique: Function },
+  prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetOneOptions<Omit<Args, "where">> // omit where so the Prisma.ModelFindUniqueArgs can be passed in, without complaining about the where property missing
 ) => {
   const { id } = req.params;
-
+  const model = getModel(req, prismaClient);
   const where = { id };
 
   if (options?.debug) console.log("getOneHandler:where", where);

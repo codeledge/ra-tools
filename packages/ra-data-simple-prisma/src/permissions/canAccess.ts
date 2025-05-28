@@ -99,15 +99,15 @@ const matchTarget = (
   return true;
 };
 
-const matchWildcard = (pattern: string, resource: string) => {
-  if (pattern === "*") {
+const matchWildcard = (resourcePattern: string, resource: string) => {
+  if (resourcePattern === "*") {
     return true;
   }
-  if (pattern === resource) {
+  if (resourcePattern === resource) {
     return true;
   }
-  if (pattern.endsWith("*")) {
-    return resource.startsWith(pattern.slice(0, -1));
+  if (resourcePattern.endsWith("*")) {
+    return resource.startsWith(resourcePattern.slice(0, -1));
   }
   return false;
 };

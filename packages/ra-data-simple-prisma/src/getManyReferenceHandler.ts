@@ -1,7 +1,9 @@
 import { GetManyReferenceRequest } from "./Http";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
+import { getModel } from "./getModel";
 
 export type GetManyRefernceArgs = {
   include?: object | null;
@@ -18,11 +20,11 @@ export type GetManyReferenceOptions<
 
 export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
   req: GetManyReferenceRequest,
-  model: { findMany: Function; count: Function },
+  prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetManyReferenceOptions<Args>
 ) => {
   const { id, target } = req.params;
-
+  const model = getModel(req, prismaClient);
   const orderBy = extractOrderBy(req);
 
   const where = extractWhere(req, {

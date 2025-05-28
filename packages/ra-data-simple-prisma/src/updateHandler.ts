@@ -3,6 +3,8 @@ import { UpdateRequest } from "./Http";
 import { auditHandler } from "./audit/auditHandler";
 import { isNotField } from "./lib/isNotField";
 import { firstKey, firstValue, isObject, isString } from "deverything";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
+import { getModel } from "./getModel";
 
 export type UpdateArgs = {
   include?: object | null;
@@ -180,11 +182,11 @@ export const reduceData = (data, options: UpdateOptions) => {
 
 export const updateHandler = async <Args extends UpdateArgs>(
   req: UpdateRequest,
-  model: { update: Function },
+  prismaClient: PrismaClientOrDynamicClientExtension,
   options?: UpdateOptions<Omit<Args, "data" | "where">>
 ) => {
   const { id } = req.params;
-
+  const model = getModel(req, prismaClient);
   const data = reduceData(req.params.data, options);
 
   if (options?.debug) {

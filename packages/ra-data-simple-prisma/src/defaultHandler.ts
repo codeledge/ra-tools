@@ -24,10 +24,11 @@ import {
 import { getOneHandler, GetOneOptions } from "./getOneHandler";
 import { updateManyHandler } from "./updateManyHandler";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
+import { getModel } from "./getModel";
 
 export const defaultHandler = async (
   req: RaPayload,
-  prisma: PrismaClientOrDynamicClientExtension,
+  prismaClient: PrismaClientOrDynamicClientExtension,
   options?: {
     audit?: AuditOptions;
     create?: CreateOptions;
@@ -39,11 +40,7 @@ export const defaultHandler = async (
     update?: UpdateOptions;
   }
 ) => {
-  const modelName = req.model || req.resource;
-  if (!modelName) throw new Error(`model name is empty`);
-
-  const model = prisma[modelName];
-  if (!model) throw new Error(`No model found for "${modelName}"`);
+  const model = getModel(req, prismaClient);
 
   switch (req.method) {
     case "create": {
