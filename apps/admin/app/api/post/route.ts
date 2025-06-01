@@ -2,17 +2,13 @@ import { prismaClient } from "db";
 import {
   defaultHandler,
   getListHandler,
-  GetListRequest,
   createHandler,
-  GetOneRequest,
   getOneHandler,
   updateHandler,
-  UpdateRequest,
-  RaPayload,
 } from "ra-data-simple-prisma";
 import { Prisma, Post, Tag, Media } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { checkAccess } from "../../../auth/checkAccess";
+import { apiHandler } from "../apiHandler";
 
 type QueryPost = Post & {
   tags: Tag[];
@@ -34,16 +30,12 @@ const transformPost = async (post: QueryPost): Promise<ReturnPost> => {
   };
 };
 
-const route = async (req: Request) => {
-  const body: RaPayload<Prisma.ModelName> = await req.json();
-
-  const { sessionAuthProvider: authProvider } = await checkAccess(body);
-
-  switch (body.method) {
+const route = apiHandler(async (raPayload, { sessionAuthProvider }) => {
+  switch (raPayload.method) {
     case "create": {
       const result = await createHandler<Prisma.PostCreateArgs>(
-        body,
-        prismaClient.post,
+        raPayload,
+        prismaClient,
         {
           connect: {
             //tags: "id", if the prop is tag: [1,2,3]
@@ -58,7 +50,7 @@ const route = async (req: Request) => {
           },
           audit: {
             model: prismaClient.audit,
-            authProvider,
+            authProvider: sessionAuthProvider,
           },
         }
       );
@@ -66,8 +58,8 @@ const route = async (req: Request) => {
     }
     case "getList": {
       const result = await getListHandler<Prisma.PostFindManyArgs>(
-        body as GetListRequest,
-        prismaClient.post,
+        raPayload,
+        prismaClient,
         {
           // debug: true,
           include: {
@@ -81,8 +73,8 @@ const route = async (req: Request) => {
     }
     case "getOne": {
       const result = await getOneHandler<Prisma.PostFindUniqueArgs>(
-        body as GetOneRequest,
-        prismaClient.post,
+        raPayload,
+        prismaClient,
         {
           include: {
             tags: true,
@@ -95,8 +87,8 @@ const route = async (req: Request) => {
     }
     case "update": {
       const result = await updateHandler<Prisma.PostUpdateArgs>(
-        body as UpdateRequest,
-        prismaClient.post,
+        raPayload,
+        prismaClient,
         {
           set: {
             //tags: "id", if the prop is tag: [1,2,3]
@@ -109,19 +101,22 @@ const route = async (req: Request) => {
               },
             },
           },
-          audit: { model: prismaClient.audit, authProvider },
+          audit: {
+            model: prismaClient.audit,
+            authProvider: sessionAuthProvider,
+          },
           // debug: true,
         }
       );
       return NextResponse.json(result);
     }
     default: {
-      const result = await defaultHandler(body, prismaClient, {
-        audit: { model: prismaClient.audit, authProvider },
+      const result = await defaultHandler(raPayload, prismaClient, {
+        audit: { model: prismaClient.audit, authProvider: sessionAuthProvider },
       });
       return NextResponse.json(result);
     }
   }
-};
+});
 
 export { route as GET, route as POST };

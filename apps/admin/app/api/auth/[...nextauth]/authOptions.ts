@@ -26,6 +26,7 @@ export const authOptions: AuthOptions = {
           id: "userid1",
           name: "Demo name",
           email: "demo@example.com",
+          role: "OWNER",
         };
 
         if (user) {
@@ -54,7 +55,7 @@ export const authOptions: AuthOptions = {
       return true;
     },
     jwt: async ({ token, user, trigger, account }) => {
-      // console.log("jwt", { token, user, trigger, account, session });
+      // console.log("jwt", { token, user, trigger, account });
 
       if (trigger === "signIn" && account?.provider === "google") {
         if (!user.email) {

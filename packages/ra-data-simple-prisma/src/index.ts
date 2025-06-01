@@ -12,6 +12,7 @@ export * from "./getListHandler";
 export * from "./getManyHandler";
 export * from "./getManyReferenceHandler";
 export * from "./getOneHandler";
+export * from "./hasFieldChanged";
 export * from "./Http";
 export * from "./isExport";
 export * from "./permissions";

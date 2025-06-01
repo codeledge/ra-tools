@@ -10,17 +10,18 @@
     "dev": "tsup prisma/prismaClient.ts --format esm,cjs --watch --dts",
     "lint": "TIMING=1 eslint src --fix",
     "migrate:dev": "prisma migrate dev",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^6.6.0"
+    "@prisma/client": "^6.8.2"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "prisma": "^6.6.0",
+    "prisma": "^6.8.2",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3"
   }

@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3020",
@@ -22,16 +22,16 @@
     "next-auth": "^4.24.11",
     "next-auth-prisma-adapter": "workspace:*",
     "ra-data-simple-prisma": "workspace:*",
-    "react": "19.1.0",
+    "react": "18.3.1",
     "react-admin": "^5.7.2",
-    "react-dom": "19.1.0",
+    "react-dom": "18.3.1",
     "react-json-view-lite": "^2.4.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.16",
     "@types/node": "22.14.1",
-    "@types/react": "19.1.1",
-    "@types/react-dom": "19.1.2",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
     "eslint-config-custom": "workspace:*",
     "typescript": "5.8.3"
   }

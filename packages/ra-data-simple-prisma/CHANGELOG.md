@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 6.1.0
+
+### Minor Changes
+
+- add hasFieldChanged
+
 ## 6.0.1
 
 ### Major Changes

@@ -5,18 +5,13 @@ import {
 } from "ra-data-simple-prisma";
 import { prismaClient } from "db";
 import { Prisma } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
-import { checkAccess } from "../../../auth/checkAccess";
+import { NextResponse } from "next/server";
 import { apiHandler } from "../apiHandler";
 
-const route = apiHandler(async (req: NextRequest) => {
-  const body = await req.json();
-
-  await checkAccess(body);
-
-  switch (body.method) {
+const route = apiHandler(async (raPayload) => {
+  switch (raPayload.method) {
     case "update": {
-      const result = await updateHandler(body, prismaClient.user, {
+      const result = await updateHandler(raPayload, prismaClient, {
         allowNestedUpsert: {
           settings: true,
         },
@@ -25,8 +20,8 @@ const route = apiHandler(async (req: NextRequest) => {
     }
     case "getOne": {
       const result = await getOneHandler<Prisma.UserFindFirstArgs>(
-        body,
-        prismaClient["user"],
+        raPayload,
+        prismaClient,
         {
           include: {
             settings: {
@@ -40,7 +35,7 @@ const route = apiHandler(async (req: NextRequest) => {
       return NextResponse.json(result);
     }
     default: {
-      const result = await defaultHandler(body, prismaClient);
+      const result = await defaultHandler(raPayload, prismaClient);
       return NextResponse.json(result);
     }
   }
