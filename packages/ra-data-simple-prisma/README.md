@@ -72,6 +72,7 @@ To be used with an underscore after the `source` name
 - exact: equals
 - gt: prisma native operator
 - gte: prisma native operator
+- has: prisma native operator
 - lt: prisma native operator
 - lte: prisma native operator
 - not: prisma native operator

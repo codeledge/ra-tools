@@ -14,6 +14,7 @@ const prismaOperators = [
   "equals",
   "gt",
   "gte",
+  "has",
   "lt",
   "lte",
   "not",

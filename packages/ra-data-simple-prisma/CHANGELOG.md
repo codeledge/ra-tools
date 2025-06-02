@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 6.2.0
+
+### Minor Changes
+
+- add "has" operator
+
 ## 6.1.0
 
 ### Minor Changes
