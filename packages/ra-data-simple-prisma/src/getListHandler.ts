@@ -94,7 +94,7 @@ export const getListHandler = async <Args extends GetListArgs>(
   }
 
   // GET DATA
-  const [rows, total] = await Promise.all([
+  const [rows, total] = await prismaClient.$transaction([
     model.findMany(queryArgs.findManyArg),
     model.count(queryArgs.countArg),
   ]);

@@ -34,7 +34,7 @@ export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
   const { skip, take } = extractSkipTake(req);
 
   // GET DATA
-  const [rows, total] = await Promise.all([
+  const [rows, total] = await prismaClient.$transaction([
     model.findMany({
       include: options?.include,
       select: options?.select,

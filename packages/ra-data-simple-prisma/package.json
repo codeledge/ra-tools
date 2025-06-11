@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "description": "Simple react-admin dataprovider for prisma, supporting audit logs and roles",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -36,7 +36,8 @@
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "@prisma/client": ">=5"
+    "@prisma/client": ">=5",
+    "react-admin": ">=5.7.2"
   },
   "dependencies": {
     "axios": "^1.8.4",
