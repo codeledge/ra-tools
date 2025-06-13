@@ -34,22 +34,33 @@ export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
 
   const { skip, take } = extractSkipTake(req);
 
-  const fetcher = options?.asTransaction
-    ? prismaClient.$transaction
-    : Promise.all;
-
   // GET DATA
-  const [rows, total] = await fetcher([
-    model.findMany({
-      include: options?.include,
-      select: options?.select,
-      where: { [target]: id, ...where },
-      orderBy,
-      skip,
-      take,
-    }),
-    model.count({ where: { [target]: id, ...where } }),
-  ]);
+  let rows, total;
+  if (options?.asTransaction) {
+    [rows, total] = await prismaClient.$transaction([
+      model.findMany({
+        include: options?.include,
+        select: options?.select,
+        where: { [target]: id, ...where },
+        orderBy,
+        skip,
+        take,
+      }),
+      model.count({ where: { [target]: id, ...where } }),
+    ]);
+  } else {
+    [rows, total] = await Promise.all([
+      model.findMany({
+        include: options?.include,
+        select: options?.select,
+        where: { [target]: id, ...where },
+        orderBy,
+        skip,
+        take,
+      }),
+      model.count({ where: { [target]: id, ...where } }),
+    ]);
+  }
 
   // TRANSFORM
   const data = options?.transformRow

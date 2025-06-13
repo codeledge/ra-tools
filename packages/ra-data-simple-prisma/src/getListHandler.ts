@@ -94,15 +94,19 @@ export const getListHandler = async <Args extends GetListArgs>(
     console.log("getListHandler:queryArgs", stringify(queryArgs));
   }
 
-  const fetcher = options?.asTransaction
-    ? prismaClient.$transaction
-    : Promise.all;
-
   // GET DATA
-  const [rows, total] = await fetcher([
-    model.findMany(queryArgs.findManyArg),
-    model.count(queryArgs.countArg),
-  ]);
+  let rows, total;
+  if (options?.asTransaction) {
+    [rows, total] = await prismaClient.$transaction([
+      model.findMany(queryArgs.findManyArg),
+      model.count(queryArgs.countArg),
+    ]);
+  } else {
+    [rows, total] = await Promise.all([
+      model.findMany(queryArgs.findManyArg),
+      model.count(queryArgs.countArg),
+    ]);
+  }
 
   if (options?.debug) {
     console.log("getListHandler:total", total);
