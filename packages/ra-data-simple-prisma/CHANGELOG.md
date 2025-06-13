@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 6.4.0
+
+### Minor Changes
+
+- optional transaction
+
 ## 6.3.0
 
 ### Minor Changes

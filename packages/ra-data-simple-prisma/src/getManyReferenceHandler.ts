@@ -16,6 +16,7 @@ export type GetManyReferenceOptions<
   debug?: boolean;
   transformRow?: (data: any) => any | Promise<any>;
   filterMode?: FilterMode;
+  asTransaction?: boolean; // if true, will use $transaction for the query
 };
 
 export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
@@ -33,8 +34,12 @@ export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
 
   const { skip, take } = extractSkipTake(req);
 
+  const fetcher = options?.asTransaction
+    ? prismaClient.$transaction
+    : Promise.all;
+
   // GET DATA
-  const [rows, total] = await prismaClient.$transaction([
+  const [rows, total] = await fetcher([
     model.findMany({
       include: options?.include,
       select: options?.select,

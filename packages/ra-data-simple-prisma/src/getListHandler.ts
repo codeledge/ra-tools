@@ -23,6 +23,7 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
     rows: any[]
   ) => any | Promise<any>;
   filterMode?: FilterMode;
+  asTransaction?: boolean; // if true, will use $transaction for the query
 };
 
 export const getListHandler = async <Args extends GetListArgs>(
@@ -93,8 +94,12 @@ export const getListHandler = async <Args extends GetListArgs>(
     console.log("getListHandler:queryArgs", stringify(queryArgs));
   }
 
+  const fetcher = options?.asTransaction
+    ? prismaClient.$transaction
+    : Promise.all;
+
   // GET DATA
-  const [rows, total] = await prismaClient.$transaction([
+  const [rows, total] = await fetcher([
     model.findMany(queryArgs.findManyArg),
     model.count(queryArgs.countArg),
   ]);
