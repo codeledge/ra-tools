@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 6.4.2
+
+### Patch Changes
+
+- typo
+
 ## 6.4.0
 
 ### Minor Changes
