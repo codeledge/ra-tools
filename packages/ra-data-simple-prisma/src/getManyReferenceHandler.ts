@@ -5,13 +5,13 @@ import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
 import { getModel } from "./getModel";
 
-export type GetManyRefernceArgs = {
+export type GetManyReferenceArgs = {
   include?: object | null;
   select?: object | null;
 };
 
 export type GetManyReferenceOptions<
-  Args extends GetManyRefernceArgs = GetManyRefernceArgs
+  Args extends GetManyReferenceArgs = GetManyReferenceArgs
 > = Args & {
   debug?: boolean;
   transformRow?: (data: any) => any | Promise<any>;
@@ -19,7 +19,7 @@ export type GetManyReferenceOptions<
   asTransaction?: boolean; // if true, will use $transaction for the query
 };
 
-export const getManyReferenceHandler = async <Args extends GetManyRefernceArgs>(
+export const getManyReferenceHandler = async <Args extends GetManyReferenceArgs>(
   req: GetManyReferenceRequest,
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetManyReferenceOptions<Args>
