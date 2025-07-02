@@ -55,6 +55,14 @@ export const PostList = (props: ListProps) => (
         source={"createdAt_lt"} // equivalent to .lt
         alwaysOn
       />,
+      <ReferenceArrayInput
+        label="Categories"
+        reference="category"
+        source="categoryId_in"
+        alwaysOn
+      >
+        <AutocompleteArrayInput optionText={"name"} />
+      </ReferenceArrayInput>,
     ]}
   >
     <Datagrid rowClick={"show"}>
@@ -65,6 +73,9 @@ export const PostList = (props: ListProps) => (
       <TextField source="text" />
       <DateField source="createdAt" />
       <DateField source="updatedAt" />
+      <ReferenceField label="Category" reference="category" source="categoryId">
+        <TextField source="name" />
+      </ReferenceField>
       <ReferenceArrayField label="Media" reference="media" source="mediaIds">
         <SingleFieldList>
           <ChipField source="url" />
@@ -87,6 +98,9 @@ export const PostCreate = (props: CreateProps) => (
         <AutocompleteInput optionText="name" />
       </ReferenceInput>
       <TextInput source="text" />
+      <ReferenceInput label="Category" source="categoryId" reference="category">
+        <AutocompleteInput optionText="name" />
+      </ReferenceInput>
       <ReferenceArrayInput label="Tags" reference="tag" source="tagIds">
         <AutocompleteArrayInput optionText={"name"} />
       </ReferenceArrayInput>
@@ -104,6 +118,9 @@ export const PostEdit = (props: EditProps) => (
         <AutocompleteInput optionText="name" />
       </ReferenceInput>
       <TextInput source="text" />
+      <ReferenceInput label="Category" source="categoryId" reference="category">
+        <AutocompleteInput optionText="name" />
+      </ReferenceInput>
       <NumberInput disabled source="_tags_count" />
       <ReferenceArrayInput label="Tags" reference="tag" source="tagIds">
         <AutocompleteArrayInput optionText={"name"} />
