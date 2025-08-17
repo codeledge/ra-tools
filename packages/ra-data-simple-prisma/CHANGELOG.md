@@ -4,7 +4,11 @@
 
 ### Major Changes
 
-- allow orderBy in options
+- allow orderBy in options to actually be applied
+- remove `asTransaction` option
+- the merge of `clientWhere` (ra payload) and server side options is:
+  - shallow
+  - server always wins
 
 ## 6.4.3
 
