@@ -3,7 +3,6 @@ import { GetListRequest } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
-import deepmerge from "deepmerge";
 import { getModel } from "./getModel";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
@@ -23,7 +22,6 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
     rows: any[]
   ) => any | Promise<any>;
   filterMode?: FilterMode;
-  asTransaction?: boolean; // if true, will use $transaction for the query
 };
 
 export const getListHandler = async <Args extends GetListArgs>(
@@ -47,8 +45,11 @@ export const getListHandler = async <Args extends GetListArgs>(
     };
   } = {
     findManyArg: {
-      select: options?.select ?? undefined,
+      // skip: options?.skip ?? undefined, TODO
+      // take: options?.take ?? undefined, TODO
       include: options?.include ?? undefined,
+      orderBy: options?.orderBy ?? undefined,
+      select: options?.select ?? undefined,
       where: options?.where ?? {},
     },
     countArg: {
@@ -57,16 +58,22 @@ export const getListHandler = async <Args extends GetListArgs>(
   };
 
   // FILTER STAGE
-  const where = extractWhere(req, {
+  const requestWhere = extractWhere(req, {
     filterMode: options?.filterMode,
   });
 
   if (options?.debug) {
-    console.debug("getListHandler:where", stringify(where));
+    console.debug("getListHandler:requestWhere", stringify(requestWhere));
   }
 
-  queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, where);
-  queryArgs.countArg.where = deepmerge(queryArgs.countArg.where, where);
+  queryArgs.findManyArg.where = {
+    ...requestWhere, // Make sure request where never wins on server options
+    ...queryArgs.findManyArg.where,
+  };
+  queryArgs.countArg.where = {
+    ...requestWhere, // Make sure request where never wins on server options
+    ...queryArgs.countArg.where,
+  };
 
   // PAGINATION STAGE
   const { skip, take } = extractSkipTake(req);
@@ -74,19 +81,31 @@ export const getListHandler = async <Args extends GetListArgs>(
   queryArgs.findManyArg.take = take;
 
   // SORT STAGE
-  const { sort } = req.params;
-  if (sort) {
+  const { sort: requestSort } = req.params;
+  // Not yet, because react admin alawys sends the default sort
+  // if (requestSort && queryArgs.findManyArg.orderBy) {
+  //   console.warn(
+  //     "getListHandler: skipping requestSort",
+  //     stringify(requestSort)
+  //   );
+  // }
+  if (
+    requestSort &&
+    !options?.orderBy // because they are mutually exclusive
+  ) {
     queryArgs.findManyArg.orderBy = extractOrderBy(req);
 
-    const { field } = sort;
+    const { field } = requestSort;
 
     if (field && options?.noNullsOnSort?.includes(field)) {
-      queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, {
+      queryArgs.findManyArg.where = {
+        ...queryArgs.findManyArg.where,
         [field]: { not: null },
-      });
-      queryArgs.countArg.where = deepmerge(queryArgs.countArg.where, {
+      };
+      queryArgs.countArg.where = {
+        ...queryArgs.countArg.where,
         [field]: { not: null },
-      });
+      };
     }
   }
 
@@ -95,18 +114,10 @@ export const getListHandler = async <Args extends GetListArgs>(
   }
 
   // GET DATA
-  let rows, total;
-  if (options?.asTransaction) {
-    [rows, total] = await prismaClient.$transaction([
-      model.findMany(queryArgs.findManyArg),
-      model.count(queryArgs.countArg),
-    ]);
-  } else {
-    [rows, total] = await Promise.all([
-      model.findMany(queryArgs.findManyArg),
-      model.count(queryArgs.countArg),
-    ]);
-  }
+  const [rows, total] = await Promise.all([
+    model.findMany(queryArgs.findManyArg),
+    model.count(queryArgs.countArg),
+  ]);
 
   if (options?.debug) {
     console.log("getListHandler:total", total);

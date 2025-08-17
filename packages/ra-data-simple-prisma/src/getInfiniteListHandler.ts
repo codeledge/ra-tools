@@ -2,7 +2,6 @@ import { GetListRequest } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere } from "./extractWhere";
-import deepmerge from "deepmerge";
 import { GetListArgs, GetListOptions } from "./getListHandler";
 import { stringify } from "deverything";
 import { getModel } from "./getModel";
@@ -26,22 +25,26 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
     };
   } = {
     findManyArg: {
-      select: options?.select ?? undefined,
       include: options?.include ?? undefined,
+      orderBy: options?.orderBy ?? undefined,
+      select: options?.select ?? undefined,
       where: options?.where ?? {},
     },
   };
 
   // FILTER STAGE
-  const where = extractWhere(req, {
+  const requestWhere = extractWhere(req, {
     filterMode: options?.filterMode,
   });
 
   if (options?.debug) {
-    console.log("getInfiniteListHandler:where", stringify(where));
+    console.log("getInfiniteListHandler:requestWhere", stringify(requestWhere));
   }
 
-  queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, where);
+  queryArgs.findManyArg.where = {
+    ...requestWhere, // Make sure request where never wins on server options
+    ...queryArgs.findManyArg.where,
+  };
 
   // PAGINATION STAGE
   const { skip, take } = extractSkipTake(req);
@@ -49,16 +52,27 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   queryArgs.findManyArg.take = take + 1; // +1 to check for next page
 
   // SORT STAGE
-  const { sort } = req.params;
-  if (sort) {
+  const { sort: requestSort } = req.params;
+  // Not yet, because react admin alawys sends the default sort
+  // if (requestSort && queryArgs.findManyArg.orderBy) {
+  //   console.warn(
+  //     "getListHandler: skipping requestSort",
+  //     stringify(requestSort)
+  //   );
+  // }
+  if (
+    requestSort &&
+    !options?.orderBy // because they are mutually exclusive
+  ) {
     queryArgs.findManyArg.orderBy = extractOrderBy(req);
 
-    const { field } = sort;
+    const { field } = requestSort;
 
     if (field && options?.noNullsOnSort?.includes(field)) {
-      queryArgs.findManyArg.where = deepmerge(queryArgs.findManyArg.where, {
-        [field]: { not: null },
-      });
+      queryArgs.findManyArg.where = {
+        ...queryArgs.findManyArg.where,
+        [field]: { not: null }, // surely wins
+      };
     }
   }
 

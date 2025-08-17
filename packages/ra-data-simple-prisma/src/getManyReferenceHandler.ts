@@ -16,10 +16,11 @@ export type GetManyReferenceOptions<
   debug?: boolean;
   transformRow?: (data: any) => any | Promise<any>;
   filterMode?: FilterMode;
-  asTransaction?: boolean; // if true, will use $transaction for the query
 };
 
-export const getManyReferenceHandler = async <Args extends GetManyReferenceArgs>(
+export const getManyReferenceHandler = async <
+  Args extends GetManyReferenceArgs
+>(
   req: GetManyReferenceRequest,
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetManyReferenceOptions<Args>
@@ -35,32 +36,18 @@ export const getManyReferenceHandler = async <Args extends GetManyReferenceArgs>
   const { skip, take } = extractSkipTake(req);
 
   // GET DATA
-  let rows, total;
-  if (options?.asTransaction) {
-    [rows, total] = await prismaClient.$transaction([
-      model.findMany({
-        include: options?.include,
-        select: options?.select,
-        where: { [target]: id, ...where },
-        orderBy,
-        skip,
-        take,
-      }),
-      model.count({ where: { [target]: id, ...where } }),
-    ]);
-  } else {
-    [rows, total] = await Promise.all([
-      model.findMany({
-        include: options?.include,
-        select: options?.select,
-        where: { [target]: id, ...where },
-        orderBy,
-        skip,
-        take,
-      }),
-      model.count({ where: { [target]: id, ...where } }),
-    ]);
-  }
+
+  const [rows, total] = await Promise.all([
+    model.findMany({
+      include: options?.include,
+      select: options?.select,
+      where: { [target]: id, ...where },
+      orderBy,
+      skip,
+      take,
+    }),
+    model.count({ where: { [target]: id, ...where } }),
+  ]);
 
   // TRANSFORM
   const data = options?.transformRow

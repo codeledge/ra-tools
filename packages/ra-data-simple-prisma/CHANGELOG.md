@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.0.0
+
+### Major Changes
+
+- allow orderBy in options
+
 ## 6.4.3
 
 ### Patch Changes

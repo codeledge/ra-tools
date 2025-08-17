@@ -13,7 +13,9 @@
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": false
+    "strict": false,
+    "target": "es2017",
+    "lib": ["es2017"]
   },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]
