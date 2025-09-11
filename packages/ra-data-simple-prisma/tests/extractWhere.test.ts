@@ -21,6 +21,7 @@ describe("extractWhere", () => {
           json_pgjson: {
             field: "value",
           },
+          OR: [{ x: 1 }, { x: 2 }, { x: 3 }],
         },
         pagination: {
           page: 1,
@@ -55,6 +56,36 @@ describe("extractWhere", () => {
         equals: "value",
         path: ["field"],
       },
+      OR: [{ x: 1 }, { x: 2 }, { x: 3 }],
+    });
+  });
+
+  test("should extract where with nested OR and operators", () => {
+    // Arrange
+    const req: GetListRequest = {
+      method: "getList",
+      resource: "test",
+      params: {
+        filter: {
+          OR: [
+            { amount: { gte: 1000 }, status: "APPROVED" },
+            { amount: { lt: 500 }, status: "PENDING" },
+          ],
+        },
+        pagination: { page: 1, perPage: 10 },
+        sort: { field: "id", order: "ASC" },
+      },
+    };
+
+    // Act
+    const result = extractWhere(req);
+
+    // Assert
+    expect(result).toEqual({
+      OR: [
+        { amount: { gte: 1000 }, status: "APPROVED" },
+        { amount: { lt: 500 }, status: "PENDING" },
+      ],
     });
   });
 });
