@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.1.0
+
+### Minor Changes
+
+- More options
+
 ## 7.0.0
 
 ### Major Changes

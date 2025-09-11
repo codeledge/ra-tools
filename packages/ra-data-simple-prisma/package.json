@@ -1,6 +1,6 @@
 {
   "name": "ra-data-simple-prisma",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "Simple react-admin dataprovider for prisma, supporting audit logs and roles",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -47,7 +47,7 @@
     "@babel/core": "7.28.3",
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-typescript": "^7.27.1",
-    "@changesets/cli": "^2.29.6",
+    "@changesets/cli": "^2.29.7",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.0",
     "eslint-config-custom": "workspace:*",

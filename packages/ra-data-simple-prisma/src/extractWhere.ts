@@ -21,6 +21,9 @@ const prismaOperators = [
   "not",
   "search",
   "startsWith",
+  "AND",
+  "OR",
+  "NOT",
 ];
 
 export type FilterMode = "insensitive" | "default" | undefined;
@@ -95,6 +98,10 @@ export const extractWhere = (
         value === null // if the client sends null, than that is also a valid (exact) filter!
       ) {
         setObjectPath(where, filterPath, value);
+      } else if (["OR", "AND", "NOT"].includes(field)) {
+        if (isArray(value) && value.every((item) => isObject(item))) {
+          setObjectPath(where, filterPath, value);
+        }
       } else if (isArray(value)) {
         setObjectPath(where, filterPath, { in: value });
       } else if (isString(value)) {
