@@ -1,5 +1,15 @@
 # ra-data-simple-prisma
 
+## 8.0.0
+
+### Major Changes
+
+- allow orderBy in options
+
+### Minor Changes
+
+- Adds initial support for Prisma's logical operators (AND, OR, NOT) in the ra-data-simple-prisma package, enabling complex filtering capabilities in React Admin applications.
+
 ## 7.0.0
 
 ### Major Changes
