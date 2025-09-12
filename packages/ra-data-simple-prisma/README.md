@@ -110,6 +110,25 @@ Example
   >
 ```
 
+### Prisma Logical Operators Support
+
+- AND
+- OR
+- NOT
+
+Enabling complex filtering capabilities in React Admin applications.
+
+Previously, `ra-data-simple-prisma` did not support Prisma's logical operators, limiting users to simple field-based filtering. Complex queries requiring logical combinations of conditions were not possible. We can use it on navigation for example
+
+```ts
+const OR = [
+  { amount: { gte: 1000 }, status: "ACTIVE" },
+  { amount: { lt: 500 }, status: "REJECTED" },
+];
+
+navigate(`/resource_name?filter=${JSON.stringify({ OR })}`);
+```
+
 ### With audit log
 
 ```js

@@ -61,6 +61,7 @@ export const extractWhere = (
           return true;
         }
       });
+
       if (hasOperator) return;
 
       if (
