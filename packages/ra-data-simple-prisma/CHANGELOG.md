@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.1.1
+
+### Patch Changes
+
+- patch axios
+
 ## 7.1.0
 
 ### Minor Changes
