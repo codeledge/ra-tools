@@ -40,7 +40,7 @@
     "react-admin": ">=5.7.2"
   },
   "dependencies": {
-    "axios": "^1.11.0",
+    "axios": "^1.13.2",
     "deverything": "^4.2.1"
   },
   "devDependencies": {
