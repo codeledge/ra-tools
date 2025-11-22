@@ -10,29 +10,29 @@
     "kill": "kill -9 $(lsof -t -i:3020)"
   },
   "dependencies": {
-    "@babel/core": "7.26.10",
-    "@mui/icons-material": "^5.15.14",
-    "@mui/material": "^5.15.14",
-    "@mui/styles": "^5.15.14",
+    "@babel/core": "7.28.5",
+    "@mui/icons-material": "^7.3.5",
+    "@mui/material": "^7.3.5",
+    "@mui/styles": "^6.4.8",
     "@prisma/extension-read-replicas": "^0.4.1",
     "axios": "^1.13.2",
     "db": "workspace:*",
     "lodash": "^4.17.21",
-    "next": "15.3.0",
-    "next-auth": "^4.24.11",
+    "next": "16.0.3",
+    "next-auth": "^4.24.13",
     "next-auth-prisma-adapter": "workspace:*",
     "ra-data-simple-prisma": "workspace:*",
-    "react": "18.3.1",
-    "react-admin": "^5.7.2",
-    "react-dom": "18.3.1",
-    "react-json-view-lite": "^2.4.1"
+    "react": "19.2.0",
+    "react-admin": "^5.13.2",
+    "react-dom": "19.2.0",
+    "react-json-view-lite": "^2.5.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.16",
-    "@types/node": "22.14.1",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/lodash": "^4.17.20",
+    "@types/node": "24.10.1",
+    "@types/react": "19.2.6",
+    "@types/react-dom": "19.2.3",
     "eslint-config-custom": "workspace:*",
-    "typescript": "5.8.3"
+    "typescript": "5.9.3"
   }
 }
