@@ -14,15 +14,17 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^6.8.2"
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "prisma": "^6.8.2",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "dotenv": "^17.2.3",
+    "jest": "^30.2.0",
+    "prisma": "^7.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   }
 }
