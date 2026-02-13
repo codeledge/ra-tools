@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.2.0
+
+### Minor Changes
+
+- trueOnly
+
 ## 7.1.1
 
 ### Patch Changes

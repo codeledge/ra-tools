@@ -44,7 +44,7 @@ export const canAccess = ({
 
   // if any deny permission matches => false
   for (const permission of permissions.filter(
-    (p) => p !== null && p.type === "deny"
+    (p) => p !== null && p.type === "deny",
   )) {
     if (matchTarget(permission, resource, action, record, field)) {
       return false;
@@ -53,7 +53,7 @@ export const canAccess = ({
 
   // if any allow permission matches => true
   for (const permission of permissions.filter(
-    (p) => p !== null && p.type !== "deny"
+    (p) => p !== null && p.type !== "deny",
   )) {
     if (matchTarget(permission, resource, action, record, field)) {
       return true;
@@ -68,9 +68,12 @@ const matchTarget = (
   resource: string,
   action: Action,
   record?: any,
-  field?: string
+  field?: string,
 ) => {
   if (permission === null || !matchWildcard(permission.resource, resource)) {
+    return false;
+  }
+  if (field && !permission.field) {
     return false;
   }
   if (Array.isArray(permission.action) && !permission.action.includes(action)) {

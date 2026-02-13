@@ -35,7 +35,7 @@ export type ExtractWhereOptions = {
 
 export const extractWhere = (
   req: GetListRequest | GetManyReferenceRequest,
-  options?: ExtractWhereOptions
+  options?: ExtractWhereOptions,
 ) => {
   const { filter } = req.params;
 
@@ -54,7 +54,7 @@ export const extractWhere = (
         ? `${currentFilterPath}.${field}`
         : field;
 
-      const hasOperator = prismaOperators.some((operator) => {
+      const hasPrismaOperator = prismaOperators.some((operator) => {
         if (field.endsWith(`_${operator}`)) {
           const [wherePath] = filterPath.split(`_${operator}`);
           setObjectPath(where, wherePath + `.${operator}`, value);
@@ -62,7 +62,7 @@ export const extractWhere = (
         }
       });
 
-      if (hasOperator) return;
+      if (hasPrismaOperator) return;
 
       if (
         // Custom operators
@@ -81,6 +81,12 @@ export const extractWhere = (
         if (path.length && equals) {
           setObjectPath(where, wherePath, { path, equals }); // TODO: allow operators
         }
+      } else if (field.endsWith(`_trueOnly`)) {
+        const [wherePath] = filterPath.split("_trueOnly");
+        if (value === true) {
+          setObjectPath(where, wherePath, true);
+        }
+        // else, ignore the filter
       } else if (field === "q") {
         // i.e. when filterToQuery is not set on AutoCompleteInput, but we don't know all the fields to search against
         console.info("Filter not handled:", field, value);
