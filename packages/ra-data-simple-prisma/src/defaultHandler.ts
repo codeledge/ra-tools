@@ -1,5 +1,15 @@
-import { AuditOptions } from "./audit/types";
+import type { AuditOptions } from "./audit/types";
+import { type CreateOptions, createHandler } from "./createHandler";
+import { type DeleteOptions, deleteHandler } from "./deleteHandler";
+import { type DeleteManyOptions, deleteManyHandler } from "./deleteManyHandler";
+import { type GetListOptions, getListHandler } from "./getListHandler";
+import { type GetManyOptions, getManyHandler } from "./getManyHandler";
 import {
+  type GetManyReferenceOptions,
+  getManyReferenceHandler,
+} from "./getManyReferenceHandler";
+import { type GetOneOptions, getOneHandler } from "./getOneHandler";
+import type {
   CreateRequest,
   DeleteManyRequest,
   DeleteRequest,
@@ -11,19 +21,9 @@ import {
   UpdateManyRequest,
   UpdateRequest,
 } from "./Http";
-import { DeleteOptions, deleteHandler } from "./deleteHandler";
-import { GetListOptions, getListHandler } from "./getListHandler";
-import { UpdateOptions, updateHandler } from "./updateHandler";
-import { createHandler, CreateOptions } from "./createHandler";
-import { deleteManyHandler } from "./deleteManyHandler";
-import { getManyHandler, GetManyOptions } from "./getManyHandler";
-import {
-  getManyReferenceHandler,
-  GetManyReferenceOptions,
-} from "./getManyReferenceHandler";
-import { getOneHandler, GetOneOptions } from "./getOneHandler";
+import type { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
+import { type UpdateOptions, updateHandler } from "./updateHandler";
 import { updateManyHandler } from "./updateManyHandler";
-import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export const defaultHandler = async (
   req: RaPayload,
@@ -32,6 +32,7 @@ export const defaultHandler = async (
     audit?: AuditOptions;
     create?: CreateOptions;
     delete?: DeleteOptions;
+    deleteMany?: DeleteManyOptions;
     getList?: GetListOptions;
     getMany?: GetManyOptions;
     getManyReference?: GetManyReferenceOptions;
