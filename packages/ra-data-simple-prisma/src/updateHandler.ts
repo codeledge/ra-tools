@@ -1,10 +1,10 @@
-import { AuditOptions } from "./audit/types";
-import { UpdateRequest } from "./Http";
-import { auditHandler } from "./audit/auditHandler";
-import { isNotField } from "./lib/isNotField";
 import { firstKey, firstValue, isObject, isString } from "deverything";
-import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
+import { auditHandler } from "./audit/auditHandler";
+import { AuditOptions } from "./audit/types";
 import { getModel } from "./getModel";
+import { UpdateRequest } from "./Http";
+import { isNotField } from "./lib/isNotField";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type UpdateArgs = {
   include?: object | null;
@@ -59,6 +59,7 @@ export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
     [key: string]: boolean;
   };
   audit?: AuditOptions;
+  primaryKey?: string;
 };
 
 export const reduceData = (data, options: UpdateOptions) => {
@@ -183,9 +184,10 @@ export const reduceData = (data, options: UpdateOptions) => {
 export const updateHandler = async <Args extends UpdateArgs>(
   req: UpdateRequest,
   prismaClient: PrismaClientOrDynamicClientExtension,
-  options?: UpdateOptions<Omit<Args, "data" | "where">>
+  options?: UpdateOptions<Omit<Args, "data" | "where">>,
 ) => {
   const { id } = req.params;
+  const primaryKey = options?.primaryKey ?? "id";
   const model = getModel(req, prismaClient);
   const data = reduceData(req.params.data, options);
 
@@ -197,7 +199,7 @@ export const updateHandler = async <Args extends UpdateArgs>(
     data,
     include: options?.include ?? undefined,
     select: options?.select ?? undefined,
-    where: { id },
+    where: { [primaryKey]: id },
   });
 
   if (options?.audit) {
