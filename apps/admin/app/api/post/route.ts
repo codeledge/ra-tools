@@ -37,6 +37,7 @@ const route = apiHandler(async (raPayload, { sessionAuthProvider }) => {
         raPayload,
         prismaClient,
         {
+          // allowOnlyFields: { title: true, body: true, tagIds: true, mediaIds: true },
           connect: {
             //tags: "id", if the prop is tag: [1,2,3]
             tagIds: {
@@ -90,6 +91,7 @@ const route = apiHandler(async (raPayload, { sessionAuthProvider }) => {
         raPayload,
         prismaClient,
         {
+          // allowOnlyFields: { title: true, body: true, tagIds: true, mediaIds: true },
           set: {
             //tags: "id", if the prop is tag: [1,2,3]
             tagIds: {

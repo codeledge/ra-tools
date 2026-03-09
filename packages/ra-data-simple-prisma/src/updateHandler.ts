@@ -4,23 +4,14 @@ import type { AuditOptions } from "./audit/types";
 import { getModel } from "./getModel";
 import type { UpdateRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
+import type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut } from "./lib/types";
 import type { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
+
+export type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut };
 
 export type UpdateArgs = {
   include?: object | null;
   select?: object | null;
-};
-
-export type SetImplicitShortcut = string;
-
-export type SetImplicitConnection = {
-  [connectModel: string]: string;
-};
-
-export type SetExplicitConnection = {
-  [pivotModel: string]: {
-    [connectModel: string]: string;
-  };
 };
 
 export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
