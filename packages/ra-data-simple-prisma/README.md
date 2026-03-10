@@ -183,6 +183,7 @@ export default function handler(req) {
     case "delete":
       await deleteHandler<Prisma.PostDeleteArgs>(req.body, prismaClient, {
         softDeleteField: "deletedAt",
+        primaryKey: ... // defaults to "id"
         audit: ...
         debug: ...
       });
@@ -190,6 +191,7 @@ export default function handler(req) {
     case "deleteMany":
       await deleteManyHandler<Prisma.PostDeleteManyArgs>(req.body, prismaClient, {
         softDeleteField: "deletedAt",
+        primaryKey: ... // defaults to "id"
         audit: ...
         debug: ...
       });
@@ -213,7 +215,7 @@ export default function handler(req) {
           },
         }
       );
-      // OR, if using InfiniteList compoenent
+      // OR, if using InfiniteList component
       await getInfiniteListHandler<Prisma.PostFindManyArgs>(
         req.body,
         prismaClient,
@@ -237,6 +239,9 @@ export default function handler(req) {
       await getManyHandler<Prisma.PostFindManyArgs>(
         req.body,
         prismaClient,
+        {
+          primaryKey: ... // defaults to "id"
+        }
       );
       break;
     case "getManyReference":
@@ -250,6 +255,7 @@ export default function handler(req) {
         req.body,
         prismaClient,
         {
+          primaryKey: ... // defaults to "id"
           select: ...
           include: ...
           transform: (post: any) => {
@@ -271,6 +277,7 @@ export default function handler(req) {
         req.body,
         prismaClient,
         {
+          primaryKey: ... // defaults to "id", also used by updateMany
           skipFields: {
             computedField: true
           },
@@ -318,6 +325,27 @@ export default function handler(req) {
       break;
   }
 }
+```
+
+### Custom Primary Key
+
+By default all handlers use `id` as the primary key field, matching the react-admin data connector convention. If your Prisma model uses a different primary key name (e.g. `Id`, `StatusId`, `postId`) you can configure it per-handler via the `primaryKey` option.
+
+This affects how the `WHERE` clause is built for single-record lookups and multi-record `{ in: ids }` filters.
+
+```ts
+// /api/status.ts — model with a non-standard primary key "StatusId"
+
+case "getOne":
+  return getOneHandler(req.body, prismaClient, {
+    primaryKey: "StatusId",
+  });
+
+case "getMany":
+  return getManyHandler(req.body, prismaClient, {
+    primaryKey: "StatusId",
+  });
+...
 ```
 
 ### Helpers
