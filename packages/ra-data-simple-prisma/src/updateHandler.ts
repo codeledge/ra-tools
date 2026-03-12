@@ -1,33 +1,18 @@
 import { firstKey, firstValue, isObject, isString } from "deverything";
 import { auditHandler } from "./audit/auditHandler";
-import { AuditOptions } from "./audit/types";
+import type { AuditOptions } from "./audit/types";
 import { getModel } from "./getModel";
-import { UpdateRequest } from "./Http";
+import type { UpdateRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
-import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
+import type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut } from "./lib/types";
+import type { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
+
+export type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut };
 
 export type UpdateArgs = {
   include?: object | null;
   select?: object | null;
 };
-
-// export type UpdateImplicitConnectionShortcut = {
-//   [key: string]: string;
-// };
-
-// export type UpdateImplicitConnection = {
-//   [key: string]: {
-//     [key: string]: string;
-//   };
-// };
-
-// export type CreateExplicitConnection = {
-//   [key: string]: {
-//     [key: string]: {
-//       [key: string]: string;
-//     };
-//   };
-// };
 
 export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
   debug?: boolean;
@@ -38,16 +23,7 @@ export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
     [key: string]: boolean;
   };
   set?: {
-    // TODO: Make this work UpdateImplicitConnectionShortcut | UpdateImplicitConnection | CreateExplicitConnection;
-    [key: string]:
-      | string
-      | {
-          [key: string]:
-            | string
-            | {
-                [key: string]: string;
-              };
-        };
+    [key: string]: SetImplicitShortcut | SetImplicitConnection | SetExplicitConnection;
   };
   allowNestedUpdate?: {
     [key: string]: boolean;

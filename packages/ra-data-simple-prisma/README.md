@@ -163,6 +163,11 @@ export default function handler(req) {
   switch (req.body.method) {
     case "create":
       await createHandler<Prisma.PostCreateArgs>(req.body, prismaClient, {
+        allowOnlyFields: {
+          title: true,
+          body: true,
+          tagIds: true,
+        },
         connect: {
           tags: "id",
           // or
@@ -278,6 +283,11 @@ export default function handler(req) {
         prismaClient,
         {
           primaryKey: ... // defaults to "id", also used by updateMany
+          allowOnlyFields: {
+            title: true,
+            body: true,
+            tagIds: true,
+          },
           skipFields: {
             computedField: true
           },
@@ -347,6 +357,32 @@ case "getMany":
   });
 ...
 ```
+
+### Allow Only Fields
+
+Both `createHandler` and `updateHandler` support an `allowOnlyFields` option that acts as an explicit allow-list of fields that may be written.
+
+```ts
+// create
+await createHandler(req.body, prismaClient, {
+  allowOnlyFields: {
+    title: true,
+    body: true,
+    tagIds: true,
+  },
+});
+
+// update
+await updateHandler(req.body, prismaClient, {
+  allowOnlyFields: {
+    title: true,
+    body: true,
+    tagIds: true,
+  },
+});
+```
+
+> **Note:** Fields with an empty string value (`""`) and internal `_`-prefixed fields (e.g. `_count`) are stripped automatically before the allow-list is checked, so they will never trigger an error.
 
 ### Helpers
 

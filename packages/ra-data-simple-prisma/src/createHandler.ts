@@ -1,46 +1,23 @@
-import { AuditOptions } from "./audit/types";
-import { CreateRequest } from "./Http";
-import { auditHandler } from "./audit/auditHandler";
-import { isNotField } from "./lib/isNotField";
 import { firstKey, firstValue, isObject, isString } from "deverything";
+import { auditHandler } from "./audit/auditHandler";
+import type { AuditOptions } from "./audit/types";
 import { getModel } from "./getModel";
-import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
+import type { CreateRequest } from "./Http";
+import { isNotField } from "./lib/isNotField";
+import type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut } from "./lib/types";
+import type { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type CreateArgs = {
   include?: object | null;
   select?: object | null;
 };
 
-// export type CreateImplicitConnectionShortcut = {
-//   [key: string]: string;
-// };
-
-// export type CreateImplicitConnection = {
-//   [key: string]: {
-//     [key: string]: string;
-//   };
-// };
-
-// export type CreateExplicitConnection = {
-//   [key: string]: {
-//     [key: string]: {
-//       [key: string]: string;
-//     };
-//   };
-// };
-
 export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
+  allowOnlyFields?: {
+    [key: string]: boolean;
+  };
   connect?: {
-    // TODO: Make this work CreateImplicitConnectionShortcut | CreateImplicitConnection | CreateExplicitConnection;
-    [key: string]:
-      | string
-      | {
-          [key: string]:
-            | string
-            | {
-                [key: string]: string;
-              };
-        };
+    [key: string]: SetImplicitShortcut | SetImplicitConnection | SetExplicitConnection;
   };
   audit?: AuditOptions;
   debug?: boolean;
@@ -49,7 +26,7 @@ export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
 export const createHandler = async <Args extends CreateArgs>(
   req: CreateRequest,
   prismaClient: PrismaClientOrDynamicClientExtension,
-  options?: CreateOptions<Omit<Args, "data">> // omit data so the Prisma.ModelCreateArgs can be passed in, without complaining about the data property missing
+  options?: CreateOptions<Omit<Args, "data">>, // omit data so the Prisma.ModelCreateArgs can be passed in, without complaining about the data property missing
 ) => {
   const model = getModel(req, prismaClient);
   const { data } = req.params;
@@ -60,9 +37,14 @@ export const createHandler = async <Args extends CreateArgs>(
   Object.entries(data).forEach(([key, value]) => {
     if (value === "") {
       delete data[key];
+      return;
     }
     if (isNotField(key)) {
       delete data[key];
+      return;
+    }
+    if (options?.allowOnlyFields && !options.allowOnlyFields[key]) {
+      throw new Error(`createHandler: Field ${key} is not allowed in create`);
     }
   });
 
@@ -80,9 +62,7 @@ export const createHandler = async <Args extends CreateArgs>(
       //    });
       // (data) tags: [1, 2, 3] => tags: { connect: [{id: 1}, {id: 2}, {id: 3}] }
       data[prop] = {
-        connect: Array.isArray(value)
-          ? value.map((key) => ({ [foreignConnect]: key }))
-          : { [foreignConnect]: value },
+        connect: Array.isArray(value) ? value.map((key) => ({ [foreignConnect]: key })) : { [foreignConnect]: value },
       };
 
       // in theory no need to remove the original data
