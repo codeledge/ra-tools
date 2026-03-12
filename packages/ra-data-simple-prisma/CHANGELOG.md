@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.3.0
+
+### Minor Changes
+
+- improvements on handlers
+
 ## 7.2.0
 
 ### Minor Changes

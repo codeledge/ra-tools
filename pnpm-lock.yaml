@@ -224,13 +224,13 @@ importers:
     dependencies:
       '@prisma/client':
         specifier: '>=5'
-        version: 6.8.2(prisma@6.8.2(typescript@5.9.2))(typescript@5.9.2)
+        version: 6.8.2(prisma@6.8.2(typescript@5.9.3))(typescript@5.9.3)
       axios:
         specifier: ^1.13.5
         version: 1.13.5
       deverything:
-        specifier: ^4.8.0
-        version: 4.8.0
+        specifier: ^4.10.1
+        version: 4.10.1
     devDependencies:
       '@babel/core':
         specifier: 7.29.0
@@ -3233,8 +3233,8 @@ packages:
     resolution: {integrity: sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==}
     engines: {node: '>=8'}
 
-  deverything@4.8.0:
-    resolution: {integrity: sha512-ABLOUEyeoxOgSyQk89TszHpfaqReeMgbnRDblXAW12O1e7jKm7JutIHTuV8b0YlUtk6gkSJCQl0DjWm5nfGrvw==}
+  deverything@4.10.1:
+    resolution: {integrity: sha512-pEyk4Td8pmKWS29anaUFSfSx9G3RhB/zBxYM5NiOyK9iX19YWFAvEl6s5UObEC4WOP7WA0gI277qfh2FNbgwGA==}
 
   diacritic@0.0.2:
     resolution: {integrity: sha512-iQCeDkSPwkfwWPr+HZZ49WRrM2FSI9097Q9w7agyRCdLcF9Eh2Ek0sHKcmMWx2oZVBjRBE/sziGFjZu0uf1Jbg==}
@@ -5510,11 +5510,6 @@ packages:
 
   typescript@5.8.3:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-
-  typescript@5.9.2:
-    resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -7982,10 +7977,10 @@ snapshots:
       prisma: 6.8.2(typescript@5.8.3)
       typescript: 5.8.3
 
-  '@prisma/client@6.8.2(prisma@6.8.2(typescript@5.9.2))(typescript@5.9.2)':
+  '@prisma/client@6.8.2(prisma@6.8.2(typescript@5.9.3))(typescript@5.9.3)':
     optionalDependencies:
-      prisma: 6.8.2(typescript@5.9.2)
-      typescript: 5.9.2
+      prisma: 6.8.2(typescript@5.9.3)
+      typescript: 5.9.3
 
   '@prisma/config@6.8.2':
     dependencies:
@@ -9192,7 +9187,7 @@ snapshots:
 
   detect-newline@3.1.0: {}
 
-  deverything@4.8.0: {}
+  deverything@4.10.1: {}
 
   diacritic@0.0.2: {}
 
@@ -11449,12 +11444,12 @@ snapshots:
     optionalDependencies:
       typescript: 5.8.3
 
-  prisma@6.8.2(typescript@5.9.2):
+  prisma@6.8.2(typescript@5.9.3):
     dependencies:
       '@prisma/config': 6.8.2
       '@prisma/engines': 6.8.2
     optionalDependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
     optional: true
 
   prompts@2.4.2:
@@ -12475,9 +12470,6 @@ snapshots:
       reflect.getprototypeof: 1.0.10
 
   typescript@5.8.3: {}
-
-  typescript@5.9.2:
-    optional: true
 
   typescript@5.9.3: {}
 
