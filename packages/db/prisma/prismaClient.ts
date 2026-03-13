@@ -17,6 +17,6 @@ export const prismaReadClient = prismaClient
   .$extends(
     readReplicas({
       url: process.env.DATABASE_URL,
-    })
+    }),
   )
-  .$replica();
+  .$replica() as unknown as PrismaClient;

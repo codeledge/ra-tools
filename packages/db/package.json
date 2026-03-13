@@ -7,6 +7,7 @@
   "types": "./dist/prismaClient.d.ts",
   "scripts": {
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "build": "tsup prisma/prismaClient.ts --format esm,cjs --dts",
     "dev": "tsup prisma/prismaClient.ts --format esm,cjs --watch --dts",
     "lint": "TIMING=1 eslint src --fix",
     "migrate:dev": "prisma migrate dev",
@@ -14,15 +15,15 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^6.8.2"
+    "@prisma/client": ">=5 <7"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "prisma": "^6.8.2",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "jest": "^30.3.0",
+    "prisma": ">=5 <7",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   }
 }
