@@ -1,9 +1,10 @@
 import { stringify } from "deverything";
-import { GetListRequest } from "./Http";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
 import { getModel } from "./getModel";
+import { GetListRequest } from "./Http";
+import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type GetListArgs = {
@@ -16,20 +17,18 @@ export type GetListArgs = {
 export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
   noNullsOnSort?: string[]; // TODO: to be keyof Args["orderBy"] CAREFUL field must be nullable, or prisma will throw
   debug?: boolean;
-  transformRow?: (
-    row: any,
-    rowIndex: number,
-    rows: any[]
-  ) => any | Promise<any>;
+  primaryKey?: string;
+  transformRow?: (row: any, rowIndex: number, rows: any[]) => any | Promise<any>;
   filterMode?: FilterMode;
 };
 
 export const getListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
   prismaClient: PrismaClientOrDynamicClientExtension,
-  options?: GetListOptions<Args>
+  options?: GetListOptions<Args>,
 ) => {
   const model = getModel(req, prismaClient);
+  const primaryKey = options?.primaryKey ?? "id";
 
   let queryArgs: {
     findManyArg: {
@@ -130,7 +129,7 @@ export const getListHandler = async <Args extends GetListArgs>(
 
   // RESPOND WITH DATA
   const response = {
-    data,
+    data: mapPrimaryKeyToId(data, primaryKey),
     total,
   };
 

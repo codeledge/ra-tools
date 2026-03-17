@@ -2,6 +2,7 @@ import { auditHandler } from "./audit/auditHandler";
 import { AuditOptions } from "./audit/types";
 import { getModel } from "./getModel";
 import { DeleteRequest } from "./Http";
+import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type DeleteOptions = {
@@ -43,7 +44,7 @@ export const deleteHandler = async <
     await auditHandler(req, options?.audit);
   }
 
-  const response = { data: deleted };
+  const response = { data: mapPrimaryKeyToId(deleted, primaryKey) };
 
   return response;
 };

@@ -1,18 +1,20 @@
-import { GetListRequest } from "./Http";
+import { stringify } from "deverything";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere } from "./extractWhere";
 import { GetListArgs, GetListOptions } from "./getListHandler";
-import { stringify } from "deverything";
 import { getModel } from "./getModel";
+import { GetListRequest } from "./Http";
+import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export const getInfiniteListHandler = async <Args extends GetListArgs>(
   req: GetListRequest,
   prismaClient: PrismaClientOrDynamicClientExtension,
-  options?: GetListOptions<Args>
+  options?: GetListOptions<Args>,
 ) => {
   const model = getModel(req, prismaClient);
+  const primaryKey = options?.primaryKey ?? "id";
 
   let queryArgs: {
     findManyArg: {
@@ -96,7 +98,7 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
 
   // RESPOND WITH DATA
   const response = {
-    data,
+    data: mapPrimaryKeyToId(data, primaryKey),
     pageInfo: {
       hasPreviousPage: skip > 0,
       hasNextPage,
