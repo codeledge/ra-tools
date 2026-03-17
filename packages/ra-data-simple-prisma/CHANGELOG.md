@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.4.0
+
+### Minor Changes
+
+- Types and custom primary key
+
 ## 7.3.0
 
 ### Minor Changes
