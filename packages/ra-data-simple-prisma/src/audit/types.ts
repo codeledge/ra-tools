@@ -1,4 +1,5 @@
-import { AuthProvider } from "react-admin";
+import { PlainObject } from "deverything";
+import { AuthProvider, Identifier } from "react-admin";
 
 export type AuditOptions = {
   model: { create: Function };
@@ -39,3 +40,10 @@ export const defaultAuditOptions: Pick<
 };
 
 export type AuditActions = "create" | "update" | "delete";
+
+export type AuditLogPayload = {
+  id: Identifier;
+  data?: PlainObject;
+  previousData?: PlainObject;
+  diff?: PlainObject;
+};

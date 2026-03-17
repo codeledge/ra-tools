@@ -1,11 +1,12 @@
-import { AuditOptions, defaultAuditOptions } from "./types";
+import { AuditOptions, AuditLogPayload, defaultAuditOptions } from "./types";
 import { RaPayload } from "../Http";
 import { objectDiff } from "deverything";
+import { Identifier } from "react-admin";
 
 export const auditHandler = async (
   request: RaPayload,
   options: AuditOptions,
-  created?: any
+  created?: any,
 ) => {
   const action = request.method.split(/(?=[A-Z])/)[0];
   const mergedOptions = {
@@ -36,15 +37,10 @@ export const auditHandler = async (
 export const createAuditEntry = async (
   options: AuditOptions,
   request: RaPayload,
-  id: any
+  id: Identifier,
 ) => {
-  let payload: {
-    id: string;
-    data?: object;
-    previousData?: object;
-    diff?: object;
-  } = {
-    id: id.toString(),
+  let payload: AuditLogPayload = {
+    id,
   };
 
   if ("previousData" in request.params) {
@@ -56,6 +52,7 @@ export const createAuditEntry = async (
   }
 
   if (payload.data && payload.previousData) {
+    // TODO: rethink this crap, maybe make a flat diff, where nested props are in dot notation
     payload.diff = objectDiff(payload.previousData, payload.data);
   }
 

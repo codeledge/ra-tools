@@ -1,12 +1,12 @@
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
 
 export const extractSkipTake = (
-  req: GetListRequest | GetManyReferenceRequest
-) => {
+  req: GetListRequest | GetManyReferenceRequest,
+): { skip: number | undefined; take: number | undefined } => {
   const { pagination } = req.params;
 
-  let skip;
-  let take;
+  let skip: number | undefined;
+  let take: number | undefined;
 
   if (pagination) {
     const { page, perPage } = pagination;
