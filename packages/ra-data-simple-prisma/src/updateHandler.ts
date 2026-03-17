@@ -5,6 +5,7 @@ import { getModel } from "./getModel";
 import type { UpdateRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
 import type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut } from "./lib/types";
+import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import type { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut };
@@ -40,6 +41,11 @@ export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
 
 export const reduceData = (data, options: UpdateOptions) => {
   return Object.entries(data).reduce((fields, [key, value]) => {
+    if (options?.primaryKey && options.primaryKey !== "id" && key === options.primaryKey) {
+      throw new Error(
+        `updateHandler: Field ${key} is reserved when primaryKey is configured; use params.id and omit the original primary key from writes`,
+      );
+    }
     if (isNotField(key)) return fields;
     if (options?.skipFields?.[key]) return fields;
 
@@ -182,7 +188,7 @@ export const updateHandler = async <Args extends UpdateArgs>(
     await auditHandler(req, options.audit);
   }
 
-  const response = { data: updated };
+  const response = { data: mapPrimaryKeyToId(updated, primaryKey) };
 
   return response;
 };

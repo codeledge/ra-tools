@@ -1,9 +1,10 @@
-import { GetManyReferenceRequest } from "./Http";
-import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
 import { getModel } from "./getModel";
+import { GetManyReferenceRequest } from "./Http";
+import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
+import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type GetManyReferenceArgs = {
   include?: object | null;
@@ -14,6 +15,7 @@ export type GetManyReferenceOptions<
   Args extends GetManyReferenceArgs = GetManyReferenceArgs
 > = Args & {
   debug?: boolean;
+  primaryKey?: string;
   transformRow?: (data: any) => any | Promise<any>;
   filterMode?: FilterMode;
 };
@@ -23,9 +25,10 @@ export const getManyReferenceHandler = async <
 >(
   req: GetManyReferenceRequest,
   prismaClient: PrismaClientOrDynamicClientExtension,
-  options?: GetManyReferenceOptions<Args>
+  options?: GetManyReferenceOptions<Args>,
 ) => {
   const { id, target } = req.params;
+  const primaryKey = options?.primaryKey ?? "id";
   const model = getModel(req, prismaClient);
   const orderBy = extractOrderBy(req);
 
@@ -54,7 +57,7 @@ export const getManyReferenceHandler = async <
     ? await Promise.all(rows.map(options.transformRow))
     : rows;
 
-  const response = { data, total };
+  const response = { data: mapPrimaryKeyToId(data, primaryKey), total };
 
   return response;
 };

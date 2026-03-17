@@ -1,5 +1,6 @@
 import { getModel } from "./getModel";
 import { GetManyRequest } from "./Http";
+import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type GetManyArgs = {
@@ -33,7 +34,7 @@ export const getManyHandler = async <Args extends GetManyArgs>(
   // TRANSFORM
   const data = options?.transformRow ? await Promise.all(rows.map(options.transformRow)) : rows;
 
-  const response = { data };
+  const response = { data: mapPrimaryKeyToId(data, primaryKey) };
 
   return response;
 };

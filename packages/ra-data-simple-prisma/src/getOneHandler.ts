@@ -1,5 +1,6 @@
 import { getModel } from "./getModel";
 import { GetOneRequest } from "./Http";
+import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type GetOneArgs = {
@@ -40,7 +41,7 @@ export const getOneHandler = async <Args extends GetOneArgs>(
   if (options?.debug) console.log("getOneHandler:afterTransform", transformedRow);
 
   // RESPONSE STAGE
-  const response = { data: transformedRow };
+  const response = { data: mapPrimaryKeyToId(transformedRow, primaryKey) };
 
   return response;
 };

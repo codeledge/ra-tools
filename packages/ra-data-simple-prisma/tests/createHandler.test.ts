@@ -106,6 +106,15 @@ describe("createHandler - allowOnlyFields", () => {
     const req = makeReq({ title: "Hi", _count: 3 });
     await expect(createHandler(req, {} as never, { allowOnlyFields: { title: true } })).resolves.toBeDefined();
   });
+
+  test("throws when payload includes the configured custom primary key field", async () => {
+    mockGetModel.mockReturnValue(makeMockModel() as never);
+
+    const req = makeReq({ title: "Hi", IrregularPrimaryKeyId: 42 });
+    await expect(createHandler(req, {} as never, { primaryKey: "IrregularPrimaryKeyId" })).rejects.toThrow(
+      "createHandler: Field IrregularPrimaryKeyId is reserved when primaryKey is configured; use id in responses and omit the original primary key from writes",
+    );
+  });
 });
 
 // ---------------------------------------------------------------------------

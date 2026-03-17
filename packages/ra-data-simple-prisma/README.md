@@ -206,6 +206,7 @@ export default function handler(req) {
         req.body,
         prismaClient,
         {
+          primaryKey: ... // defaults to "id"
           select: ...
           where: ...
           noNullsOnSort: ...
@@ -225,6 +226,7 @@ export default function handler(req) {
         req.body,
         prismaClient,
         {
+          primaryKey: ... // defaults to "id"
           select: ...
           where: ...
           noNullsOnSort: ...
@@ -253,6 +255,9 @@ export default function handler(req) {
       await getManyReferenceHandler<Prisma.PostFindManyArgs>(
         req.body,
         prismaClient,
+        {
+          primaryKey: ... // defaults to "id"
+        }
       );
       break;
     case "getOne":
@@ -341,7 +346,10 @@ export default function handler(req) {
 
 By default all handlers use `id` as the primary key field, matching the react-admin data connector convention. If your Prisma model uses a different primary key name (e.g. `Id`, `StatusId`, `postId`) you can configure it per-handler via the `primaryKey` option.
 
-This affects how the `WHERE` clause is built for single-record lookups and multi-record `{ in: ids }` filters.
+This affects:
+
+- how the `WHERE` clause is built for single-record lookups and multi-record `{ in: ids }` filters
+- how incoming write payloads are handled and returned records are normalized for react-admin compatibility
 
 ```ts
 // /api/status.ts — model with a non-standard primary key "StatusId"

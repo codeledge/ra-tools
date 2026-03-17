@@ -65,6 +65,14 @@ describe("reduceData", () => {
     );
   });
 
+  test("throws when data includes the configured custom primary key field", () => {
+    expect(() =>
+      reduceData({ title: "Hi", IrregularPrimaryKeyId: 42 }, { primaryKey: "IrregularPrimaryKeyId" }),
+    ).toThrow(
+      "updateHandler: Field IrregularPrimaryKeyId is reserved when primaryKey is configured; use params.id and omit the original primary key from writes",
+    );
+  });
+
   // set — implicit shortcut: set: { tags: "id" }
   test("set with string (implicit shortcut) transforms array to { set: [{id},...] }", () => {
     const result = reduceData({ tags: [1, 2, 3] }, { set: { tags: "id" } });
@@ -235,5 +243,14 @@ describe("updateHandler", () => {
     await updateHandler(req, {} as never);
 
     expect(model.update).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "abc-123" } }));
+  });
+
+  test("rejects payload data containing the configured custom primary key field", async () => {
+    mockGetModel.mockReturnValue(makeMockModel() as never);
+
+    const req = makeReq(1, { title: "Updated", IrregularPrimaryKeyId: 42 });
+    await expect(updateHandler(req, {} as never, { primaryKey: "IrregularPrimaryKeyId" })).rejects.toThrow(
+      "updateHandler: Field IrregularPrimaryKeyId is reserved when primaryKey is configured; use params.id and omit the original primary key from writes",
+    );
   });
 });

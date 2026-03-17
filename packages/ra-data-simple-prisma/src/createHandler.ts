@@ -21,6 +21,7 @@ export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
   };
   audit?: AuditOptions;
   debug?: boolean;
+  primaryKey?: string;
 };
 
 export const createHandler = async <Args extends CreateArgs>(
@@ -30,11 +31,17 @@ export const createHandler = async <Args extends CreateArgs>(
 ) => {
   const model = getModel(req, prismaClient);
   const { data } = req.params;
+  const primaryKey = options?.primaryKey ?? "id";
 
   if (options?.debug) console.log("createHandler:data", data);
 
   // Filter out invalid fields
   Object.entries(data).forEach(([key, value]) => {
+    if (primaryKey !== "id" && key === primaryKey) {
+      throw new Error(
+        `createHandler: Field ${key} is reserved when primaryKey is configured; use id in responses and omit the original primary key from writes`,
+      );
+    }
     if (value === "") {
       delete data[key];
       return;
