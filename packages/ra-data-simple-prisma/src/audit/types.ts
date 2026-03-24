@@ -45,5 +45,4 @@ export type AuditLogPayload = {
   id: Identifier;
   data?: PlainObject;
   previousData?: PlainObject;
-  diff?: PlainObject;
 };

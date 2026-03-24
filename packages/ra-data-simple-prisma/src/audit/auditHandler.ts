@@ -1,6 +1,5 @@
 import { AuditOptions, AuditLogPayload, defaultAuditOptions } from "./types";
 import { RaPayload } from "../Http";
-import { objectDiff } from "deverything";
 import { Identifier } from "react-admin";
 
 export const auditHandler = async (
@@ -49,11 +48,6 @@ export const createAuditEntry = async (
 
   if ("data" in request.params) {
     payload.data = request.params.data;
-  }
-
-  if (payload.data && payload.previousData) {
-    // TODO: rethink this crap, maybe make a flat diff, where nested props are in dot notation
-    payload.diff = objectDiff(payload.previousData, payload.data);
   }
 
   const user = await options.authProvider.getIdentity();
