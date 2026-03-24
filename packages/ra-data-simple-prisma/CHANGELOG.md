@@ -1,5 +1,12 @@
 # ra-data-simple-prisma
 
+## 7.5.0
+
+### Minor Changes
+
+- drop `diff` property in audit payload
+- NOTE: this could sound like a breaking change but the quality of the diff was so bad that relying on it by consumers would have been unlikely
+
 ## 7.4.0
 
 ### Minor Changes
