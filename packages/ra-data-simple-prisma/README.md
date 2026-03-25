@@ -152,6 +152,20 @@ audit:
 - enabledForAction?: Enabled for which action eg. `{create: true, update: true, delete: false}`
 - enabledResources?: List of resources which are to be audited. Defaults to all.
 
+The `payload` column stores a `AuditLogPayload` object:
+
+```ts
+type AuditLogPayload = {
+  id: Identifier;       // record id
+  data?: object;        // the new values sent by react-admin (present on create / update)
+  previousData?: object; // the record values before the change (present on update)
+};
+```
+
+- `data` is populated from `request.params.data` — i.e. the fields the user submitted in the create/update form.
+- `previousData` is populated from `request.params.previousData` — i.e. the full record as it existed before the update. React-Admin sends this automatically when editing a record.
+- Neither field is present on `delete` actions (only `id` is stored).
+
 ### Overrides
 
 All dataProvider methods can be overridden for a given resource, or all.
@@ -391,6 +405,54 @@ await updateHandler(req.body, prismaClient, {
 ```
 
 > **Note:** Fields with an empty string value (`""`) and internal `_`-prefixed fields (e.g. `_count`) are stripped automatically before the allow-list is checked, so they will never trigger an error.
+
+### Omit Fields
+
+The `omit` option is supported by `getListHandler`, `getOneHandler`, `getManyHandler`, `getManyReferenceHandler`, `createHandler`, and `updateHandler`. It maps directly to [Prisma's `omit` clause](https://www.prisma.io/docs/orm/prisma-client/queries/select-fields#omitting-fields), letting you exclude specific fields from query results without having to enumerate all the fields you _do_ want (as you would with `select`).
+
+This is useful for stripping sensitive fields (e.g. `password`, `secret`) or large fields you never need in the admin UI.
+
+```ts
+// Exclude the password hash from every user record returned
+await getListHandler<Prisma.UserFindManyArgs>(req.body, prismaClient, {
+  omit: {
+    password_hash: true,
+  },
+});
+
+await getOneHandler<Prisma.UserFindUniqueArgs>(req.body, prismaClient, {
+  omit: {
+    password_hash: true,
+  },
+});
+
+await getManyHandler<Prisma.UserFindManyArgs>(req.body, prismaClient, {
+  omit: {
+    password_hash: true,
+  },
+});
+
+await getManyReferenceHandler<Prisma.UserFindManyArgs>(req.body, prismaClient, {
+  omit: {
+    password_hash: true,
+  },
+});
+
+// Also available on write handlers — omits fields from the returned record
+await createHandler<Prisma.UserCreateArgs>(req.body, prismaClient, {
+  omit: {
+    password_hash: true,
+  },
+});
+
+await updateHandler<Prisma.UserUpdateArgs>(req.body, prismaClient, {
+  omit: {
+    password_hash: true,
+  },
+});
+```
+
+> **Note:** `omit` and `select` are mutually exclusive in Prisma — passing both will cause a runtime error.
 
 ### Helpers
 
