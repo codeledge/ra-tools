@@ -10,6 +10,7 @@ import type { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 export type CreateArgs = {
   include?: object | null;
   select?: object | null;
+  omit?: object | null;
 };
 
 export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
@@ -135,6 +136,7 @@ export const createHandler = async <Args extends CreateArgs>(
     data,
     include: options?.include ?? undefined,
     select: options?.select ?? undefined,
+    omit: options?.omit ?? undefined,
   });
 
   if (options?.debug) console.log("createHandler:created", created);

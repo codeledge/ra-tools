@@ -10,6 +10,7 @@ import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 export type GetListArgs = {
   include?: object | null;
   select?: object | null;
+  omit?: object | null;
   where?: object | null;
   orderBy?: object | null;
 };
@@ -35,6 +36,7 @@ export const getListHandler = async <Args extends GetListArgs>(
       include?: object;
       orderBy?: object;
       select?: object;
+      omit?: object;
       skip?: number;
       take?: number;
       where: object;
@@ -49,6 +51,7 @@ export const getListHandler = async <Args extends GetListArgs>(
       include: options?.include ?? undefined,
       orderBy: options?.orderBy ?? undefined,
       select: options?.select ?? undefined,
+      omit: options?.omit ?? undefined,
       where: options?.where ?? {},
     },
     countArg: {

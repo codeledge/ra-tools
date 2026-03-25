@@ -13,6 +13,7 @@ export type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut 
 export type UpdateArgs = {
   include?: object | null;
   select?: object | null;
+  omit?: object | null;
 };
 
 export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
@@ -181,6 +182,7 @@ export const updateHandler = async <Args extends UpdateArgs>(
     data,
     include: options?.include ?? undefined,
     select: options?.select ?? undefined,
+    omit: options?.omit ?? undefined,
     where: { [primaryKey]: id },
   });
 
