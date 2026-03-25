@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.5.1
+
+### Patch Changes
+
+- feat: support Prisma's "omit" field
+
 ## 7.5.0
 
 ### Minor Changes

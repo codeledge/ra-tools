@@ -6,6 +6,7 @@ import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 export type GetManyArgs = {
   include?: object | null;
   select?: object | null;
+  omit?: object | null;
 };
 
 export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = Args & {
@@ -28,6 +29,7 @@ export const getManyHandler = async <Args extends GetManyArgs>(
   const rows = await model.findMany({
     include: options?.include,
     select: options?.select,
+    omit: options?.omit,
     where: { [primaryKey]: { in: ids } },
   });
 

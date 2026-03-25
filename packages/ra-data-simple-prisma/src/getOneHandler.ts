@@ -6,6 +6,7 @@ import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 export type GetOneArgs = {
   include?: object | null;
   select?: object | null;
+  omit?: object | null;
   // there is no where because it's always id based
 };
 
@@ -30,6 +31,7 @@ export const getOneHandler = async <Args extends GetOneArgs>(
   const row = await model.findUnique({
     where,
     select: options?.select ?? undefined,
+    omit: options?.omit ?? undefined,
     include: options?.include ?? undefined,
   });
 

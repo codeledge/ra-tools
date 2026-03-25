@@ -9,6 +9,7 @@ import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 export type GetManyReferenceArgs = {
   include?: object | null;
   select?: object | null;
+  omit?: object | null;
 };
 
 export type GetManyReferenceOptions<
@@ -44,6 +45,7 @@ export const getManyReferenceHandler = async <
     model.findMany({
       include: options?.include,
       select: options?.select,
+      omit: options?.omit,
       where: { [target]: id, ...where },
       orderBy,
       skip,
