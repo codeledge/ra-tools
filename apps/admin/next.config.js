@@ -2,9 +2,7 @@
 
 const nextConfig = {
   reactStrictMode: true,
-  serverRuntimeConfig: {
-    PROJECT_ROOT: __dirname,
-  },
+  transpilePackages: ["config", "db", "eslint-config-custom", "next-auth-prisma-adapter", "ra-data-simple-prisma"],
 };
 
 module.exports = nextConfig;

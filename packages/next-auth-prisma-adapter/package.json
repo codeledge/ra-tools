@@ -26,14 +26,14 @@
   "author": "Orlando Groppo <orlando.groppo@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
-    "@prisma/client": ">=5",
+    "@prisma/client": ">=5 <7",
     "next-auth": ">=4"
   },
   "devDependencies": {
     "eslint-config-custom": "workspace:*",
-    "jest": "^29.7.0",
-    "next-auth": "^4.24.11",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "jest": "^30.3.0",
+    "next-auth": "^4.24.13",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   }
 }

@@ -10,12 +10,12 @@
     "jest-server.js"
   ],
   "dependencies": {
-    "eslint": "9.24.0",
-    "eslint-config-next": "^15.3.0",
-    "eslint-config-prettier": "^10.1.2",
-    "next": "15.3.0",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "typescript": "^5.8.3"
+    "eslint": "10.0.3",
+    "eslint-config-next": "^16.1.6",
+    "eslint-config-prettier": "^10.1.8",
+    "next": "16.1.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "typescript": "^5.9.3"
   }
 }
