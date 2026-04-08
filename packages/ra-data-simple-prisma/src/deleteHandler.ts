@@ -41,6 +41,9 @@ export const deleteHandler = async <
       });
 
   if (options?.audit) {
+    if (options?.audit.addRecordToPayloadOnDelete) {
+      req.params.previousData = deleted; // note there is no "data" for the delete operation so must be "previousData"
+    }
     await auditHandler(req, options?.audit);
   }
 
