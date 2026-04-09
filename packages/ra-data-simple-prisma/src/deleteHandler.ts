@@ -41,6 +41,10 @@ export const deleteHandler = async <
       });
 
   if (options?.audit) {
+    // NOTE: there is no "data" for the delete request so must be
+    // "previousData", also makes sense semantically
+    req.params.previousData = deleted;
+
     await auditHandler(req, options?.audit);
   }
 

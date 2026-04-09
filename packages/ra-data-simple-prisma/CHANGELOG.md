@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.5.2
+
+### Patch Changes
+
+- delete audit payload
+
 ## 7.5.1
 
 ### Patch Changes
