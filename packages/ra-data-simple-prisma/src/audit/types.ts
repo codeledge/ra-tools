@@ -18,7 +18,6 @@ export type AuditOptions = {
     delete?: boolean;
   };
   enabledResources?: string[];
-  addRecordToPayloadOnDelete?: boolean; // if true, the current record will be added to the payload for operations where data is not sent from client (i.e. delete)
 };
 
 export const defaultAuditOptions: Pick<
