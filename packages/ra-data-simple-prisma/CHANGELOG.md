@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.5.3
+
+### Patch Changes
+
+- no export
+
 ## 7.5.2
 
 ### Patch Changes

@@ -14,12 +14,8 @@ export const extractSkipTake = (
     const first = (page - 1) * perPage;
     const last = page * perPage - 1;
 
-    if (first === 0 && last === 999) {
-      // Do nothing: when exporting, the free version only allows 1000 records
-    } else {
-      skip = first;
-      take = last - first + 1;
-    }
+    skip = first;
+    take = last - first + 1;
   }
 
   return { skip, take };
