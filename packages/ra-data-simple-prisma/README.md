@@ -31,13 +31,18 @@ export default ReactAdmin;
 
 ### Backend: import the request handlers
 
-Simplest implementation ever:
+Server-side code should import from the `/server` subpath. This entry
+contains only the request handlers and helpers, with no dependency on
+`react-admin` (and therefore no transitive dependency on `ra-core`,
+`ra-ui-materialui`, or `react-router-dom`). This keeps Next.js / Vercel
+serverless bundles small and avoids ESM resolution issues caused by
+tracing UI-only packages into the function.
 
 ```js
 // -- Example for Next Pages router --
 // /api/[resource].ts <= catch all resource requests
 
-import { defaultHandler } from "ra-data-simple-prisma";
+import { defaultHandler } from "ra-data-simple-prisma/server";
 import { prismaClient } from "../prisma/client"; // <= Your prisma client instance
 
 export default async function handler(req, res) {
@@ -48,7 +53,7 @@ export default async function handler(req, res) {
 // -- Example for Next App router --
 // /app/api/[resource]/route.ts <= catch all resource requests
 
-import { defaultHandler } from "ra-data-simple-prisma";
+import { defaultHandler } from "ra-data-simple-prisma/server";
 import { prismaClient } from "../prisma/client"; // <= Your prisma client instance
 import { NextResponse } from "next/server";
 
@@ -60,6 +65,11 @@ const handler = async (req: Request) => {
 
 export { handler as GET, handler as POST };
 ```
+
+> The top-level `ra-data-simple-prisma` import still re-exports the
+> handlers for backwards compatibility, but new server-side code should
+> prefer `ra-data-simple-prisma/server` so that `react-admin` stays out
+> of the server bundle.
 
 ### (List) Filters: Available Operators
 

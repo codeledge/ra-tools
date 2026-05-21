@@ -1,6 +1,6 @@
 import { AuditOptions, AuditLogPayload, defaultAuditOptions } from "./types";
-import { RaPayload } from "../Http";
-import { Identifier } from "react-admin";
+import type { RaPayload } from "../Http";
+import type { Identifier } from "react-admin";
 
 export const auditHandler = async (
   request: RaPayload,
