@@ -229,8 +229,8 @@ importers:
         specifier: ^1.13.5
         version: 1.13.5
       deverything:
-        specifier: ^4.10.1
-        version: 4.10.1
+        specifier: ^5.5.1
+        version: 5.5.1
     devDependencies:
       '@babel/core':
         specifier: 7.29.0
@@ -3233,8 +3233,8 @@ packages:
     resolution: {integrity: sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==}
     engines: {node: '>=8'}
 
-  deverything@4.10.1:
-    resolution: {integrity: sha512-pEyk4Td8pmKWS29anaUFSfSx9G3RhB/zBxYM5NiOyK9iX19YWFAvEl6s5UObEC4WOP7WA0gI277qfh2FNbgwGA==}
+  deverything@5.5.1:
+    resolution: {integrity: sha512-R+bNnYb+MhjW6XkWV2010l6Wu2rMmquSAUHnJp9/6rcgOqHD2AXpDmxT8EtbcQGFu45/gGnIkhAJ1Pu7t4hQFg==}
 
   diacritic@0.0.2:
     resolution: {integrity: sha512-iQCeDkSPwkfwWPr+HZZ49WRrM2FSI9097Q9w7agyRCdLcF9Eh2Ek0sHKcmMWx2oZVBjRBE/sziGFjZu0uf1Jbg==}
@@ -9186,7 +9186,7 @@ snapshots:
 
   detect-newline@3.1.0: {}
 
-  deverything@4.10.1: {}
+  deverything@5.5.1: {}
 
   diacritic@0.0.2: {}
 

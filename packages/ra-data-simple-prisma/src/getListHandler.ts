@@ -19,7 +19,12 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
   noNullsOnSort?: string[]; // TODO: to be keyof Args["orderBy"] CAREFUL field must be nullable, or prisma will throw
   debug?: boolean;
   primaryKey?: string;
-  transformRow?: (row: any, rowIndex: number, rows: any[]) => any | Promise<any>;
+  transformRow?: (
+    row: any,
+    rowIndex: number,
+    rows: any[],
+  ) => any | Promise<any>;
+  transformRows?: (rows: any[]) => any[] | Promise<any[]>;
   filterMode?: FilterMode;
 };
 
@@ -125,10 +130,16 @@ export const getListHandler = async <Args extends GetListArgs>(
     console.log("getListHandler:total", total);
   }
 
+  let data = rows;
+
   // TRANSFORM DATA
-  const data = options?.transformRow
-    ? await Promise.all(rows.map(options.transformRow))
-    : rows;
+  if (options?.transformRow) {
+    data = await Promise.all(data.map(options.transformRow));
+  }
+
+  if (options?.transformRows) {
+    data = await options.transformRows(data);
+  }
 
   // RESPOND WITH DATA
   const response = {

@@ -11,13 +11,22 @@ import { extractOrderBy } from "../src/extractOrderBy";
 import { extractSkipTake } from "../src/extractSkipTake";
 import { extractWhere } from "../src/extractWhere";
 import { getModel } from "../src/getModel";
+import { sortBySortedKeys } from "deverything";
 
 const mockGetModel = getModel as jest.MockedFunction<typeof getModel>;
-const mockExtractWhere = extractWhere as jest.MockedFunction<typeof extractWhere>;
-const mockExtractOrderBy = extractOrderBy as jest.MockedFunction<typeof extractOrderBy>;
-const mockExtractSkipTake = extractSkipTake as jest.MockedFunction<typeof extractSkipTake>;
+const mockExtractWhere = extractWhere as jest.MockedFunction<
+  typeof extractWhere
+>;
+const mockExtractOrderBy = extractOrderBy as jest.MockedFunction<
+  typeof extractOrderBy
+>;
+const mockExtractSkipTake = extractSkipTake as jest.MockedFunction<
+  typeof extractSkipTake
+>;
 
-function makeReq(overrides: Partial<GetListRequest["params"]> = {}): GetListRequest {
+function makeReq(
+  overrides: Partial<GetListRequest["params"]> = {},
+): GetListRequest {
   return {
     method: "getList",
     resource: "post",
@@ -79,7 +88,9 @@ describe("getListHandler", () => {
     });
 
     expect(mockExtractOrderBy).not.toHaveBeenCalled();
-    expect(model.findMany).toHaveBeenCalledWith(expect.objectContaining({ orderBy: { createdAt: "desc" } }));
+    expect(model.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ orderBy: { createdAt: "desc" } }),
+    );
   });
 
   test("adds not-null constraint for sorted field in noNullsOnSort", async () => {
@@ -87,10 +98,14 @@ describe("getListHandler", () => {
     mockGetModel.mockReturnValue(model as never);
     mockExtractWhere.mockReturnValue({ status: "client" } as never);
 
-    await getListHandler(makeReq({ sort: { field: "title", order: "ASC" } }), {} as never, {
-      where: { status: "server" },
-      noNullsOnSort: ["title"],
-    });
+    await getListHandler(
+      makeReq({ sort: { field: "title", order: "ASC" } }),
+      {} as never,
+      {
+        where: { status: "server" },
+        noNullsOnSort: ["title"],
+      },
+    );
 
     expect(model.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -124,9 +139,34 @@ describe("getListHandler", () => {
     expect(result.total).toBe(2);
   });
 
+  test("applies transformRows to the full result set", async () => {
+    const model = {
+      findMany: jest.fn().mockResolvedValue([
+        { id: 3, title: "A" },
+        { id: 1, title: "B" },
+        { id: 2, title: "C" },
+      ] as never),
+      count: jest.fn().mockResolvedValue(3 as never),
+    };
+    mockGetModel.mockReturnValue(model as never);
+
+    const result = await getListHandler(makeReq(), {} as never, {
+      transformRows: (rows) => sortBySortedKeys(rows, [1, 2, 3]),
+    });
+
+    expect(result.data).toEqual([
+      { id: 1, title: "B" },
+      { id: 2, title: "C" },
+      { id: 3, title: "A" },
+    ]);
+    expect(result.total).toBe(3);
+  });
+
   test("maps custom primaryKey to id in response and removes original key", async () => {
     const model = {
-      findMany: jest.fn().mockResolvedValue([{ StatusId: 10, name: "Published" }] as never),
+      findMany: jest
+        .fn()
+        .mockResolvedValue([{ StatusId: 10, name: "Published" }] as never),
       count: jest.fn().mockResolvedValue(1 as never),
     };
     mockGetModel.mockReturnValue(model as never);
@@ -144,13 +184,23 @@ describe("getListHandler", () => {
     mockGetModel.mockReturnValue(model as never);
     mockExtractWhere.mockReturnValue({ status: "active" } as never);
 
-    const debugSpy = jest.spyOn(console, "debug").mockImplementation(() => undefined);
-    const logSpy = jest.spyOn(console, "log").mockImplementation(() => undefined);
+    const debugSpy = jest
+      .spyOn(console, "debug")
+      .mockImplementation(() => undefined);
+    const logSpy = jest
+      .spyOn(console, "log")
+      .mockImplementation(() => undefined);
 
     await getListHandler(makeReq(), {} as never, { debug: true });
 
-    expect(debugSpy).toHaveBeenCalledWith("getListHandler:requestWhere", expect.any(String));
-    expect(logSpy).toHaveBeenCalledWith("getListHandler:queryArgs", expect.any(String));
+    expect(debugSpy).toHaveBeenCalledWith(
+      "getListHandler:requestWhere",
+      expect.any(String),
+    );
+    expect(logSpy).toHaveBeenCalledWith(
+      "getListHandler:queryArgs",
+      expect.any(String),
+    );
     expect(logSpy).toHaveBeenCalledWith("getListHandler:total", 1);
   });
 });

@@ -5,6 +5,7 @@ export * from "./defaultHandler";
 export * from "./deleteHandler";
 export * from "./deleteManyHandler";
 export * from "./extractOrderBy";
+export * from "./extractRequiredSkipTake";
 export * from "./extractSkipTake";
 export * from "./extractWhere";
 export * from "./getInfiniteListHandler";
