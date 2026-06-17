@@ -1,5 +1,5 @@
 import { PlainObject } from "deverything";
-import { AuthProvider, Identifier } from "react-admin";
+import type { AuthProvider, Identifier } from "react-admin";
 
 export type AuditOptions = {
   model: { create: Function };
