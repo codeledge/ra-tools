@@ -23,6 +23,7 @@ function makeMockModel() {
   return {
     deleteMany: jest.fn().mockResolvedValue({ count: 2 } as never),
     updateMany: jest.fn().mockResolvedValue({ count: 2 } as never),
+    findMany: jest.fn().mockResolvedValue([] as never),
   };
 }
 
@@ -67,8 +68,13 @@ describe("deleteManyHandler", () => {
     expect(result).toEqual({ data: [9, 10] });
   });
 
-  test("calls auditHandler when audit options are provided", async () => {
+  test("fetches rows before deleting and passes them to auditHandler when audit options are provided", async () => {
     const model = makeMockModel();
+    const rows = [
+      { id: 3, user_id: 123 },
+      { id: 4, user_id: 456 },
+    ];
+    model.findMany.mockResolvedValue(rows as never);
     mockGetModel.mockReturnValue(model as never);
     mockAuditHandler.mockResolvedValue(undefined as never);
 
@@ -80,15 +86,22 @@ describe("deleteManyHandler", () => {
 
     await deleteManyHandler(req, {} as never, { audit: auditOptions });
 
-    expect(mockAuditHandler).toHaveBeenCalledWith(req, auditOptions);
+    expect(model.findMany).toHaveBeenCalledWith({
+      where: { id: { in: [3, 4] } },
+    });
+    expect(mockAuditHandler).toHaveBeenCalledWith(req, auditOptions, undefined, {
+      rows,
+      primaryKey: "id",
+    });
   });
 
-  test("does not call auditHandler when audit options are absent", async () => {
+  test("does not call auditHandler or findMany when audit options are absent", async () => {
     const model = makeMockModel();
     mockGetModel.mockReturnValue(model as never);
 
     await deleteManyHandler(makeReq([3, 4]), {} as never);
 
+    expect(model.findMany).not.toHaveBeenCalled();
     expect(mockAuditHandler).not.toHaveBeenCalled();
   });
 

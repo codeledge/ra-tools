@@ -20,6 +20,12 @@ export const deleteManyHandler = async (
   const primaryKey = options?.primaryKey ?? "id";
   const model = getModel(req, prismaClient);
 
+  const rowsToDelete = options?.audit
+    ? await model.findMany({
+        where: { [primaryKey]: { in: ids } },
+      })
+    : undefined;
+
   const deleted = options?.softDeleteField
     ? await model.updateMany({
         where: { [primaryKey]: { in: ids } },
@@ -32,7 +38,10 @@ export const deleteManyHandler = async (
       });
 
   if (options?.audit) {
-    await auditHandler(req, options?.audit);
+    await auditHandler(req, options.audit, undefined, {
+      rows: rowsToDelete,
+      primaryKey,
+    });
   }
 
   // react-admin expects the ids of the deleted rows
