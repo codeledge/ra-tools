@@ -33,6 +33,28 @@ export type ExtractWhereOptions = {
   debug?: boolean;
 };
 
+const DATE_ONLY_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
+const dateComparisonOperators = ["gt", "gte", "lt", "lte"] as const;
+
+const coerceDateComparisonValue = (operator: string, value: unknown) => {
+  if (typeof value !== "string" || !DATE_ONLY_REGEX.test(value)) {
+    return value;
+  }
+
+  // The boundary depends on inclusivity, not direction: the inclusive operators
+  // must span the whole named day, the exclusive ones must leave it out entirely.
+  if (operator === "lte" || operator === "gt") {
+    return `${value}T23:59:59.999Z`;
+  }
+
+  if (operator === "gte" || operator === "lt") {
+    return `${value}T00:00:00.000Z`;
+  }
+
+  return value;
+};
+
 export const extractWhere = (
   req: GetListRequest | GetManyReferenceRequest,
   options?: ExtractWhereOptions,
@@ -57,12 +79,29 @@ export const extractWhere = (
       const hasPrismaOperator = prismaOperators.some((operator) => {
         if (field.endsWith(`_${operator}`)) {
           const [wherePath] = filterPath.split(`_${operator}`);
-          setObjectPath(where, wherePath + `.${operator}`, value);
+          setObjectPath(
+            where,
+            wherePath + `.${operator}`,
+            coerceDateComparisonValue(operator, value),
+          );
           return true;
         }
       });
 
       if (hasPrismaOperator) return;
+
+      if (
+        dateComparisonOperators.includes(
+          field as (typeof dateComparisonOperators)[number],
+        )
+      ) {
+        setObjectPath(
+          where,
+          filterPath,
+          coerceDateComparisonValue(field, value),
+        );
+        return;
+      }
 
       if (
         // Custom operators
