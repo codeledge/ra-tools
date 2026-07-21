@@ -162,4 +162,93 @@ describe("extractWhere", () => {
       ],
     });
   });
+
+  test("coerces YYYY-MM-DD strings for _gte/_lte date filters", () => {
+    const req: GetListRequest = {
+      method: "getList",
+      resource: "test",
+      params: {
+        filter: {
+          createdAt_gte: "2025-01-02",
+          createdAt_lte: "2025-01-31",
+          updatedAt_gt: "2025-01-01",
+          updatedAt_lt: "2025-02-01",
+        },
+        pagination: { page: 1, perPage: 10 },
+        sort: { field: "id", order: "ASC" },
+      },
+    };
+
+    const result = extractWhere(req);
+
+    expect(result).toEqual({
+      createdAt: {
+        gte: "2025-01-02T00:00:00.000Z",
+        lte: "2025-01-31T23:59:59.999Z",
+      },
+      // exclusive operators take the opposite boundary, so the named day is
+      // left out entirely: gt skips all of Jan 1, lt skips all of Feb 1
+      updatedAt: {
+        gt: "2025-01-01T23:59:59.999Z",
+        lt: "2025-02-01T00:00:00.000Z",
+      },
+    });
+  });
+
+  test("coerces YYYY-MM-DD strings for nested date comparison operators", () => {
+    const req: GetListRequest = {
+      method: "getList",
+      resource: "test",
+      params: {
+        filter: {
+          createdAt: {
+            gte: "2025-01-02",
+            lte: "2025-01-31",
+          },
+        },
+        pagination: { page: 1, perPage: 10 },
+        sort: { field: "id", order: "ASC" },
+      },
+    };
+
+    const result = extractWhere(req);
+
+    expect(result).toEqual({
+      createdAt: {
+        gte: "2025-01-02T00:00:00.000Z",
+        lte: "2025-01-31T23:59:59.999Z",
+      },
+    });
+  });
+
+  test("leaves non date-only comparison values unchanged", () => {
+    const req: GetListRequest = {
+      method: "getList",
+      resource: "test",
+      params: {
+        filter: {
+          createdAt_gte: "2025-01-02T15:30:00.000Z",
+          amount_gte: 1000,
+          name_contains: "foo",
+        },
+        pagination: { page: 1, perPage: 10 },
+        sort: { field: "id", order: "ASC" },
+      },
+    };
+
+    const result = extractWhere(req);
+
+    expect(result).toEqual({
+      createdAt: {
+        gte: "2025-01-02T15:30:00.000Z",
+      },
+      amount: {
+        gte: 1000,
+      },
+      name: {
+        contains: "foo",
+        mode: undefined,
+      },
+    });
+  });
 });
