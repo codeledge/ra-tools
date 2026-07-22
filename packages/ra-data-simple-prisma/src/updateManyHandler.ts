@@ -18,13 +18,22 @@ export const updateManyHandler = async <Args extends UpdateArgs>(
     console.log("updateManyHandler:data", data);
   }
 
+  const rowsToUpdate = options?.audit
+    ? await model.findMany({
+        where: { [primaryKey]: { in: ids } },
+      })
+    : undefined;
+
   await model.updateMany({
     data,
     where: { [primaryKey]: { in: ids } },
   });
 
   if (options?.audit) {
-    await auditHandler(req, options?.audit);
+    await auditHandler(req, options.audit, undefined, {
+      rows: rowsToUpdate,
+      primaryKey,
+    });
   }
 
   //react-admin expects a array of ids as response
