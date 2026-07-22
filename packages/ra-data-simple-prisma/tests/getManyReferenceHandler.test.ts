@@ -95,6 +95,21 @@ describe("getManyReferenceHandler", () => {
     ]);
   });
 
+  test("applies transformRows to the full result set", async () => {
+    const model = makeModel();
+    mockGetModel.mockReturnValue(model as never);
+
+    const result = await getManyReferenceHandler(makeReq(), {} as never, {
+      transformRows: async (rows) => rows.map((row, index) => ({ ...row, position: index })),
+    });
+
+    expect(result.data).toEqual([
+      { id: 1, body: "first", position: 0 },
+      { id: 2, body: "second", position: 1 },
+    ]);
+    expect(result.total).toBe(2);
+  });
+
   test("maps custom primaryKey to id in response", async () => {
     const model = {
       findMany: jest.fn().mockResolvedValue([

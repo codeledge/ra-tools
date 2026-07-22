@@ -18,6 +18,7 @@ export type GetManyReferenceOptions<
   debug?: boolean;
   primaryKey?: string;
   transformRow?: (data: any) => any | Promise<any>;
+  transformRows?: (rows: any[]) => any[] | Promise<any[]>;
   filterMode?: FilterMode;
 };
 
@@ -55,9 +56,15 @@ export const getManyReferenceHandler = async <
   ]);
 
   // TRANSFORM
-  const data = options?.transformRow
-    ? await Promise.all(rows.map(options.transformRow))
-    : rows;
+  let data = rows;
+
+  if (options?.transformRow) {
+    data = await Promise.all(data.map(options.transformRow));
+  }
+
+  if (options?.transformRows) {
+    data = await options.transformRows(data);
+  }
 
   const response = { data: mapPrimaryKeyToId(data, primaryKey), total };
 

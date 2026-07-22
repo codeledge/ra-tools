@@ -104,6 +104,39 @@ describe("getManyHandler", () => {
     });
   });
 
+  test("applies transformRows to the full result set", async () => {
+    const model = makeMockModel();
+    mockGetModel.mockReturnValue(model as never);
+
+    const result = await getManyHandler(makeReq([1, 2]), {} as never, {
+      transformRows: (rows) => [...rows].reverse(),
+    });
+
+    expect(result).toEqual({
+      data: [
+        { id: 2, title: "B" },
+        { id: 1, title: "A" },
+      ],
+    });
+  });
+
+  test("applies transformRows after transformRow", async () => {
+    const model = makeMockModel();
+    mockGetModel.mockReturnValue(model as never);
+
+    const result = await getManyHandler(makeReq([1, 2]), {} as never, {
+      transformRow: (row) => ({ ...row, title: row.title.toLowerCase() }),
+      transformRows: async (rows) => rows.map((row, index) => ({ ...row, position: index })),
+    });
+
+    expect(result).toEqual({
+      data: [
+        { id: 1, title: "a", position: 0 },
+        { id: 2, title: "b", position: 1 },
+      ],
+    });
+  });
+
   test("uses custom primaryKey in where and maps response to id", async () => {
     const model = {
       findMany: jest.fn().mockResolvedValue([

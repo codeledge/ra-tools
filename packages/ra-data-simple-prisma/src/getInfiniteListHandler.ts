@@ -92,9 +92,15 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   }
 
   // TRANSFORM DATA
-  const data = options?.transformRow
-    ? await Promise.all(rows.map(options.transformRow))
-    : rows;
+  let data = rows;
+
+  if (options?.transformRow) {
+    data = await Promise.all(data.map(options.transformRow));
+  }
+
+  if (options?.transformRows) {
+    data = await options.transformRows(data);
+  }
 
   // RESPOND WITH DATA
   const response = {
