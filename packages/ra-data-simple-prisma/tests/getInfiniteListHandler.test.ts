@@ -153,6 +153,25 @@ describe("getInfiniteListHandler", () => {
     ]);
   });
 
+  test("applies transformRows to the full result set", async () => {
+    const model = {
+      findMany: jest.fn().mockResolvedValue([
+        { id: 1, title: "A" },
+        { id: 2, title: "B" },
+      ] as never),
+    };
+    mockGetModel.mockReturnValue(model as never);
+
+    const result = await getInfiniteListHandler(makeReq(), {} as never, {
+      transformRows: (rows) => [...rows].reverse(),
+    });
+
+    expect(result.data).toEqual([
+      { id: 2, title: "B" },
+      { id: 1, title: "A" },
+    ]);
+  });
+
   test("maps custom primaryKey to id in response and removes original key", async () => {
     const model = {
       findMany: jest.fn().mockResolvedValue([

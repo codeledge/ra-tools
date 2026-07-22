@@ -233,6 +233,10 @@ export default function handler(req) {
                 tagIds: post.tags.map((tag) => tag.id);
               }
           },
+          transformRows: async (posts: ServerPost[]): Promise<AugmentedPost[]> => {
+            const stats = await fetchStatsForPosts(posts.map((post) => post.id));
+            return posts.map((post) => ({ ...post, stats: stats[post.id] }));
+          },
         }
       );
       // OR, if using InfiniteList component
@@ -253,6 +257,7 @@ export default function handler(req) {
                 tagIds: post.tags.map((tag) => tag.id);
               }
           },
+          transformRows: ... // same as getListHandler
         }
       );
       break;
@@ -262,6 +267,8 @@ export default function handler(req) {
         prismaClient,
         {
           primaryKey: ... // defaults to "id"
+          transformRow: ... // same as getListHandler
+          transformRows: ... // same as getListHandler
         }
       );
       break;
@@ -271,6 +278,8 @@ export default function handler(req) {
         prismaClient,
         {
           primaryKey: ... // defaults to "id"
+          transformRow: ... // same as getListHandler
+          transformRows: ... // same as getListHandler
         }
       );
       break;
