@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 7.7.0
+
+### Minor Changes
+
+- transform rows
+
 ## 7.6.0
 
 ### Minor Changes
