@@ -13,7 +13,7 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetListOptions<Args>,
 ) => {
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
   const primaryKey = options?.primaryKey ?? "id";
 
   let queryArgs: {

@@ -1,14 +1,22 @@
 import { firstKey, firstValue, isObject, isString } from "deverything";
 import { auditHandler } from "./audit/auditHandler";
 import type { AuditOptions } from "./audit/types";
-import { getModel } from "./getModel";
+import { getModel, type ResourceToModelMap } from "./getModel";
 import type { UpdateRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
-import type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut } from "./lib/types";
+import type {
+  SetExplicitConnection,
+  SetImplicitConnection,
+  SetImplicitShortcut,
+} from "./lib/types";
 import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import type { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
-export type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut };
+export type {
+  SetExplicitConnection,
+  SetImplicitConnection,
+  SetImplicitShortcut,
+};
 
 export type UpdateArgs = {
   include?: object | null;
@@ -25,7 +33,10 @@ export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
     [key: string]: boolean;
   };
   set?: {
-    [key: string]: SetImplicitShortcut | SetImplicitConnection | SetExplicitConnection;
+    [key: string]:
+      | SetImplicitShortcut
+      | SetImplicitConnection
+      | SetExplicitConnection;
   };
   allowNestedUpdate?: {
     [key: string]: boolean;
@@ -38,11 +49,16 @@ export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
   };
   audit?: AuditOptions;
   primaryKey?: string;
+  resourceToModelMap?: ResourceToModelMap;
 };
 
 export const reduceData = (data, options: UpdateOptions) => {
   return Object.entries(data).reduce((fields, [key, value]) => {
-    if (options?.primaryKey && options.primaryKey !== "id" && key === options.primaryKey) {
+    if (
+      options?.primaryKey &&
+      options.primaryKey !== "id" &&
+      key === options.primaryKey
+    ) {
       throw new Error(
         `updateHandler: Field ${key} is reserved when primaryKey is configured; use params.id and omit the original primary key from writes`,
       );
@@ -171,7 +187,7 @@ export const updateHandler = async <Args extends UpdateArgs>(
 ) => {
   const { id } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
   const data = reduceData(req.params.data, options);
 
   if (options?.debug) {

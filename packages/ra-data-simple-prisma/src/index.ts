@@ -1,4 +1,5 @@
 export * from "./audit";
+export * from "./bindHandler";
 export * from "./createHandler";
 export * from "./dataProvider";
 export * from "./defaultHandler";
@@ -12,6 +13,7 @@ export * from "./getInfiniteListHandler";
 export * from "./getListHandler";
 export * from "./getManyHandler";
 export * from "./getManyReferenceHandler";
+export * from "./getModel";
 export * from "./getOneHandler";
 export * from "./hasFieldChanged";
 export * from "./Http";

@@ -13,9 +13,14 @@ import { auditHandler } from "../src/audit/auditHandler";
 import { getModel } from "../src/getModel";
 
 const mockGetModel = getModel as jest.MockedFunction<typeof getModel>;
-const mockAuditHandler = auditHandler as jest.MockedFunction<typeof auditHandler>;
+const mockAuditHandler = auditHandler as jest.MockedFunction<
+  typeof auditHandler
+>;
 
-function makeReq(data: Record<string, unknown>, resource = "post"): CreateRequest {
+function makeReq(
+  data: Record<string, unknown>,
+  resource = "post",
+): CreateRequest {
   return {
     method: "create",
     resource,
@@ -41,7 +46,9 @@ describe("createHandler - field filtering", () => {
     const req = makeReq({ title: "Hello", count: 5 });
     const result = await createHandler(req, {} as never);
 
-    expect(model.create).toHaveBeenCalledWith(expect.objectContaining({ data: { title: "Hello", count: 5 } }));
+    expect(model.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { title: "Hello", count: 5 } }),
+    );
     expect(result).toEqual({ data: { id: 1, title: "New Post" } });
   });
 
@@ -52,7 +59,9 @@ describe("createHandler - field filtering", () => {
     const req = makeReq({ title: "Keep", subtitle: "" });
     await createHandler(req, {} as never);
 
-    expect(model.create).toHaveBeenCalledWith(expect.objectContaining({ data: { title: "Keep" } }));
+    expect(model.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { title: "Keep" } }),
+    );
   });
 
   test("removes _ prefixed fields (isNotField)", async () => {
@@ -62,7 +71,9 @@ describe("createHandler - field filtering", () => {
     const req = makeReq({ title: "Hi", _count: 3, _sum: 10 });
     await createHandler(req, {} as never);
 
-    expect(model.create).toHaveBeenCalledWith(expect.objectContaining({ data: { title: "Hi" } }));
+    expect(model.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { title: "Hi" } }),
+    );
   });
 });
 
@@ -76,18 +87,22 @@ describe("createHandler - allowOnlyFields", () => {
     mockGetModel.mockReturnValue(model as never);
 
     const req = makeReq({ title: "Hi", safe: "yes" });
-    await createHandler(req, {} as never, { allowOnlyFields: { title: true, safe: true } });
+    await createHandler(req, {} as never, {
+      allowOnlyFields: { title: true, safe: true },
+    });
 
-    expect(model.create).toHaveBeenCalledWith(expect.objectContaining({ data: { title: "Hi", safe: "yes" } }));
+    expect(model.create).toHaveBeenCalledWith(
+      expect.objectContaining({ data: { title: "Hi", safe: "yes" } }),
+    );
   });
 
   test("throws for a field not in the allow list", async () => {
     mockGetModel.mockReturnValue(makeMockModel() as never);
 
     const req = makeReq({ title: "Hi", extra: "bad" });
-    await expect(createHandler(req, {} as never, { allowOnlyFields: { title: true } })).rejects.toThrow(
-      "createHandler: Field extra is not allowed in create",
-    );
+    await expect(
+      createHandler(req, {} as never, { allowOnlyFields: { title: true } }),
+    ).rejects.toThrow("createHandler: Field extra is not allowed in create");
   });
 
   test("empty string fields are removed before allowOnlyFields is checked", async () => {
@@ -96,7 +111,9 @@ describe("createHandler - allowOnlyFields", () => {
 
     // "extra" would fail allowOnlyFields, but it has an empty value so it is removed first
     const req = makeReq({ title: "Hi", extra: "" });
-    await expect(createHandler(req, {} as never, { allowOnlyFields: { title: true } })).resolves.toBeDefined();
+    await expect(
+      createHandler(req, {} as never, { allowOnlyFields: { title: true } }),
+    ).resolves.toBeDefined();
   });
 
   test("_ prefixed fields are removed before allowOnlyFields is checked", async () => {
@@ -104,14 +121,18 @@ describe("createHandler - allowOnlyFields", () => {
     mockGetModel.mockReturnValue(model as never);
 
     const req = makeReq({ title: "Hi", _count: 3 });
-    await expect(createHandler(req, {} as never, { allowOnlyFields: { title: true } })).resolves.toBeDefined();
+    await expect(
+      createHandler(req, {} as never, { allowOnlyFields: { title: true } }),
+    ).resolves.toBeDefined();
   });
 
   test("throws when payload includes the configured custom primary key field", async () => {
     mockGetModel.mockReturnValue(makeMockModel() as never);
 
     const req = makeReq({ title: "Hi", IrregularPrimaryKeyId: 42 });
-    await expect(createHandler(req, {} as never, { primaryKey: "IrregularPrimaryKeyId" })).rejects.toThrow(
+    await expect(
+      createHandler(req, {} as never, { primaryKey: "IrregularPrimaryKeyId" }),
+    ).rejects.toThrow(
       "createHandler: Field IrregularPrimaryKeyId is reserved when primaryKey is configured; use id in responses and omit the original primary key from writes",
     );
   });
@@ -157,9 +178,12 @@ describe("createHandler - connect option", () => {
     mockGetModel.mockReturnValue(model as never);
 
     const req = makeReq({ tagIds: [10, 20] });
-    await createHandler(req, {} as never, { connect: { tagIds: { tags: "id" } } });
+    await createHandler(req, {} as never, {
+      connect: { tagIds: { tags: "id" } },
+    });
 
-    const callData = (model.create.mock.calls[0] as [{ data: unknown }])[0].data;
+    const callData = (model.create.mock.calls[0] as [{ data: unknown }])[0]
+      .data;
     expect(callData).toEqual({
       tags: { connect: [{ id: 10 }, { id: 20 }] },
     });
@@ -176,10 +200,14 @@ describe("createHandler - connect option", () => {
       connect: { mediaIds: { postToMediaRels: { media: "id" } } },
     });
 
-    const callData = (model.create.mock.calls[0] as [{ data: unknown }])[0].data;
+    const callData = (model.create.mock.calls[0] as [{ data: unknown }])[0]
+      .data;
     expect(callData).toEqual({
       postToMediaRels: {
-        create: [{ media: { connect: { id: 5 } } }, { media: { connect: { id: 6 } } }],
+        create: [
+          { media: { connect: { id: 5 } } },
+          { media: { connect: { id: 6 } } },
+        ],
       },
     });
     expect(callData).not.toHaveProperty("mediaIds");
@@ -195,18 +223,26 @@ describe("createHandler - model options", () => {
     const model = makeMockModel();
     mockGetModel.mockReturnValue(model as never);
 
-    await createHandler(makeReq({ title: "Hi" }), {} as never, { include: { tags: true } });
+    await createHandler(makeReq({ title: "Hi" }), {} as never, {
+      include: { tags: true },
+    });
 
-    expect(model.create).toHaveBeenCalledWith(expect.objectContaining({ include: { tags: true } }));
+    expect(model.create).toHaveBeenCalledWith(
+      expect.objectContaining({ include: { tags: true } }),
+    );
   });
 
   test("passes select to model.create", async () => {
     const model = makeMockModel();
     mockGetModel.mockReturnValue(model as never);
 
-    await createHandler(makeReq({ title: "Hi" }), {} as never, { select: { id: true, title: true } });
+    await createHandler(makeReq({ title: "Hi" }), {} as never, {
+      select: { id: true, title: true },
+    });
 
-    expect(model.create).toHaveBeenCalledWith(expect.objectContaining({ select: { id: true, title: true } }));
+    expect(model.create).toHaveBeenCalledWith(
+      expect.objectContaining({ select: { id: true, title: true } }),
+    );
   });
 });
 
@@ -218,12 +254,21 @@ describe("createHandler - debug", () => {
   test("debug logs data before and after create", async () => {
     const model = makeMockModel();
     mockGetModel.mockReturnValue(model as never);
-    const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => undefined);
+    const consoleSpy = jest
+      .spyOn(console, "log")
+      .mockImplementation(() => undefined);
 
-    await createHandler(makeReq({ title: "Debug" }), {} as never, { debug: true });
+    await createHandler(makeReq({ title: "Debug" }), {} as never, {
+      debug: true,
+    });
 
-    expect(consoleSpy).toHaveBeenCalledWith("createHandler:data", { title: "Debug" });
-    expect(consoleSpy).toHaveBeenCalledWith("createHandler:created", { id: 1, title: "New Post" });
+    expect(consoleSpy).toHaveBeenCalledWith("createHandler:data", {
+      title: "Debug",
+    });
+    expect(consoleSpy).toHaveBeenCalledWith("createHandler:created", {
+      id: 1,
+      title: "New Post",
+    });
   });
 });
 
@@ -244,7 +289,10 @@ describe("createHandler - audit", () => {
     const req = makeReq({ title: "Audited" });
     await createHandler(req, {} as never, { audit: auditOptions });
 
-    expect(mockAuditHandler).toHaveBeenCalledWith(req, auditOptions, { id: 1, title: "New Post" });
+    expect(mockAuditHandler).toHaveBeenCalledWith(req, auditOptions, {
+      id: 1,
+      title: "New Post",
+    });
   });
 
   test("does not call auditHandler when audit option is absent", async () => {
@@ -253,5 +301,22 @@ describe("createHandler - audit", () => {
     await createHandler(makeReq({ title: "No audit" }), {} as never);
 
     expect(mockAuditHandler).not.toHaveBeenCalled();
+  });
+});
+
+describe("createHandler - resourceToModelMap", () => {
+  test("passes resourceToModelMap to getModel", async () => {
+    mockGetModel.mockReturnValue(makeMockModel() as never);
+    const prismaClient = {} as never;
+    const resourceToModelMap = { post: "blog_post" };
+    const req = makeReq({ title: "Mapped" });
+
+    await createHandler(req, prismaClient, { resourceToModelMap });
+
+    expect(mockGetModel).toHaveBeenCalledWith(
+      req,
+      prismaClient,
+      resourceToModelMap,
+    );
   });
 });

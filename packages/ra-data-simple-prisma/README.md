@@ -61,6 +61,52 @@ const handler = async (req: Request) => {
 export { handler as GET, handler as POST };
 ```
 
+### Bind shared defaults
+
+Lazy?
+Each handler has its own bind function, so you don't have to pass the same options on every call. Call-site options override the bound defaults. Write binders accept a default `audit` object.
+
+```ts
+import {
+  bindCreateHandler,
+  bindGetListHandler,
+  bindUpdateHandler,
+} from "ra-data-simple-prisma";
+import { prismaRead, prismaWrite } from "../prisma/client";
+
+const resourceToModelMap = {
+  admin: "adminUser",
+  users: "user",
+};
+
+export const createHandler = bindCreateHandler({
+  prismaClient: prismaWrite,
+  resourceToModelMap,
+  audit: { model: prismaWrite.audit_log },
+});
+
+export const updateHandler = bindUpdateHandler({
+  prismaClient: prismaWrite,
+  resourceToModelMap,
+  audit: { model: prismaWrite.audit_log },
+});
+
+export const getListHandler = bindGetListHandler({
+  prismaClient: prismaRead,
+  resourceToModelMap,
+});
+
+await getListHandler(req.body, { include: { posts: true } });
+
+await createHandler(req.body, {
+  audit: { authProvider },
+});
+
+await getListHandler(req.body, {
+  prismaClient: debugPrismaClient,
+});
+```
+
 ### (List) Filters: Available Operators
 
 To be used with an underscore after the `source` name
@@ -156,8 +202,8 @@ The `payload` column stores a `AuditLogPayload` object:
 
 ```ts
 type AuditLogPayload = {
-  id: Identifier;       // record id
-  data?: object;        // the new values sent by react-admin (present on create / update)
+  id: Identifier; // record id
+  data?: object; // the new values sent by react-admin (present on create / update)
   previousData?: object; // the record values before the change (present on update)
 };
 ```

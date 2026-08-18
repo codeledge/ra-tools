@@ -1,4 +1,4 @@
-import { getModel } from "./getModel";
+import { getModel, type ResourceToModelMap } from "./getModel";
 import { GetManyRequest } from "./Http";
 import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
@@ -12,6 +12,7 @@ export type GetManyArgs = {
 export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = Args & {
   debug?: boolean;
   primaryKey?: string;
+  resourceToModelMap?: ResourceToModelMap;
   transformRow?: (data: any) => any | Promise<any>;
   transformRows?: (rows: any[]) => any[] | Promise<any[]>;
 };
@@ -22,7 +23,7 @@ export const getManyHandler = async <Args extends GetManyArgs>(
   options?: GetManyOptions<Args>,
 ) => {
   const { ids } = req.params;
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
 
   const primaryKey = options?.primaryKey ?? "id";
 
