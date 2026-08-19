@@ -25,14 +25,22 @@ export const auditHandler = async (
     return;
   }
 
-  if (mergedOptions.enabledResources && !(request.model in mergedOptions)) {
+  if (
+    mergedOptions.enabledResources &&
+    !mergedOptions.enabledResources.includes(request.resource)
+  ) {
     return;
   }
 
   if (request.method === "updateMany" || request.method === "deleteMany") {
     if (previousRows) {
       for (const row of previousRows.rows) {
-        await createAuditEntry(mergedOptions, request, row[previousRows.primaryKey], row);
+        await createAuditEntry(
+          mergedOptions,
+          request,
+          row[previousRows.primaryKey],
+          row,
+        );
       }
     } else {
       for (const id of request.params.ids) {

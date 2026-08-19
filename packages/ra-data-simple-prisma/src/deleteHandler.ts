@@ -1,31 +1,32 @@
 import { auditHandler } from "./audit/auditHandler";
 import { AuditOptions } from "./audit/types";
-import { getModel } from "./getModel";
+import { getModel, type ResourceToModelMap } from "./getModel";
 import { DeleteRequest } from "./Http";
 import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
+
+export type DeleteArgs = {
+  include?: object | null;
+  select?: object | null;
+  where?: object | null;
+};
 
 export type DeleteOptions = {
   softDeleteField?: string;
   debug?: boolean;
   audit?: AuditOptions;
   primaryKey?: string;
+  resourceToModelMap?: ResourceToModelMap;
 };
 
 // NOTE: generic type W is not used in this function yet
 
-export const deleteHandler = async <
-  W extends {
-    include?: object | null;
-    select?: object | null;
-    where?: object | null;
-  },
->(
+export const deleteHandler = async <W extends DeleteArgs>(
   req: DeleteRequest,
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: DeleteOptions,
 ) => {
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
   const { id } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
 

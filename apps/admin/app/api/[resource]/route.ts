@@ -7,6 +7,9 @@ const route = apiHandler(
   async (raPayload, { sessionAuthProvider: authProvider }) => {
     const response = await defaultHandler(raPayload, prismaClient, {
       getList: { debug: false },
+      resourceToModelMap: {
+        admin: "adminUser",
+      },
       audit: {
         model: prismaClient.audit,
         authProvider,
@@ -14,7 +17,7 @@ const route = apiHandler(
       },
     });
     return NextResponse.json(response);
-  }
+  },
 );
 
 export { route as GET, route as POST };

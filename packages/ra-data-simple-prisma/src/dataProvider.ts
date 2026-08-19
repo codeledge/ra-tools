@@ -15,7 +15,6 @@ export const dataProvider = (
   options?: {
     headers?: CreateAxiosDefaults["headers"];
     withCredentials?: boolean;
-    resourceToModelMap?: Record<string, string>;
     axiosInterceptors?: {
       response?: {
         onFulfilled?: AxiosInterceptorFulfilled<any>;
@@ -28,7 +27,7 @@ export const dataProvider = (
         options?: AxiosInterceptorOptions;
       }[];
     };
-  }
+  },
 ): DataProvider => {
   const apiService = axios.create({
     baseURL: endpoint,
@@ -44,16 +43,16 @@ export const dataProvider = (
         apiService.interceptors.request.use(
           value.onFulfilled,
           value.onRejected,
-          value.options
-        )
+          value.options,
+        ),
       );
 
     if (options.axiosInterceptors.response)
       options.axiosInterceptors.response.forEach((value) =>
         apiService.interceptors.response.use(
           value.onFulfilled,
-          value.onRejected
-        )
+          value.onRejected,
+        ),
       );
   }
 
@@ -64,7 +63,6 @@ export const dataProvider = (
           method: "getList",
           resource,
           params,
-          model: options?.resourceToModelMap?.[resource] ?? undefined,
         })
         .catch(reactAdminAxiosErrorHandler);
     },
@@ -76,7 +74,6 @@ export const dataProvider = (
           method: "getOne",
           resource,
           params,
-          model: options?.resourceToModelMap?.[resource] ?? undefined,
         })
         .catch(reactAdminAxiosErrorHandler);
     },
@@ -86,7 +83,6 @@ export const dataProvider = (
           method: "getMany",
           resource,
           params,
-          model: options?.resourceToModelMap?.[resource] ?? undefined,
         })
         .catch(reactAdminAxiosErrorHandler);
     },
@@ -96,7 +92,6 @@ export const dataProvider = (
           method: "getManyReference",
           resource,
           params,
-          model: options?.resourceToModelMap?.[resource] ?? undefined,
         })
         .catch(reactAdminAxiosErrorHandler);
     },
@@ -106,7 +101,6 @@ export const dataProvider = (
           method: "create",
           resource,
           params,
-          model: options?.resourceToModelMap?.[resource] ?? undefined,
         })
         .catch(reactAdminAxiosErrorHandler);
     },
@@ -118,7 +112,6 @@ export const dataProvider = (
           method: "update",
           resource,
           params,
-          model: options?.resourceToModelMap?.[resource] ?? undefined,
         })
         .catch(reactAdminAxiosErrorHandler);
     },
@@ -128,7 +121,6 @@ export const dataProvider = (
           method: "updateMany",
           resource,
           params,
-          model: options?.resourceToModelMap?.[resource] ?? undefined,
         })
         .catch(reactAdminAxiosErrorHandler);
     },
@@ -140,7 +132,6 @@ export const dataProvider = (
           method: "delete",
           resource,
           params,
-          model: options?.resourceToModelMap?.[resource] ?? undefined,
         })
         .catch(reactAdminAxiosErrorHandler);
     },
@@ -150,7 +141,6 @@ export const dataProvider = (
           method: "deleteMany",
           resource,
           params,
-          model: options?.resourceToModelMap?.[resource] ?? undefined,
         })
         .catch(reactAdminAxiosErrorHandler);
     },
@@ -169,6 +159,6 @@ const reactAdminAxiosErrorHandler = (error: AxiosError) => {
   throw new HttpError(
     (error?.response?.data as any)?.message || error?.response?.statusText,
     error?.response?.status,
-    error?.response?.data
+    error?.response?.data,
   );
 };

@@ -1,7 +1,7 @@
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
-import { getModel } from "./getModel";
+import { getModel, type ResourceToModelMap } from "./getModel";
 import { GetManyReferenceRequest } from "./Http";
 import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
@@ -13,17 +13,18 @@ export type GetManyReferenceArgs = {
 };
 
 export type GetManyReferenceOptions<
-  Args extends GetManyReferenceArgs = GetManyReferenceArgs
+  Args extends GetManyReferenceArgs = GetManyReferenceArgs,
 > = Args & {
   debug?: boolean;
   primaryKey?: string;
+  resourceToModelMap?: ResourceToModelMap;
   transformRow?: (data: any) => any | Promise<any>;
   transformRows?: (rows: any[]) => any[] | Promise<any[]>;
   filterMode?: FilterMode;
 };
 
 export const getManyReferenceHandler = async <
-  Args extends GetManyReferenceArgs
+  Args extends GetManyReferenceArgs,
 >(
   req: GetManyReferenceRequest,
   prismaClient: PrismaClientOrDynamicClientExtension,
@@ -31,7 +32,7 @@ export const getManyReferenceHandler = async <
 ) => {
   const { id, target } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
   const orderBy = extractOrderBy(req);
 
   const where = extractWhere(req, {
