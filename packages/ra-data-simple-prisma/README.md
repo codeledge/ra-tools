@@ -61,6 +61,29 @@ const handler = async (req: Request) => {
 export { handler as GET, handler as POST };
 ```
 
+### Remix
+
+The data provider sends all React Admin operations as `POST` requests, so use a
+Remix resource route `action` to read the JSON payload. For example, in a
+catch-all route such as `app/routes/api.$.tsx`:
+
+```tsx
+import { json, type ActionFunctionArgs } from "@remix-run/node";
+import { defaultHandler, type RaPayload } from "ra-data-simple-prisma";
+import { prisma } from "../your/prisma/client";
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const body = (await request.json()) as RaPayload;
+  const result = await defaultHandler(body, prisma);
+
+  return json(result);
+};
+```
+
+If the route also needs to support `GET` requests from other clients, export a
+separate `loader` and parse its input from the URL rather than calling
+`request.json()`.
+
 ### Bind shared defaults
 
 Lazy?
