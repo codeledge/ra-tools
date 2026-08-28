@@ -7,12 +7,14 @@ Check the example apps to see common usages or use them as a boilerplate.
 # Packages
 
 - [ra-data-simple-prisma](./packages/ra-data-simple-prisma/)
+- [ra-data-duckdb](./packages/ra-data-duckdb/)
 - [next-auth-prisma-adapter](./packages/next-auth-prisma-adapter/)
 
 # Examples
 
 [example admin app](./apps/admin/) Debug, test, and develop the packages, but also use it as the admin/CMS for the website!
 [example website](./apps/website/) A nextjs/mui boilerplate to show the data (very much under construction yet)
+[DuckDB admin example](./apps/duckdb-admin/) Minimal in-memory DuckDB and React Admin app.
 
 ### Development
 
