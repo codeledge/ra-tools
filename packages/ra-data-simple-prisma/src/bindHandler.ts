@@ -68,6 +68,18 @@ export type HandlerDefaultsOverride = {
   audit?: Partial<AuditOptions>;
 };
 
+/**
+ * Per-call options for a bound handler. Shared default keys (`prismaClient`,
+ * `resourceToModelMap`, `audit`) stay partial so call sites can override them
+ * without satisfying the full handler option types (e.g. `AuditOptions` requires
+ * `authProvider`, which is usually supplied only at the call site).
+ */
+export type BoundHandlerOptions<Opts extends object> = Omit<
+  Opts,
+  keyof HandlerDefaultsOverride
+> &
+  HandlerDefaultsOverride;
+
 const resolvePrismaClient = (
   defaults: BindHandlerDefaults,
   options?: HandlerDefaultsOverride,
@@ -75,10 +87,10 @@ const resolvePrismaClient = (
 
 const mergeHandlerOptions = <Opts extends object>(
   defaults: BindWriteHandlerDefaults,
-  options?: Opts & HandlerDefaultsOverride,
+  options?: BoundHandlerOptions<Opts>,
 ): Opts => {
-  const { prismaClient: _prismaClient, ...callRest } = (options ?? {}) as Opts &
-    HandlerDefaultsOverride;
+  const { prismaClient: _prismaClient, ...callRest } = (options ??
+    {}) as BoundHandlerOptions<Opts>;
   const { prismaClient: _defaultPrismaClient, ...defaultRest } = defaults;
 
   const mergedAudit =
@@ -96,12 +108,10 @@ const mergeHandlerOptions = <Opts extends object>(
   } as Opts;
 };
 
-export const bindCreateHandler = (
-  defaults: BindWriteHandlerDefaults & CreateOptions,
-) => {
+export const bindCreateHandler = (defaults: BindWriteHandlerDefaults) => {
   return <Args extends CreateArgs>(
     req: CreateRequest,
-    options?: CreateOptions<Omit<Args, "data">> & HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<CreateOptions<Omit<Args, "data">>>,
   ) =>
     createHandler<Args>(
       req,
@@ -110,12 +120,10 @@ export const bindCreateHandler = (
     );
 };
 
-export const bindDeleteHandler = (
-  defaults: BindWriteHandlerDefaults & DeleteOptions,
-) => {
+export const bindDeleteHandler = (defaults: BindWriteHandlerDefaults) => {
   return <W extends DeleteArgs>(
     req: DeleteRequest,
-    options?: DeleteOptions & HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<DeleteOptions>,
   ) =>
     deleteHandler<W>(
       req,
@@ -124,12 +132,10 @@ export const bindDeleteHandler = (
     );
 };
 
-export const bindDeleteManyHandler = (
-  defaults: BindWriteHandlerDefaults & DeleteManyOptions,
-) => {
+export const bindDeleteManyHandler = (defaults: BindWriteHandlerDefaults) => {
   return (
     req: DeleteManyRequest,
-    options?: DeleteManyOptions & HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<DeleteManyOptions>,
   ) =>
     deleteManyHandler(
       req,
@@ -138,12 +144,10 @@ export const bindDeleteManyHandler = (
     );
 };
 
-export const bindGetListHandler = (
-  defaults: BindHandlerDefaults & GetListOptions,
-) => {
+export const bindGetListHandler = (defaults: BindHandlerDefaults) => {
   return <Args extends GetListArgs>(
     req: GetListRequest,
-    options?: GetListOptions<Args> & HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<GetListOptions<Args>>,
   ) =>
     getListHandler<Args>(
       req,
@@ -152,12 +156,10 @@ export const bindGetListHandler = (
     );
 };
 
-export const bindGetInfiniteListHandler = (
-  defaults: BindHandlerDefaults & GetListOptions,
-) => {
+export const bindGetInfiniteListHandler = (defaults: BindHandlerDefaults) => {
   return <Args extends GetListArgs>(
     req: GetListRequest,
-    options?: GetListOptions<Args> & HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<GetListOptions<Args>>,
   ) =>
     getInfiniteListHandler<Args>(
       req,
@@ -166,12 +168,10 @@ export const bindGetInfiniteListHandler = (
     );
 };
 
-export const bindGetManyHandler = (
-  defaults: BindHandlerDefaults & GetManyOptions,
-) => {
+export const bindGetManyHandler = (defaults: BindHandlerDefaults) => {
   return <Args extends GetManyArgs>(
     req: GetManyRequest,
-    options?: GetManyOptions<Args> & HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<GetManyOptions<Args>>,
   ) =>
     getManyHandler<Args>(
       req,
@@ -180,12 +180,10 @@ export const bindGetManyHandler = (
     );
 };
 
-export const bindGetManyReferenceHandler = (
-  defaults: BindHandlerDefaults & GetManyReferenceOptions,
-) => {
+export const bindGetManyReferenceHandler = (defaults: BindHandlerDefaults) => {
   return <Args extends GetManyReferenceArgs>(
     req: GetManyReferenceRequest,
-    options?: GetManyReferenceOptions<Args> & HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<GetManyReferenceOptions<Args>>,
   ) =>
     getManyReferenceHandler<Args>(
       req,
@@ -194,12 +192,10 @@ export const bindGetManyReferenceHandler = (
     );
 };
 
-export const bindGetOneHandler = (
-  defaults: BindHandlerDefaults & GetOneOptions,
-) => {
+export const bindGetOneHandler = (defaults: BindHandlerDefaults) => {
   return <Args extends GetOneArgs>(
     req: GetOneRequest,
-    options?: GetOneOptions<Omit<Args, "where">> & HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<GetOneOptions<Omit<Args, "where">>>,
   ) =>
     getOneHandler<Args>(
       req,
@@ -211,13 +207,10 @@ export const bindGetOneHandler = (
     );
 };
 
-export const bindUpdateHandler = (
-  defaults: BindWriteHandlerDefaults & UpdateOptions,
-) => {
+export const bindUpdateHandler = (defaults: BindWriteHandlerDefaults) => {
   return <Args extends UpdateArgs>(
     req: UpdateRequest,
-    options?: UpdateOptions<Omit<Args, "data" | "where">> &
-      HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<UpdateOptions<Omit<Args, "data" | "where">>>,
   ) =>
     updateHandler<Args>(
       req,
@@ -229,14 +222,12 @@ export const bindUpdateHandler = (
     );
 };
 
-export const bindUpdateManyHandler = (
-  defaults: BindWriteHandlerDefaults &
-    Omit<UpdateOptions, "select" | "include">,
-) => {
+export const bindUpdateManyHandler = (defaults: BindWriteHandlerDefaults) => {
   return <Args extends UpdateArgs>(
     req: UpdateManyRequest,
-    options?: Omit<UpdateOptions<Args>, "select" | "include"> &
-      HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<
+      Omit<UpdateOptions<Args>, "select" | "include">
+    >,
   ) =>
     updateManyHandler<Args>(
       req,
@@ -248,12 +239,10 @@ export const bindUpdateManyHandler = (
     );
 };
 
-export const bindDefaultHandler = (
-  defaults: BindWriteHandlerDefaults & DefaultHandlerOptions,
-) => {
+export const bindDefaultHandler = (defaults: BindWriteHandlerDefaults) => {
   return (
     req: RaPayload,
-    options?: DefaultHandlerOptions & HandlerDefaultsOverride,
+    options?: BoundHandlerOptions<DefaultHandlerOptions>,
   ) =>
     defaultHandler(
       req,

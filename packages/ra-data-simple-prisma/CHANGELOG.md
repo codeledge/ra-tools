@@ -1,5 +1,11 @@
 # ra-data-simple-prisma
 
+## 8.0.1
+
+### Patch Changes
+
+- Fix bind handler TypeScript types so defaults can supply a partial audit config (e.g. the audit model) without requiring a full `AuditOptions` / `authProvider` at bind time. Call-site options use `BoundHandlerOptions` so overrides stay partial too.
+
 ## 8.0.0
 
 ### Major Changes
