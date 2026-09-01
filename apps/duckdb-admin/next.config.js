@@ -4,7 +4,6 @@ const path = require("path");
 const nextConfig = {
   serverExternalPackages: ["@duckdb/node-api"],
   transpilePackages: [
-    "ra-data-duckdb",
     "react-admin",
     "ra-core",
     "ra-ui-materialui",

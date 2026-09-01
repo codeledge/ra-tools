@@ -60,4 +60,4 @@ const handler = async (request: Request) => {
   }
 };
 
-export { handler as GET, handler as POST };
+export { handler as POST };

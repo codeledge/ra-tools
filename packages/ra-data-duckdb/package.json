@@ -1,12 +1,12 @@
 {
   "name": "ra-data-duckdb",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Simple react-admin dataprovider for DuckDB",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/client.js",
+  "module": "./dist/client.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts src/server.ts --format esm,cjs --dts --treeshake --external react-admin --external ra-core --external ra-ui-materialui --external @duckdb/node-api",
+    "build": "tsup src/client.ts src/handlers.ts --format esm,cjs --treeshake --external react-admin --external ra-core --external ra-ui-materialui --external @duckdb/node-api && tsup src/index.ts --dts-only --external react-admin --external ra-core --external ra-ui-materialui --external @duckdb/node-api",
     "dev": "pnpm build --watch",
     "lint": "eslint src --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
@@ -19,13 +19,13 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/client.mjs",
+      "require": "./dist/client.js"
     },
     "./server": {
-      "types": "./dist/server.d.ts",
-      "import": "./dist/server.mjs",
-      "require": "./dist/server.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/handlers.mjs",
+      "require": "./dist/handlers.js"
     }
   },
   "keywords": [
