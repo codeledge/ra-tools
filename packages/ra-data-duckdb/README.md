@@ -2,7 +2,14 @@
 
 Simple react-admin data provider backed by [DuckDB](https://duckdb.org/). Same request shape as [`ra-data-simple-prisma`](../ra-data-simple-prisma/): the browser talks HTTP, the server runs SQL.
 
-See the [DuckDB admin example](../../apps/duckdb-admin/) for a runnable Next.js app.
+The package splits into two parts you wire together in your own stack:
+
+1. **Browser** — `dataProvider` from `ra-data-duckdb` (POSTs `{ method, resource, params }` to your API)
+2. **Server** — `defaultHandler` from `ra-data-duckdb/server` (runs SQL via `@duckdb/node-api`)
+
+Expose the API with Express, Fastify, Hono, Next.js, Remix, or any Node HTTP server — one `POST /:resource` route per resource (or a catch-all) is enough.
+
+Example app: [duckdb-admin](../../apps/duckdb-admin/) (Next.js App Router).
 
 ### Requirements
 
@@ -19,24 +26,65 @@ pnpm i ra-data-duckdb @duckdb/node-api
 bun add ra-data-duckdb @duckdb/node-api
 ```
 
-Import `dataProvider` from `ra-data-duckdb` in the browser. Import handlers from `ra-data-duckdb/server` in API routes — this keeps `react-admin` out of Next.js server bundles (required with the App Router).
+Import `dataProvider` from `ra-data-duckdb` in the browser. Import handlers from `ra-data-duckdb/server` on your backend.
 
-The data provider sends every React Admin operation as an HTTP **POST** with a JSON body (`{ method, resource, params }`).
+The data provider sends every React Admin operation as an HTTP **POST** to `/{resource}` with a JSON body: `{ method, resource, params }`.
 
 ### Frontend
+
+Works with any React setup (Vite, CRA, Next.js client components, etc.):
 
 ```tsx
 import { Admin, Resource } from "react-admin";
 import { dataProvider } from "ra-data-duckdb";
 
 const ReactAdmin = () => (
-  <Admin dataProvider={dataProvider("/api")}>
+  <Admin dataProvider={dataProvider("http://localhost:3001")}>
     <Resource name="users" />
   </Admin>
 );
 ```
 
+Point `dataProvider` at your API base URL. React Admin will POST to `http://localhost:3001/users`, `http://localhost:3001/posts`, and so on.
+
+### Backend (Express)
+
+Catch-all route: one `POST /:resource` handler is enough for every resource.
+
+```ts
+import { DuckDBInstance } from "@duckdb/node-api";
+import cors from "cors";
+import express from "express";
+import { defaultHandler, fromDuckDBConnection } from "ra-data-duckdb/server";
+
+const instance = await DuckDBInstance.create("data.duckdb");
+const connection = await instance.connect();
+const db = fromDuckDBConnection(connection);
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.post("/:resource", async (req, res) => {
+  const result = await defaultHandler(
+    { ...req.body, resource: req.params.resource },
+    db,
+    {
+      resourceToTableMap: { users: "app_users" },
+      getList: { searchColumns: ["name", "email"] },
+    },
+  );
+  res.json(result);
+});
+
+app.listen(3001);
+```
+
+Use the same pattern with Fastify, Hono, Koa, or plain `node:http` — wire `defaultHandler` into whatever receives the POST body.
+
 ### Backend (Next.js App Router)
+
+Import handlers from `ra-data-duckdb/server` so `react-admin` stays out of server bundles.
 
 ```ts
 // app/api/[resource]/route.ts
@@ -60,7 +108,7 @@ export async function POST(req: Request) {
 }
 ```
 
-Top-level `await` is valid in Next.js route modules. Reuse a single DuckDB connection across requests (see the [example app](../../apps/duckdb-admin/)).
+See also: [duckdb-admin example](../../apps/duckdb-admin/).
 
 ### Backend (Next.js Pages Router)
 
@@ -152,26 +200,26 @@ import {
   getListHandler,
 } from "ra-data-duckdb/server";
 
-export async function POST(req: Request) {
-  const body = await req.json();
+app.post("/:resource", async (req, res) => {
+  const body = { ...req.body, resource: req.params.resource };
 
   switch (body.method) {
     case "getList":
-      return NextResponse.json(
+      return res.json(
         await getListHandler(body, db, {
           searchColumns: ["name", "email"],
         }),
       );
     case "create":
-      return NextResponse.json(
+      return res.json(
         await createHandler(body, db, {
           allowOnlyFields: { name: true, email: true },
         }),
       );
     default:
-      return NextResponse.json(await defaultHandler(body, db));
+      return res.json(await defaultHandler(body, db));
   }
-}
+});
 ```
 
 ### Schema
