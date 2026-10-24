@@ -1,0 +1,28 @@
+{
+  "name": "drizzle-admin-example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "NODE_OPTIONS=--no-webstorage next dev -p 3040",
+    "build": "NODE_OPTIONS=--no-webstorage next build",
+    "start": "NODE_OPTIONS=--no-webstorage next start -p 3040"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.10",
+    "@mui/icons-material": "5.17.1",
+    "@mui/material": "5.17.1",
+    "drizzle-orm": "1.0.0-rc.4",
+    "next": "16.4.2",
+    "ra-data-drizzle": "workspace:*",
+    "react": "19.3.1",
+    "react-admin": "^5.14.1",
+    "react-dom": "19.3.1",
+    "react-hook-form": "^7.65.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "^5.9.3"
+  }
+}
