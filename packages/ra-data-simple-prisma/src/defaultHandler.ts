@@ -8,6 +8,7 @@ import {
   type GetManyReferenceOptions,
   getManyReferenceHandler,
 } from "./getManyReferenceHandler";
+import { type ResourceToModelMap } from "./getModel";
 import { type GetOneOptions, getOneHandler } from "./getOneHandler";
 import type {
   CreateRequest,
@@ -25,37 +26,48 @@ import type { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 import { type UpdateOptions, updateHandler } from "./updateHandler";
 import { updateManyHandler } from "./updateManyHandler";
 
+export type DefaultHandlerOptions = {
+  audit?: AuditOptions;
+  create?: CreateOptions;
+  delete?: DeleteOptions;
+  deleteMany?: DeleteManyOptions;
+  getList?: GetListOptions;
+  getMany?: GetManyOptions;
+  getManyReference?: GetManyReferenceOptions;
+  getOne?: GetOneOptions;
+  resourceToModelMap?: ResourceToModelMap;
+  update?: UpdateOptions;
+};
+
+const withResourceToModelMap = <T extends object>(
+  handlerOptions: T | undefined,
+  resourceToModelMap?: ResourceToModelMap,
+) => ({
+  ...(resourceToModelMap ? { resourceToModelMap } : {}),
+  ...handlerOptions,
+});
+
 export const defaultHandler = async (
   req: RaPayload,
   prismaClient: PrismaClientOrDynamicClientExtension,
-  options?: {
-    audit?: AuditOptions;
-    create?: CreateOptions;
-    delete?: DeleteOptions;
-    deleteMany?: DeleteManyOptions;
-    getList?: GetListOptions;
-    getMany?: GetManyOptions;
-    getManyReference?: GetManyReferenceOptions;
-    getOne?: GetOneOptions;
-    update?: UpdateOptions;
-  }
+  options?: DefaultHandlerOptions,
 ) => {
   switch (req.method) {
     case "create": {
       return await createHandler(req as CreateRequest, prismaClient, {
-        ...options?.create,
+        ...withResourceToModelMap(options?.create, options?.resourceToModelMap),
         audit: options?.audit,
       });
     }
     case "delete": {
       return await deleteHandler(req as DeleteRequest, prismaClient, {
-        ...options?.delete,
+        ...withResourceToModelMap(options?.delete, options?.resourceToModelMap),
         audit: options?.audit,
       });
     }
     case "deleteMany": {
       return deleteManyHandler(req as DeleteManyRequest, prismaClient, {
-        ...options?.delete,
+        ...withResourceToModelMap(options?.delete, options?.resourceToModelMap),
         audit: options?.audit,
       });
     }
@@ -63,35 +75,42 @@ export const defaultHandler = async (
       return getListHandler(
         req as GetListRequest,
         prismaClient,
-        options?.getList
+        withResourceToModelMap(options?.getList, options?.resourceToModelMap),
       );
     }
     case "getMany": {
       return getManyHandler(
         req as GetManyRequest,
         prismaClient,
-        options?.getMany
+        withResourceToModelMap(options?.getMany, options?.resourceToModelMap),
       );
     }
     case "getManyReference": {
       return getManyReferenceHandler(
         req as GetManyReferenceRequest,
         prismaClient,
-        options?.getManyReference
+        withResourceToModelMap(
+          options?.getManyReference,
+          options?.resourceToModelMap,
+        ),
       );
     }
     case "getOne": {
-      return getOneHandler(req as GetOneRequest, prismaClient, options?.getOne);
+      return getOneHandler(
+        req as GetOneRequest,
+        prismaClient,
+        withResourceToModelMap(options?.getOne, options?.resourceToModelMap),
+      );
     }
     case "update": {
       return await updateHandler(req as UpdateRequest, prismaClient, {
-        ...options?.update,
+        ...withResourceToModelMap(options?.update, options?.resourceToModelMap),
         audit: options?.audit,
       });
     }
     case "updateMany": {
       return await updateManyHandler(req as UpdateManyRequest, prismaClient, {
-        ...options?.update,
+        ...withResourceToModelMap(options?.update, options?.resourceToModelMap),
         audit: options?.audit,
       });
     }

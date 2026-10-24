@@ -24,15 +24,34 @@ import { getOneHandler } from "../src/getOneHandler";
 import { updateHandler } from "../src/updateHandler";
 import { updateManyHandler } from "../src/updateManyHandler";
 
-const mockCreateHandler = createHandler as jest.MockedFunction<typeof createHandler>;
-const mockDeleteHandler = deleteHandler as jest.MockedFunction<typeof deleteHandler>;
-const mockDeleteManyHandler = deleteManyHandler as jest.MockedFunction<typeof deleteManyHandler>;
-const mockGetListHandler = getListHandler as jest.MockedFunction<typeof getListHandler>;
-const mockGetManyHandler = getManyHandler as jest.MockedFunction<typeof getManyHandler>;
-const mockGetManyReferenceHandler = getManyReferenceHandler as jest.MockedFunction<typeof getManyReferenceHandler>;
-const mockGetOneHandler = getOneHandler as jest.MockedFunction<typeof getOneHandler>;
-const mockUpdateHandler = updateHandler as jest.MockedFunction<typeof updateHandler>;
-const mockUpdateManyHandler = updateManyHandler as jest.MockedFunction<typeof updateManyHandler>;
+const mockCreateHandler = createHandler as jest.MockedFunction<
+  typeof createHandler
+>;
+const mockDeleteHandler = deleteHandler as jest.MockedFunction<
+  typeof deleteHandler
+>;
+const mockDeleteManyHandler = deleteManyHandler as jest.MockedFunction<
+  typeof deleteManyHandler
+>;
+const mockGetListHandler = getListHandler as jest.MockedFunction<
+  typeof getListHandler
+>;
+const mockGetManyHandler = getManyHandler as jest.MockedFunction<
+  typeof getManyHandler
+>;
+const mockGetManyReferenceHandler =
+  getManyReferenceHandler as jest.MockedFunction<
+    typeof getManyReferenceHandler
+  >;
+const mockGetOneHandler = getOneHandler as jest.MockedFunction<
+  typeof getOneHandler
+>;
+const mockUpdateHandler = updateHandler as jest.MockedFunction<
+  typeof updateHandler
+>;
+const mockUpdateManyHandler = updateManyHandler as jest.MockedFunction<
+  typeof updateManyHandler
+>;
 
 const prismaClient = {} as unknown as PrismaClientOrDynamicClientExtension;
 
@@ -51,7 +70,10 @@ beforeEach(() => {
   mockDeleteManyHandler.mockResolvedValue({ data: [1] } as never);
   mockGetListHandler.mockResolvedValue({ data: [], total: 0 } as never);
   mockGetManyHandler.mockResolvedValue({ data: [] } as never);
-  mockGetManyReferenceHandler.mockResolvedValue({ data: [], total: 0 } as never);
+  mockGetManyReferenceHandler.mockResolvedValue({
+    data: [],
+    total: 0,
+  } as never);
   mockGetOneHandler.mockResolvedValue(mockResult as never);
   mockUpdateHandler.mockResolvedValue(mockResult as never);
   mockUpdateManyHandler.mockResolvedValue({ data: [1] } as never);
@@ -67,7 +89,9 @@ describe("defaultHandler", () => {
 
     test("calls createHandler with the request and prismaClient", async () => {
       await defaultHandler(req, prismaClient);
-      expect(mockCreateHandler).toHaveBeenCalledWith(req, prismaClient, {});
+      expect(mockCreateHandler).toHaveBeenCalledWith(req, prismaClient, {
+        audit: undefined,
+      });
     });
 
     test("passes create options to createHandler", async () => {
@@ -81,7 +105,9 @@ describe("defaultHandler", () => {
 
     test("passes audit options to createHandler", async () => {
       const auditModel = { create: jest.fn() };
-      const options = { audit: { model: auditModel, authProvider: mockAuthProvider } };
+      const options = {
+        audit: { model: auditModel, authProvider: mockAuthProvider },
+      };
       await defaultHandler(req, prismaClient, options);
       expect(mockCreateHandler).toHaveBeenCalledWith(req, prismaClient, {
         audit: expect.objectContaining({ model: auditModel }),
@@ -103,7 +129,9 @@ describe("defaultHandler", () => {
 
     test("calls deleteHandler with the request and prismaClient", async () => {
       await defaultHandler(req, prismaClient);
-      expect(mockDeleteHandler).toHaveBeenCalledWith(req, prismaClient, {});
+      expect(mockDeleteHandler).toHaveBeenCalledWith(req, prismaClient, {
+        audit: undefined,
+      });
     });
 
     test("passes delete options to deleteHandler", async () => {
@@ -117,7 +145,9 @@ describe("defaultHandler", () => {
 
     test("passes audit options to deleteHandler", async () => {
       const auditModel = { create: jest.fn() };
-      const options = { audit: { model: auditModel, authProvider: mockAuthProvider } };
+      const options = {
+        audit: { model: auditModel, authProvider: mockAuthProvider },
+      };
       await defaultHandler(req, prismaClient, options);
       expect(mockDeleteHandler).toHaveBeenCalledWith(req, prismaClient, {
         audit: expect.objectContaining({ model: auditModel }),
@@ -139,7 +169,9 @@ describe("defaultHandler", () => {
 
     test("calls deleteManyHandler with the request and prismaClient", async () => {
       await defaultHandler(req, prismaClient);
-      expect(mockDeleteManyHandler).toHaveBeenCalledWith(req, prismaClient, {});
+      expect(mockDeleteManyHandler).toHaveBeenCalledWith(req, prismaClient, {
+        audit: undefined,
+      });
     });
 
     test("passes delete options to deleteManyHandler", async () => {
@@ -153,7 +185,9 @@ describe("defaultHandler", () => {
 
     test("passes audit options to deleteManyHandler", async () => {
       const auditModel = { create: jest.fn() };
-      const options = { audit: { model: auditModel, authProvider: mockAuthProvider } };
+      const options = {
+        audit: { model: auditModel, authProvider: mockAuthProvider },
+      };
       await defaultHandler(req, prismaClient, options);
       expect(mockDeleteManyHandler).toHaveBeenCalledWith(req, prismaClient, {
         audit: expect.objectContaining({ model: auditModel }),
@@ -179,13 +213,15 @@ describe("defaultHandler", () => {
 
     test("calls getListHandler with the request and prismaClient", async () => {
       await defaultHandler(req, prismaClient);
-      expect(mockGetListHandler).toHaveBeenCalledWith(req, prismaClient, undefined);
+      expect(mockGetListHandler).toHaveBeenCalledWith(req, prismaClient, {});
     });
 
     test("passes getList options to getListHandler", async () => {
       const options = { getList: { debug: true } };
       await defaultHandler(req, prismaClient, options);
-      expect(mockGetListHandler).toHaveBeenCalledWith(req, prismaClient, { debug: true });
+      expect(mockGetListHandler).toHaveBeenCalledWith(req, prismaClient, {
+        debug: true,
+      });
     });
 
     test("returns the result from getListHandler", async () => {
@@ -203,13 +239,15 @@ describe("defaultHandler", () => {
 
     test("calls getManyHandler with the request and prismaClient", async () => {
       await defaultHandler(req, prismaClient);
-      expect(mockGetManyHandler).toHaveBeenCalledWith(req, prismaClient, undefined);
+      expect(mockGetManyHandler).toHaveBeenCalledWith(req, prismaClient, {});
     });
 
     test("passes getMany options to getManyHandler", async () => {
       const options = { getMany: { debug: true } };
       await defaultHandler(req, prismaClient, options);
-      expect(mockGetManyHandler).toHaveBeenCalledWith(req, prismaClient, { debug: true });
+      expect(mockGetManyHandler).toHaveBeenCalledWith(req, prismaClient, {
+        debug: true,
+      });
     });
 
     test("returns the result from getManyHandler", async () => {
@@ -233,13 +271,21 @@ describe("defaultHandler", () => {
 
     test("calls getManyReferenceHandler with the request and prismaClient", async () => {
       await defaultHandler(req, prismaClient);
-      expect(mockGetManyReferenceHandler).toHaveBeenCalledWith(req, prismaClient, undefined);
+      expect(mockGetManyReferenceHandler).toHaveBeenCalledWith(
+        req,
+        prismaClient,
+        {},
+      );
     });
 
     test("passes getManyReference options to getManyReferenceHandler", async () => {
       const options = { getManyReference: { debug: true } };
       await defaultHandler(req, prismaClient, options);
-      expect(mockGetManyReferenceHandler).toHaveBeenCalledWith(req, prismaClient, { debug: true });
+      expect(mockGetManyReferenceHandler).toHaveBeenCalledWith(
+        req,
+        prismaClient,
+        { debug: true },
+      );
     });
 
     test("returns the result from getManyReferenceHandler", async () => {
@@ -257,13 +303,15 @@ describe("defaultHandler", () => {
 
     test("calls getOneHandler with the request and prismaClient", async () => {
       await defaultHandler(req, prismaClient);
-      expect(mockGetOneHandler).toHaveBeenCalledWith(req, prismaClient, undefined);
+      expect(mockGetOneHandler).toHaveBeenCalledWith(req, prismaClient, {});
     });
 
     test("passes getOne options to getOneHandler", async () => {
       const options = { getOne: { debug: true } };
       await defaultHandler(req, prismaClient, options);
-      expect(mockGetOneHandler).toHaveBeenCalledWith(req, prismaClient, { debug: true });
+      expect(mockGetOneHandler).toHaveBeenCalledWith(req, prismaClient, {
+        debug: true,
+      });
     });
 
     test("returns the result from getOneHandler", async () => {
@@ -276,12 +324,18 @@ describe("defaultHandler", () => {
     const req: RaPayload = {
       method: "update",
       resource: "post",
-      params: { id: 1, data: { title: "Updated" }, previousData: { id: 1, title: "Old" } },
+      params: {
+        id: 1,
+        data: { title: "Updated" },
+        previousData: { id: 1, title: "Old" },
+      },
     };
 
     test("calls updateHandler with the request and prismaClient", async () => {
       await defaultHandler(req, prismaClient);
-      expect(mockUpdateHandler).toHaveBeenCalledWith(req, prismaClient, {});
+      expect(mockUpdateHandler).toHaveBeenCalledWith(req, prismaClient, {
+        audit: undefined,
+      });
     });
 
     test("passes update options to updateHandler", async () => {
@@ -295,7 +349,9 @@ describe("defaultHandler", () => {
 
     test("passes audit options to updateHandler", async () => {
       const auditModel = { create: jest.fn() };
-      const options = { audit: { model: auditModel, authProvider: mockAuthProvider } };
+      const options = {
+        audit: { model: auditModel, authProvider: mockAuthProvider },
+      };
       await defaultHandler(req, prismaClient, options);
       expect(mockUpdateHandler).toHaveBeenCalledWith(req, prismaClient, {
         audit: expect.objectContaining({ model: auditModel }),
@@ -317,7 +373,9 @@ describe("defaultHandler", () => {
 
     test("calls updateManyHandler with the request and prismaClient", async () => {
       await defaultHandler(req, prismaClient);
-      expect(mockUpdateManyHandler).toHaveBeenCalledWith(req, prismaClient, {});
+      expect(mockUpdateManyHandler).toHaveBeenCalledWith(req, prismaClient, {
+        audit: undefined,
+      });
     });
 
     test("passes update options to updateManyHandler", async () => {
@@ -331,7 +389,9 @@ describe("defaultHandler", () => {
 
     test("passes audit options to updateManyHandler", async () => {
       const auditModel = { create: jest.fn() };
-      const options = { audit: { model: auditModel, authProvider: mockAuthProvider } };
+      const options = {
+        audit: { model: auditModel, authProvider: mockAuthProvider },
+      };
       await defaultHandler(req, prismaClient, options);
       expect(mockUpdateManyHandler).toHaveBeenCalledWith(req, prismaClient, {
         audit: expect.objectContaining({ model: auditModel }),
@@ -346,8 +406,67 @@ describe("defaultHandler", () => {
 
   describe("invalid method", () => {
     test("throws an error for an unknown method", async () => {
-      const req = { method: "unknownMethod", resource: "post", params: {} } as unknown as RaPayload;
-      await expect(defaultHandler(req, prismaClient)).rejects.toThrow("Invalid method");
+      const req = {
+        method: "unknownMethod",
+        resource: "post",
+        params: {},
+      } as unknown as RaPayload;
+      await expect(defaultHandler(req, prismaClient)).rejects.toThrow(
+        "Invalid method",
+      );
+    });
+  });
+
+  describe("resourceToModelMap", () => {
+    const resourceToModelMap = { post: "blog_post" };
+
+    test("passes the map to getListHandler", async () => {
+      const req: RaPayload = {
+        method: "getList",
+        resource: "post",
+        params: {
+          filter: {},
+          pagination: { page: 1, perPage: 10 },
+          sort: { field: "id", order: "ASC" },
+        },
+      };
+      await defaultHandler(req, prismaClient, { resourceToModelMap });
+      expect(mockGetListHandler).toHaveBeenCalledWith(req, prismaClient, {
+        resourceToModelMap,
+      });
+    });
+
+    test("merges the map with method options", async () => {
+      const req: RaPayload = {
+        method: "getOne",
+        resource: "post",
+        params: { id: 1 },
+      };
+      await defaultHandler(req, prismaClient, {
+        resourceToModelMap,
+        getOne: { debug: true },
+      });
+      expect(mockGetOneHandler).toHaveBeenCalledWith(req, prismaClient, {
+        resourceToModelMap,
+        debug: true,
+      });
+    });
+
+    test("lets per-method resourceToModelMap win", async () => {
+      const req: RaPayload = {
+        method: "create",
+        resource: "post",
+        params: { data: { title: "New Post" } },
+      };
+      const methodMap = { post: "legacy_post" };
+      await defaultHandler(req, prismaClient, {
+        resourceToModelMap,
+        create: { resourceToModelMap: methodMap },
+      });
+      expect(mockCreateHandler).toHaveBeenCalledWith(req, prismaClient, {
+        resourceToModelMap: methodMap,
+        audit: undefined,
+      });
     });
   });
 });

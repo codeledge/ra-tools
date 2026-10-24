@@ -1,5 +1,74 @@
 # ra-data-simple-prisma
 
+## 8.0.1
+
+### Patch Changes
+
+- Fix bind handler TypeScript types so defaults can supply a partial audit config (e.g. the audit model) without requiring a full `AuditOptions` / `authProvider` at bind time. Call-site options use `BoundHandlerOptions` so overrides stay partial too.
+
+## 8.0.0
+
+### Major Changes
+
+- `resourceToModelMap` is server-only. The frontend `dataProvider` no longer accepts it, and the request payload no longer includes `model`.
+- Bind functions (`bindCreateHandler`, `bindGetListHandler`, …) so you can set shared handler defaults once.
+
+### Migration
+
+1. Remove `resourceToModelMap` from the client `dataProvider(...)` call.
+
+```ts
+// before
+dataProvider("/api", {
+  resourceToModelMap: { admin: "adminUser" },
+});
+
+// after
+dataProvider("/api");
+```
+
+2. Pass `resourceToModelMap` on the server, on every handler (or once on `defaultHandler` if that is your catch-all).
+
+```ts
+await defaultHandler(body, prismaClient, {
+  resourceToModelMap: { admin: "adminUser" },
+});
+
+await getListHandler(body, prismaClient, {
+  resourceToModelMap: { admin: "adminUser" },
+});
+```
+
+3. If you don't want to repeat that map (and the prisma client / audit defaults) on every call, bind the handlers once. Call-site options still override.
+
+```ts
+export const getListHandler = bindGetListHandler({
+  prismaClient,
+  resourceToModelMap: { admin: "adminUser" },
+});
+
+export const createHandler = bindCreateHandler({
+  prismaClient,
+  resourceToModelMap: { admin: "adminUser" },
+  audit: { model: prismaClient.audit_log },
+});
+
+await getListHandler(body);
+await createHandler(body, { audit: { authProvider } });
+```
+
+## 7.7.0
+
+### Minor Changes
+
+- transform rows
+
+## 7.6.0
+
+### Minor Changes
+
+- transformRows
+
 ## 7.5.3
 
 ### Patch Changes

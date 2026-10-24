@@ -2,7 +2,7 @@ import { stringify } from "deverything";
 import { extractOrderBy } from "./extractOrderBy";
 import { extractSkipTake } from "./extractSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
-import { getModel } from "./getModel";
+import { getModel, type ResourceToModelMap } from "./getModel";
 import { GetListRequest } from "./Http";
 import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
@@ -19,7 +19,13 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
   noNullsOnSort?: string[]; // TODO: to be keyof Args["orderBy"] CAREFUL field must be nullable, or prisma will throw
   debug?: boolean;
   primaryKey?: string;
-  transformRow?: (row: any, rowIndex: number, rows: any[]) => any | Promise<any>;
+  resourceToModelMap?: ResourceToModelMap;
+  transformRow?: (
+    row: any,
+    rowIndex: number,
+    rows: any[],
+  ) => any | Promise<any>;
+  transformRows?: (rows: any[]) => any[] | Promise<any[]>;
   filterMode?: FilterMode;
 };
 
@@ -28,7 +34,7 @@ export const getListHandler = async <Args extends GetListArgs>(
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetListOptions<Args>,
 ) => {
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
   const primaryKey = options?.primaryKey ?? "id";
 
   let queryArgs: {
@@ -125,10 +131,16 @@ export const getListHandler = async <Args extends GetListArgs>(
     console.log("getListHandler:total", total);
   }
 
+  let data = rows;
+
   // TRANSFORM DATA
-  const data = options?.transformRow
-    ? await Promise.all(rows.map(options.transformRow))
-    : rows;
+  if (options?.transformRow) {
+    data = await Promise.all(data.map(options.transformRow));
+  }
+
+  if (options?.transformRows) {
+    data = await options.transformRows(data);
+  }
 
   // RESPOND WITH DATA
   const response = {

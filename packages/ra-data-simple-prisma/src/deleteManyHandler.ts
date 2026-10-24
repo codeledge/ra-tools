@@ -1,6 +1,6 @@
 import { auditHandler } from "./audit/auditHandler";
 import { AuditOptions } from "./audit/types";
-import { getModel } from "./getModel";
+import { getModel, type ResourceToModelMap } from "./getModel";
 import { DeleteManyRequest } from "./Http";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
@@ -9,6 +9,7 @@ export type DeleteManyOptions = {
   audit?: AuditOptions;
   debug?: boolean;
   primaryKey?: string;
+  resourceToModelMap?: ResourceToModelMap;
 };
 
 export const deleteManyHandler = async (
@@ -18,7 +19,13 @@ export const deleteManyHandler = async (
 ) => {
   const { ids } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+
+  const rowsToDelete = options?.audit
+    ? await model.findMany({
+        where: { [primaryKey]: { in: ids } },
+      })
+    : undefined;
 
   const deleted = options?.softDeleteField
     ? await model.updateMany({
@@ -32,7 +39,10 @@ export const deleteManyHandler = async (
       });
 
   if (options?.audit) {
-    await auditHandler(req, options?.audit);
+    await auditHandler(req, options.audit, undefined, {
+      rows: rowsToDelete,
+      primaryKey,
+    });
   }
 
   // react-admin expects the ids of the deleted rows

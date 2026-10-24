@@ -1,11 +1,18 @@
 import { AuditOptions, AuditLogPayload, defaultAuditOptions } from "./types";
 import type { RaPayload } from "../Http";
 import type { Identifier } from "react-admin";
+import type { PlainObject } from "deverything";
+
+export type AuditPreviousRows = {
+  rows: PlainObject[];
+  primaryKey: string;
+};
 
 export const auditHandler = async (
   request: RaPayload,
   options: AuditOptions,
   created?: any,
+  previousRows?: AuditPreviousRows,
 ) => {
   const action = request.method.split(/(?=[A-Z])/)[0];
   const mergedOptions = {
@@ -18,13 +25,27 @@ export const auditHandler = async (
     return;
   }
 
-  if (mergedOptions.enabledResources && !(request.model in mergedOptions)) {
+  if (
+    mergedOptions.enabledResources &&
+    !mergedOptions.enabledResources.includes(request.resource)
+  ) {
     return;
   }
 
   if (request.method === "updateMany" || request.method === "deleteMany") {
-    for (const id of request.params.ids) {
-      await createAuditEntry(mergedOptions, request, id);
+    if (previousRows) {
+      for (const row of previousRows.rows) {
+        await createAuditEntry(
+          mergedOptions,
+          request,
+          row[previousRows.primaryKey],
+          row,
+        );
+      }
+    } else {
+      for (const id of request.params.ids) {
+        await createAuditEntry(mergedOptions, request, id);
+      }
     }
   } else if ("id" in request.params) {
     await createAuditEntry(mergedOptions, request, request.params.id);
@@ -37,12 +58,15 @@ export const createAuditEntry = async (
   options: AuditOptions,
   request: RaPayload,
   id: Identifier,
+  previousData?: PlainObject,
 ) => {
   let payload: AuditLogPayload = {
     id,
   };
 
-  if ("previousData" in request.params) {
+  if (previousData) {
+    payload.previousData = previousData;
+  } else if ("previousData" in request.params) {
     payload.previousData = request.params.previousData;
   }
 

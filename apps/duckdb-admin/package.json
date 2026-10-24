@@ -1,0 +1,27 @@
+{
+  "name": "duckdb-admin-example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "NODE_OPTIONS=--no-webstorage next dev -p 3030",
+    "build": "NODE_OPTIONS=--no-webstorage next build",
+    "start": "NODE_OPTIONS=--no-webstorage next start -p 3030"
+  },
+  "dependencies": {
+    "@duckdb/node-api": "1.5.5-r.4",
+    "@mui/icons-material": "5.17.1",
+    "@mui/material": "5.17.1",
+    "next": "15.3.0",
+    "ra-data-duckdb": "workspace:*",
+    "react": "19.1.0",
+    "react-admin": "^5.14.1",
+    "react-dom": "19.1.0",
+    "react-hook-form": "^7.65.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "19.1.1",
+    "@types/react-dom": "19.1.2",
+    "typescript": "^5.9.3"
+  }
+}

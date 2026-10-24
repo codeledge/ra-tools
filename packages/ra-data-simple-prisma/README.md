@@ -71,6 +71,76 @@ export { handler as GET, handler as POST };
 > prefer `ra-data-simple-prisma/server` so that `react-admin` stays out
 > of the server bundle.
 
+### Remix
+
+The data provider sends all React Admin operations as `POST` requests, so use a
+Remix resource route `action` to read the JSON payload. For example, in a
+catch-all route such as `app/routes/api.$.tsx`:
+
+```tsx
+import { json, type ActionFunctionArgs } from "@remix-run/node";
+import { defaultHandler, type RaPayload } from "ra-data-simple-prisma/server";
+import { prisma } from "../your/prisma/client";
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const body = (await request.json()) as RaPayload;
+  const result = await defaultHandler(body, prisma);
+
+  return json(result);
+};
+```
+
+If the route also needs to support `GET` requests from other clients, export a
+separate `loader` and parse its input from the URL rather than calling
+`request.json()`.
+
+### Bind shared defaults
+
+Lazy?
+Each handler has its own bind function, so you don't have to pass the same options on every call. Call-site options override the bound defaults. Write binders accept a default `audit` object.
+
+```ts
+import {
+  bindCreateHandler,
+  bindGetListHandler,
+  bindUpdateHandler,
+} from "ra-data-simple-prisma/server";
+import { prismaRead, prismaWrite } from "../prisma/client";
+
+const resourceToModelMap = {
+  admin: "adminUser",
+  users: "user",
+};
+
+export const createHandler = bindCreateHandler({
+  prismaClient: prismaWrite,
+  resourceToModelMap,
+  audit: { model: prismaWrite.audit_log },
+});
+
+export const updateHandler = bindUpdateHandler({
+  prismaClient: prismaWrite,
+  resourceToModelMap,
+  audit: { model: prismaWrite.audit_log },
+});
+
+export const getListHandler = bindGetListHandler({
+  prismaClient: prismaRead,
+  resourceToModelMap,
+});
+
+await getListHandler(req.body, { include: { posts: true } });
+
+await createHandler(req.body, {
+  audit: { authProvider },
+});
+
+await getListHandler(req.body, {
+  prismaClient: debugPrismaClient,
+});
+```
+
+
 ### (List) Filters: Available Operators
 
 To be used with an underscore after the `source` name
@@ -166,8 +236,8 @@ The `payload` column stores a `AuditLogPayload` object:
 
 ```ts
 type AuditLogPayload = {
-  id: Identifier;       // record id
-  data?: object;        // the new values sent by react-admin (present on create / update)
+  id: Identifier; // record id
+  data?: object; // the new values sent by react-admin (present on create / update)
   previousData?: object; // the record values before the change (present on update)
 };
 ```
@@ -243,6 +313,10 @@ export default function handler(req) {
                 tagIds: post.tags.map((tag) => tag.id);
               }
           },
+          transformRows: async (posts: ServerPost[]): Promise<AugmentedPost[]> => {
+            const stats = await fetchStatsForPosts(posts.map((post) => post.id));
+            return posts.map((post) => ({ ...post, stats: stats[post.id] }));
+          },
         }
       );
       // OR, if using InfiniteList component
@@ -263,6 +337,7 @@ export default function handler(req) {
                 tagIds: post.tags.map((tag) => tag.id);
               }
           },
+          transformRows: ... // same as getListHandler
         }
       );
       break;
@@ -272,6 +347,8 @@ export default function handler(req) {
         prismaClient,
         {
           primaryKey: ... // defaults to "id"
+          transformRow: ... // same as getListHandler
+          transformRows: ... // same as getListHandler
         }
       );
       break;
@@ -281,6 +358,8 @@ export default function handler(req) {
         prismaClient,
         {
           primaryKey: ... // defaults to "id"
+          transformRow: ... // same as getListHandler
+          transformRows: ... // same as getListHandler
         }
       );
       break;

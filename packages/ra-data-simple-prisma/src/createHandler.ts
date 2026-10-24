@@ -1,10 +1,14 @@
 import { firstKey, firstValue, isObject, isString } from "deverything";
 import { auditHandler } from "./audit/auditHandler";
 import type { AuditOptions } from "./audit/types";
-import { getModel } from "./getModel";
+import { getModel, type ResourceToModelMap } from "./getModel";
 import type { CreateRequest } from "./Http";
 import { isNotField } from "./lib/isNotField";
-import type { SetExplicitConnection, SetImplicitConnection, SetImplicitShortcut } from "./lib/types";
+import type {
+  SetExplicitConnection,
+  SetImplicitConnection,
+  SetImplicitShortcut,
+} from "./lib/types";
 import type { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
 export type CreateArgs = {
@@ -18,11 +22,15 @@ export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
     [key: string]: boolean;
   };
   connect?: {
-    [key: string]: SetImplicitShortcut | SetImplicitConnection | SetExplicitConnection;
+    [key: string]:
+      | SetImplicitShortcut
+      | SetImplicitConnection
+      | SetExplicitConnection;
   };
   audit?: AuditOptions;
   debug?: boolean;
   primaryKey?: string;
+  resourceToModelMap?: ResourceToModelMap;
 };
 
 export const createHandler = async <Args extends CreateArgs>(
@@ -30,7 +38,7 @@ export const createHandler = async <Args extends CreateArgs>(
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: CreateOptions<Omit<Args, "data">>, // omit data so the Prisma.ModelCreateArgs can be passed in, without complaining about the data property missing
 ) => {
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
   const { data } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
 
@@ -70,7 +78,9 @@ export const createHandler = async <Args extends CreateArgs>(
       //    });
       // (data) tags: [1, 2, 3] => tags: { connect: [{id: 1}, {id: 2}, {id: 3}] }
       data[prop] = {
-        connect: Array.isArray(value) ? value.map((key) => ({ [foreignConnect]: key })) : { [foreignConnect]: value },
+        connect: Array.isArray(value)
+          ? value.map((key) => ({ [foreignConnect]: key }))
+          : { [foreignConnect]: value },
       };
 
       // in theory no need to remove the original data

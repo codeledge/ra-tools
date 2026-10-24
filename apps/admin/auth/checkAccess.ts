@@ -20,7 +20,7 @@ export const checkAccess = async (payload: RaPayload) => {
   const method = payload.method as ReactAdminFetchActions;
   const action = fetchActionToAction[method];
 
-  const resource = payload.model ?? payload.resource; //model can be undefined
+  const resource = payload.resource;
 
   // Field check done later, needs to get the diff to see if it's actually changed
   const canAccess = await sessionAuthProvider.canAccess?.({

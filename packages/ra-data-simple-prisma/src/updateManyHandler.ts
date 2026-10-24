@@ -11,12 +11,18 @@ export const updateManyHandler = async <Args extends UpdateArgs>(
 ) => {
   const { ids } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
   const data = reduceData(req.params.data, options);
 
   if (options?.debug) {
     console.log("updateManyHandler:data", data);
   }
+
+  const rowsToUpdate = options?.audit
+    ? await model.findMany({
+        where: { [primaryKey]: { in: ids } },
+      })
+    : undefined;
 
   await model.updateMany({
     data,
@@ -24,7 +30,10 @@ export const updateManyHandler = async <Args extends UpdateArgs>(
   });
 
   if (options?.audit) {
-    await auditHandler(req, options?.audit);
+    await auditHandler(req, options.audit, undefined, {
+      rows: rowsToUpdate,
+      primaryKey,
+    });
   }
 
   //react-admin expects a array of ids as response

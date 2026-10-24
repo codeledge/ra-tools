@@ -1,4 +1,4 @@
-import { getModel } from "./getModel";
+import { getModel, type ResourceToModelMap } from "./getModel";
 import { GetManyRequest } from "./Http";
 import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
@@ -12,7 +12,9 @@ export type GetManyArgs = {
 export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = Args & {
   debug?: boolean;
   primaryKey?: string;
+  resourceToModelMap?: ResourceToModelMap;
   transformRow?: (data: any) => any | Promise<any>;
+  transformRows?: (rows: any[]) => any[] | Promise<any[]>;
 };
 
 export const getManyHandler = async <Args extends GetManyArgs>(
@@ -21,7 +23,7 @@ export const getManyHandler = async <Args extends GetManyArgs>(
   options?: GetManyOptions<Args>,
 ) => {
   const { ids } = req.params;
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
 
   const primaryKey = options?.primaryKey ?? "id";
 
@@ -34,7 +36,15 @@ export const getManyHandler = async <Args extends GetManyArgs>(
   });
 
   // TRANSFORM
-  const data = options?.transformRow ? await Promise.all(rows.map(options.transformRow)) : rows;
+  let data = rows;
+
+  if (options?.transformRow) {
+    data = await Promise.all(data.map(options.transformRow));
+  }
+
+  if (options?.transformRows) {
+    data = await options.transformRows(data);
+  }
 
   const response = { data: mapPrimaryKeyToId(data, primaryKey) };
 

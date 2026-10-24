@@ -1,4 +1,4 @@
-import { getModel } from "./getModel";
+import { getModel, type ResourceToModelMap } from "./getModel";
 import { GetOneRequest } from "./Http";
 import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
@@ -13,6 +13,7 @@ export type GetOneArgs = {
 export type GetOneOptions<Args extends GetOneArgs = GetOneArgs> = Args & {
   debug?: boolean;
   primaryKey?: string;
+  resourceToModelMap?: ResourceToModelMap;
   transform?: (row: any) => any | Promise<any>;
 };
 
@@ -23,7 +24,7 @@ export const getOneHandler = async <Args extends GetOneArgs>(
 ) => {
   const { id } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
   const where = { [primaryKey]: id };
 
   if (options?.debug) console.log("getOneHandler:where", where);
@@ -38,9 +39,12 @@ export const getOneHandler = async <Args extends GetOneArgs>(
   // TRANSFORM STAGE
   if (options?.debug) console.log("getOneHandler:beforeTransform", row);
 
-  const transformedRow = options?.transform ? await options.transform(row) : row;
+  const transformedRow = options?.transform
+    ? await options.transform(row)
+    : row;
 
-  if (options?.debug) console.log("getOneHandler:afterTransform", transformedRow);
+  if (options?.debug)
+    console.log("getOneHandler:afterTransform", transformedRow);
 
   // RESPONSE STAGE
   const response = { data: mapPrimaryKeyToId(transformedRow, primaryKey) };

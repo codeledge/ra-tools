@@ -13,7 +13,7 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetListOptions<Args>,
 ) => {
-  const model = getModel(req, prismaClient);
+  const model = getModel(req, prismaClient, options?.resourceToModelMap);
   const primaryKey = options?.primaryKey ?? "id";
 
   let queryArgs: {
@@ -92,9 +92,15 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   }
 
   // TRANSFORM DATA
-  const data = options?.transformRow
-    ? await Promise.all(rows.map(options.transformRow))
-    : rows;
+  let data = rows;
+
+  if (options?.transformRow) {
+    data = await Promise.all(data.map(options.transformRow));
+  }
+
+  if (options?.transformRows) {
+    data = await options.transformRows(data);
+  }
 
   // RESPOND WITH DATA
   const response = {

@@ -1,5 +1,12 @@
 # admin
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies
+  - ra-data-simple-prisma@8.0.0
+
 ## 0.0.6
 
 ### Patch Changes
