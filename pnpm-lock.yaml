@@ -324,6 +324,55 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
+  packages/ra-data-drizzle:
+    dependencies:
+      axios:
+        specifier: ^1.13.5
+        version: 1.13.5
+      deverything:
+        specifier: ^5.5.1
+        version: 5.5.1
+    devDependencies:
+      '@babel/core':
+        specifier: 7.29.0
+        version: 7.29.0
+      '@babel/preset-env':
+        specifier: ^7.29.0
+        version: 7.29.0(@babel/core@7.29.0)
+      '@babel/preset-typescript':
+        specifier: ^7.28.5
+        version: 7.28.5(@babel/core@7.29.0)
+      '@electric-sql/pglite':
+        specifier: 0.5.10
+        version: 0.5.10
+      '@types/jest':
+        specifier: ^30.0.0
+        version: 30.0.0
+      '@types/node':
+        specifier: ^25.2.3
+        version: 25.2.3
+      drizzle-orm:
+        specifier: 1.0.0-rc.4
+        version: 1.0.0-rc.4(@electric-sql/pglite@0.5.10)(@sinclair/typebox@0.34.48)
+      eslint-config-custom:
+        specifier: workspace:*
+        version: link:../eslint-config-custom
+      jest:
+        specifier: ^30.2.0
+        version: 30.2.0(@types/node@25.2.3)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@25.2.3)(typescript@5.9.3))
+      react-admin:
+        specifier: ^5.14.1
+        version: 5.14.1(@mui/system@7.3.8(@emotion/react@11.14.0(@types/react@19.1.1)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.1)(react@19.1.0))(@types/react@19.1.1)(react@19.1.0))(@types/react@19.1.1)(react@19.1.0))(@mui/utils@7.3.8(@types/react@19.1.1)(react@19.1.0))(@types/react@19.1.1)(csstype@3.2.3)(react-dom@19.1.0(react@19.1.0))(react-is@19.2.4)(react@19.1.0)
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@25.2.3)(typescript@5.9.3)
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(jiti@2.4.2)(postcss@8.5.26)(tsx@4.23.13)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/ra-data-duckdb:
     dependencies:
       axios:
@@ -1195,6 +1244,9 @@ packages:
 
   '@duckdb/node-bindings@1.5.5-r.4':
     resolution: {integrity: sha512-n+4hEfjp4vny3BuWn5p1Gh5CzHaPRxoI8TzTytxL1GMlIKKrXcg/o6sSAjrsROUXGAM4WQCiWPLKnPsjJJSggg==}
+
+  '@electric-sql/pglite@0.5.10':
+    resolution: {integrity: sha512-tXc/25U3ulOkiRQuTFdwIv+JhBqtMdAF7Gvo6CfZZWtSB4+hgC4Wr2vwK5ngvvN5PJfAAEGIsfyCVy1JhCOBYw==}
 
   '@emnapi/core@1.8.1':
     resolution: {integrity: sha512-AvT9QFpxK0Zd8J0jopedNm+w/2fIzvtPKPjqyw9jwvBaReTTqPBk9Hixaz7KbjimP+QNz605/XnjFcDAL2pqBg==}
@@ -3557,6 +3609,152 @@ packages:
   dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
+
+  drizzle-orm@1.0.0-rc.4:
+    resolution: {integrity: sha512-BT+pf+qoiYHqltoA88Jmf6ilGMXPlpfE0hEJKc2adRtMCAl25Swk/t5gXcWxZNAwdtf3F5gCd2FpeOyP/pT0Hw==}
+    peerDependencies:
+      '@aws-sdk/client-rds-data': '>=3'
+      '@cloudflare/workers-types': '>=4'
+      '@effect/sql-d1': '>=4.0.0-beta.83 || >=4.0.0'
+      '@effect/sql-libsql': '>=4.0.0-beta.83 || >=4.0.0'
+      '@effect/sql-mysql2': '>=4.0.0-beta.83 || >=4.0.0'
+      '@effect/sql-pg': '>=4.0.0-beta.83 || >=4.0.0'
+      '@effect/sql-pglite': '>=4.0.0-beta.83 || >=4.0.0'
+      '@effect/sql-sqlite-bun': '>=4.0.0-beta.83 || >=4.0.0'
+      '@effect/sql-sqlite-do': '>=4.0.0-beta.83 || >=4.0.0'
+      '@effect/sql-sqlite-node': '>=4.0.0-beta.83 || >=4.0.0'
+      '@effect/sql-sqlite-wasm': '>=4.0.0-beta.83 || >=4.0.0'
+      '@electric-sql/pglite': '>=0.2.0'
+      '@libsql/client': '>=0.10.0'
+      '@libsql/client-wasm': '>=0.10.0'
+      '@neondatabase/serverless': '>=0.10.0'
+      '@op-engineering/op-sqlite': '>=2'
+      '@opentelemetry/api': ^1.4.1
+      '@planetscale/database': '>=1.13'
+      '@sinclair/typebox': '>=0.34.8'
+      '@sqlitecloud/drivers': '>=1.0.653'
+      '@tidbcloud/serverless': '*'
+      '@tursodatabase/database': '>=0.6.0-pre.28 || >=0.6.0'
+      '@tursodatabase/database-common': '>=0.6.0-pre.28 || >=0.6.0'
+      '@tursodatabase/database-wasm': '>=0.6.0-pre.28 || >=0.6.0'
+      '@tursodatabase/serverless': '>=1.1.3'
+      '@tursodatabase/sync': '>=0.6.0-pre.28 || >=0.6.0'
+      '@types/better-sqlite3': '*'
+      '@types/mssql': ^9.1.4
+      '@types/pg': '*'
+      '@types/sql.js': '*'
+      '@upstash/redis': '>=1.34.7'
+      '@vercel/postgres': '>=0.8.0'
+      '@xata.io/client': '*'
+      arktype: '>=2.0.0'
+      better-sqlite3: '>=9.3.0'
+      bun-types: '*'
+      effect: '>=4.0.0-beta.83 || >=4.0.0'
+      expo-sqlite: '>=14.0.0'
+      mssql: ^11.0.1
+      mysql2: '>=2'
+      pg: '>=8'
+      postgres: '>=3'
+      sql.js: '>=1'
+      sqlite3: '>=5'
+      typebox: '>=1.0.0'
+      valibot: '>=1.0.0-beta.7'
+      zod: ^3.25.0 || ^4.0.0
+    peerDependenciesMeta:
+      '@aws-sdk/client-rds-data':
+        optional: true
+      '@cloudflare/workers-types':
+        optional: true
+      '@effect/sql-d1':
+        optional: true
+      '@effect/sql-libsql':
+        optional: true
+      '@effect/sql-mysql2':
+        optional: true
+      '@effect/sql-pg':
+        optional: true
+      '@effect/sql-pglite':
+        optional: true
+      '@effect/sql-sqlite-bun':
+        optional: true
+      '@effect/sql-sqlite-do':
+        optional: true
+      '@effect/sql-sqlite-node':
+        optional: true
+      '@effect/sql-sqlite-wasm':
+        optional: true
+      '@electric-sql/pglite':
+        optional: true
+      '@libsql/client':
+        optional: true
+      '@libsql/client-wasm':
+        optional: true
+      '@neondatabase/serverless':
+        optional: true
+      '@op-engineering/op-sqlite':
+        optional: true
+      '@opentelemetry/api':
+        optional: true
+      '@planetscale/database':
+        optional: true
+      '@sinclair/typebox':
+        optional: true
+      '@sqlitecloud/drivers':
+        optional: true
+      '@tidbcloud/serverless':
+        optional: true
+      '@tursodatabase/database':
+        optional: true
+      '@tursodatabase/database-common':
+        optional: true
+      '@tursodatabase/database-wasm':
+        optional: true
+      '@tursodatabase/serverless':
+        optional: true
+      '@tursodatabase/sync':
+        optional: true
+      '@types/better-sqlite3':
+        optional: true
+      '@types/mssql':
+        optional: true
+      '@types/pg':
+        optional: true
+      '@types/sql.js':
+        optional: true
+      '@upstash/redis':
+        optional: true
+      '@vercel/postgres':
+        optional: true
+      '@xata.io/client':
+        optional: true
+      arktype:
+        optional: true
+      better-sqlite3:
+        optional: true
+      bun-types:
+        optional: true
+      effect:
+        optional: true
+      expo-sqlite:
+        optional: true
+      mssql:
+        optional: true
+      mysql2:
+        optional: true
+      pg:
+        optional: true
+      postgres:
+        optional: true
+      sql.js:
+        optional: true
+      sqlite3:
+        optional: true
+      typebox:
+        optional: true
+      valibot:
+        optional: true
+      zod:
+        optional: true
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -7207,6 +7405,8 @@ snapshots:
       '@duckdb/node-bindings-win32-arm64': 1.5.5-r.4
       '@duckdb/node-bindings-win32-x64': 1.5.5-r.4
 
+  '@electric-sql/pglite@0.5.10': {}
+
   '@emnapi/core@1.8.1':
     dependencies:
       '@emnapi/wasi-threads': 1.1.0
@@ -9849,6 +10049,11 @@ snapshots:
       '@types/trusted-types': 2.0.7
 
   dotenv@16.0.3: {}
+
+  drizzle-orm@1.0.0-rc.4(@electric-sql/pglite@0.5.10)(@sinclair/typebox@0.34.48):
+    optionalDependencies:
+      '@electric-sql/pglite': 0.5.10
+      '@sinclair/typebox': 0.34.48
 
   dunder-proto@1.0.1:
     dependencies:
