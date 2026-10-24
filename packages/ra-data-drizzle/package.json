@@ -1,6 +1,6 @@
 {
   "name": "ra-data-drizzle",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Simple react-admin dataprovider for Drizzle ORM v1 (Postgres), supporting audit logs and roles",
   "main": "./dist/client.js",
   "module": "./dist/client.mjs",
