@@ -1,7 +1,7 @@
 import { AuditOptions, AuditLogPayload, defaultAuditOptions } from "./types";
-import { RaPayload } from "../Http";
-import { Identifier } from "react-admin";
-import { PlainObject } from "deverything";
+import type { RaPayload } from "../Http";
+import type { Identifier } from "react-admin";
+import type { PlainObject } from "deverything";
 
 export type AuditPreviousRows = {
   rows: PlainObject[];
