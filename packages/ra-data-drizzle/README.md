@@ -5,6 +5,8 @@ Simple react-admin data provider for [Drizzle ORM](https://orm.drizzle.team/) **
 1. **Browser** — `dataProvider` from `ra-data-drizzle` (POSTs `{ method, resource, params }` to your API)
 2. **Server** — `defaultHandler` from `ra-data-drizzle/server` (runs `db.query.*`, `db.insert/update/delete`)
 
+`defaultHandler` is framework-agnostic — it takes the parsed request body and returns a JSON-serializable result, so any HTTP framework works (Express, Fastify, Hono, Next.js, ...). Next.js below is just an example.
+
 ### Requirements
 
 - [react-admin](https://marmelab.com/react-admin/) `>= 5.7.2`
@@ -66,14 +68,20 @@ export const POST = async (req: Request) => {
 
 ```ts
 app.post("/:resource", async (req, res) => {
-  res.json(await defaultHandler({ ...req.body, resource: req.params.resource }, db));
+  res.json(
+    await defaultHandler({ ...req.body, resource: req.params.resource }, db),
+  );
 });
 ```
 
 ### Custom handlers
 
 ```ts
-import { defaultHandler, getListHandler, updateHandler } from "ra-data-drizzle/server";
+import {
+  defaultHandler,
+  getListHandler,
+  updateHandler,
+} from "ra-data-drizzle/server";
 
 switch (body.method) {
   case "getList":
@@ -85,7 +93,9 @@ switch (body.method) {
       transformRow: (row) => ({ ...row, url: `/posts/${row.id}` }),
     });
   case "update":
-    return updateHandler(body, db, { allowOnlyFields: { title: true, body: true } });
+    return updateHandler(body, db, {
+      allowOnlyFields: { title: true, body: true },
+    });
   default:
     return defaultHandler(body, db);
 }
@@ -108,44 +118,44 @@ Filter keys use `column@operator`. The operator is **any Drizzle RQB v2 operator
 
 Aliases for react-admin inputs, which send raw values:
 
-| Filter               | Becomes                                                   |
-| -------------------- | --------------------------------------------------------- |
-| `title@contains`     | `ilike '%v%'` (`%`, `_` escaped)                          |
-| `title@startsWith`   | `ilike 'v%'`                                              |
-| `title@endsWith`     | `ilike '%v'`                                              |
-| `title@exact`        | `eq v` (`null` => `isNull`)                               |
-| `meta@pgjson`        | `meta @> '{...}'::jsonb` (jsonb containment, experimental) |
-| `body@search`        | `to_tsvector(body) @@ plainto_tsquery(v)` (experimental)  |
+| Filter             | Becomes                                                    |
+| ------------------ | ---------------------------------------------------------- |
+| `title@contains`   | `ilike '%v%'` (`%`, `_` escaped)                           |
+| `title@startsWith` | `ilike 'v%'`                                               |
+| `title@endsWith`   | `ilike '%v'`                                               |
+| `title@exact`      | `eq v` (`null` => `isNull`)                                |
+| `meta@pgjson`      | `meta @> '{...}'::jsonb` (jsonb containment, experimental) |
+| `body@search`      | `to_tsvector(body) @@ plainto_tsquery(v)` (experimental)   |
 
 Set `filterMode: "default"` on a handler to use case sensitive `like` instead of `ilike`.
 
 Bare fields (what `<ReferenceInput>`, `<SearchInput>` and default filters send):
 
-| Value                                                   | Becomes          |
-| ------------------------------------------------------- | ---------------- |
-| string                                                  | `ilike '%v%'`    |
-| number, boolean, or `id` / `*Id` / `*_id` / `uuid` key  | `eq`             |
-| `null`                                                  | `isNull`         |
-| array                                                   | `in`             |
-| nested object or dotted key (`author.name@eq`)          | relation filter  |
-| `OR` / `AND` (arrays), `NOT` (object)                   | converted recursively |
+| Value                                                  | Becomes               |
+| ------------------------------------------------------ | --------------------- |
+| string                                                 | `ilike '%v%'`         |
+| number, boolean, or `id` / `*Id` / `*_id` / `uuid` key | `eq`                  |
+| `null`                                                 | `isNull`              |
+| array                                                  | `in`                  |
+| nested object or dotted key (`author.name@eq`)         | relation filter       |
+| `OR` / `AND` (arrays), `NOT` (object)                  | converted recursively |
 
 Empty strings, `undefined`, `_underscored` keys and `q` are ignored. `RAW` and unknown operators are rejected. `@` can never appear in a column name, so snake_case columns like `created_at` or `is_in` are never mistaken for operators.
 
 ### Migrating from ra-data-simple-prisma
 
-| ra-data-simple-prisma | ra-data-drizzle        |
-| --------------------- | ---------------------- |
-| `age_gte`             | `age@gte`              |
-| `title_contains`      | `title@contains`       |
-| `status_in`           | `status@in`            |
-| `tags_has`            | `tags@arrayContains`   |
-| `title_equals`, `_eq`, `_exact`, `_enum` | `title@eq` / `title@exact` |
-| `x_not`               | `x@ne`                 |
-| `x_pgjson`            | `x@pgjson`             |
-| `include` / `select` / `omit` | `with` / `columns` |
-| `resourceToModelMap`  | `resourceToTableMap`   |
-| `connect` / `set` (nested writes) | not supported — Drizzle has no nested writes, write a custom handler |
+| ra-data-simple-prisma                    | ra-data-drizzle                                                      |
+| ---------------------------------------- | -------------------------------------------------------------------- |
+| `age_gte`                                | `age@gte`                                                            |
+| `title_contains`                         | `title@contains`                                                     |
+| `status_in`                              | `status@in`                                                          |
+| `tags_has`                               | `tags@arrayContains`                                                 |
+| `title_equals`, `_eq`, `_exact`, `_enum` | `title@eq` / `title@exact`                                           |
+| `x_not`                                  | `x@ne`                                                               |
+| `x_pgjson`                               | `x@pgjson`                                                           |
+| `include` / `select` / `omit`            | `with` / `columns`                                                   |
+| `resourceToModelMap`                     | `resourceToTableMap`                                                 |
+| `connect` / `set` (nested writes)        | not supported — Drizzle has no nested writes, write a custom handler |
 
 ## Writes
 
@@ -159,7 +169,7 @@ Empty strings, `undefined`, `_underscored` keys and `q` are ignored. `RAW` and u
 
 ```ts
 getListHandler(body, db, { primaryKey: "slug" }); // rows are returned with `id`
-createHandler(body, db, { primaryKey: "slug" });  // `id` from react-admin is written to `slug`
+createHandler(body, db, { primaryKey: "slug" }); // `id` from react-admin is written to `slug`
 ```
 
 ## Audit log
