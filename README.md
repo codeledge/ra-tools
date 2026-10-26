@@ -8,6 +8,7 @@ Check the example apps to see common usages or use them as a boilerplate.
 
 - [ra-data-simple-prisma](./packages/ra-data-simple-prisma/)
 - [ra-data-duckdb](./packages/ra-data-duckdb/)
+- [ra-data-drizzle](./packages/ra-data-drizzle/)
 - [next-auth-prisma-adapter](./packages/next-auth-prisma-adapter/)
 
 # Examples

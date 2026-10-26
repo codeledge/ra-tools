@@ -1,0 +1,78 @@
+{
+  "name": "ra-data-drizzle",
+  "version": "0.0.1",
+  "description": "Simple react-admin dataprovider for Drizzle ORM v1 (Postgres), supporting audit logs and roles",
+  "main": "./dist/client.js",
+  "module": "./dist/client.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/client.ts src/server.ts --format esm,cjs --treeshake --external react-admin --external ra-core --external ra-ui-materialui --external drizzle-orm && tsup src/index.ts --dts-only --external react-admin --external ra-core --external ra-ui-materialui --external drizzle-orm",
+    "dev": "pnpm build --watch",
+    "lint": "eslint src --fix",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "prepublish": "pnpm build",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "files": [
+    "/dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/client.mjs",
+      "require": "./dist/client.js"
+    },
+    "./server": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/server.mjs",
+      "require": "./dist/server.js"
+    }
+  },
+  "keywords": [
+    "drizzle",
+    "drizzle-orm",
+    "postgres",
+    "rest",
+    "marmelab",
+    "react-admin",
+    "dataprovider",
+    "audit-log",
+    "admin",
+    "react"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codeledge/ra-tools.git",
+    "directory": "packages/ra-data-drizzle"
+  },
+  "author": "Orlando Groppo <orlando.groppo@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "drizzle-orm": ">=1.0.0-rc.4 <2",
+    "react-admin": ">=5.7.2"
+  },
+  "peerDependenciesMeta": {
+    "drizzle-orm": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "axios": "^1.13.5",
+    "deverything": "^5.5.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.29.0",
+    "@babel/preset-env": "^7.29.0",
+    "@babel/preset-typescript": "^7.28.5",
+    "@electric-sql/pglite": "0.5.10",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.2.3",
+    "drizzle-orm": "1.0.0-rc.4",
+    "eslint-config-custom": "workspace:*",
+    "jest": "^30.2.0",
+    "react-admin": "^5.14.1",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
