@@ -11,7 +11,12 @@ export const updateManyHandler = async <Args extends UpdateArgs>(
 ) => {
   const { ids } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
   const data = reduceData(req.params.data, options);
 
   if (options?.debug) {

@@ -19,5 +19,6 @@ export * from "./hasFieldChanged";
 export * from "./Http";
 export * from "./isExport";
 export * from "./permissions";
+export * from "./RDSPError";
 export * from "./updateHandler";
 export * from "./updateManyHandler";

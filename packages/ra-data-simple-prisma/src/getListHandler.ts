@@ -1,6 +1,6 @@
 import { stringify } from "deverything";
 import { extractOrderBy } from "./extractOrderBy";
-import { extractSkipTake } from "./extractSkipTake";
+import { extractRequiredSkipTake } from "./extractRequiredSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
 import { getModel, type ResourceToModelMap } from "./getModel";
 import { GetListRequest } from "./Http";
@@ -20,6 +20,8 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
   debug?: boolean;
   primaryKey?: string;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
   transformRow?: (
     row: any,
     rowIndex: number,
@@ -27,6 +29,12 @@ export type GetListOptions<Args extends GetListArgs = GetListArgs> = Args & {
   ) => any | Promise<any>;
   transformRows?: (rows: any[]) => any[] | Promise<any[]>;
   filterMode?: FilterMode;
+  /** Field paths the client may filter on; unset allows every field. */
+  filterableFields?: string[];
+  /** Field paths the client may sort on; unset allows every field. */
+  sortableFields?: string[];
+  /** Largest perPage a client may request (default 1000). */
+  maxPerPage?: number;
 };
 
 export const getListHandler = async <Args extends GetListArgs>(
@@ -34,7 +42,12 @@ export const getListHandler = async <Args extends GetListArgs>(
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetListOptions<Args>,
 ) => {
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
   const primaryKey = options?.primaryKey ?? "id";
 
   let queryArgs: {
@@ -68,6 +81,7 @@ export const getListHandler = async <Args extends GetListArgs>(
   // FILTER STAGE
   const requestWhere = extractWhere(req, {
     filterMode: options?.filterMode,
+    filterableFields: options?.filterableFields,
   });
 
   if (options?.debug) {
@@ -84,7 +98,9 @@ export const getListHandler = async <Args extends GetListArgs>(
   };
 
   // PAGINATION STAGE
-  const { skip, take } = extractSkipTake(req);
+  const { skip, take } = extractRequiredSkipTake(req, {
+    maxPerPage: options?.maxPerPage,
+  });
   queryArgs.findManyArg.skip = skip;
   queryArgs.findManyArg.take = take;
 
@@ -101,7 +117,9 @@ export const getListHandler = async <Args extends GetListArgs>(
     requestSort &&
     !options?.orderBy // because they are mutually exclusive
   ) {
-    queryArgs.findManyArg.orderBy = extractOrderBy(req);
+    queryArgs.findManyArg.orderBy = extractOrderBy(req, {
+      sortableFields: options?.sortableFields,
+    });
 
     const { field } = requestSort;
 

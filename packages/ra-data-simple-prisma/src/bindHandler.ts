@@ -56,6 +56,8 @@ import { updateManyHandler } from "./updateManyHandler";
 export type BindHandlerDefaults = {
   prismaClient: PrismaClientOrDynamicClientExtension;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
 };
 
 export type BindWriteHandlerDefaults = BindHandlerDefaults & {
@@ -65,6 +67,8 @@ export type BindWriteHandlerDefaults = BindHandlerDefaults & {
 export type HandlerDefaultsOverride = {
   prismaClient?: PrismaClientOrDynamicClientExtension;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
   audit?: Partial<AuditOptions>;
 };
 

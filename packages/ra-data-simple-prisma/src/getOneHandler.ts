@@ -14,6 +14,8 @@ export type GetOneOptions<Args extends GetOneArgs = GetOneArgs> = Args & {
   debug?: boolean;
   primaryKey?: string;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
   transform?: (row: any) => any | Promise<any>;
 };
 
@@ -24,7 +26,12 @@ export const getOneHandler = async <Args extends GetOneArgs>(
 ) => {
   const { id } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
   const where = { [primaryKey]: id };
 
   if (options?.debug) console.log("getOneHandler:where", where);
