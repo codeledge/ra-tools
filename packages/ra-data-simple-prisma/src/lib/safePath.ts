@@ -1,3 +1,4 @@
+import { setObjectPath } from "deverything";
 import { RDSPError } from "../RDSPError";
 
 // Segments that would let a request reach Object.prototype via a path walk.
@@ -27,16 +28,10 @@ export const splitSafePath = (path: unknown, context: string): string[] => {
   return segments;
 };
 
-const isPlainObjectValue = (value: unknown): value is Record<string, unknown> =>
-  value !== null &&
-  typeof value === "object" &&
-  !Array.isArray(value) &&
-  Object.getPrototypeOf(value) === Object.prototype;
-
 /**
- * Sets `value` at a dot-separated `path` on `target`, creating plain objects
- * along the way. Every segment is validated, so request-supplied paths can't
- * write to Object.prototype (unlike `deverything.setObjectPath`).
+ * Sets `value` at a dot-separated `path` on `target`. Every segment is
+ * validated first, so request-supplied paths can't write to Object.prototype
+ * through `deverything.setObjectPath`.
  */
 export const setSafePath = (
   target: Record<string, unknown>,
@@ -44,18 +39,6 @@ export const setSafePath = (
   value: unknown,
   context: string,
 ) => {
-  const segments = splitSafePath(path, context);
-  let current = target;
-
-  segments.slice(0, -1).forEach((segment) => {
-    const next = Object.prototype.hasOwnProperty.call(current, segment)
-      ? current[segment]
-      : undefined;
-    if (!isPlainObjectValue(next)) {
-      current[segment] = {};
-    }
-    current = current[segment] as Record<string, unknown>;
-  });
-
-  current[segments[segments.length - 1]] = value;
+  splitSafePath(path, context);
+  setObjectPath(target, path, value);
 };

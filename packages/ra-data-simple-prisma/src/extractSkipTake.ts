@@ -1,3 +1,4 @@
+import { isPositiveInt } from "deverything";
 import { GetListRequest, GetManyReferenceRequest } from "./Http";
 import { RDSPError } from "./RDSPError";
 
@@ -10,9 +11,6 @@ export type ExtractSkipTakeOptions = {
    */
   maxPerPage?: number;
 };
-
-const isPositiveInteger = (value: unknown): value is number =>
-  typeof value === "number" && Number.isSafeInteger(value) && value > 0;
 
 /**
  * Turns react-admin pagination into Prisma `skip`/`take`. Returns undefined
@@ -34,7 +32,7 @@ export const extractSkipTake = (
     const { page, perPage } = pagination;
     const maxPerPage = options?.maxPerPage ?? DEFAULT_MAX_PER_PAGE;
 
-    if (!isPositiveInteger(page) || !isPositiveInteger(perPage)) {
+    if (!isPositiveInt(page) || !isPositiveInt(perPage)) {
       throw new RDSPError(
         "extractSkipTake: pagination page and perPage must be positive integers",
       );
