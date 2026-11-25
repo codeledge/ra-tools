@@ -13,6 +13,8 @@ export type GetManyOptions<Args extends GetManyArgs = GetManyArgs> = Args & {
   debug?: boolean;
   primaryKey?: string;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
   transformRow?: (data: any) => any | Promise<any>;
   transformRows?: (rows: any[]) => any[] | Promise<any[]>;
 };
@@ -23,7 +25,12 @@ export const getManyHandler = async <Args extends GetManyArgs>(
   options?: GetManyOptions<Args>,
 ) => {
   const { ids } = req.params;
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
 
   const primaryKey = options?.primaryKey ?? "id";
 

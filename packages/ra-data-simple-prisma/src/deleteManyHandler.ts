@@ -10,6 +10,8 @@ export type DeleteManyOptions = {
   debug?: boolean;
   primaryKey?: string;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
 };
 
 export const deleteManyHandler = async (
@@ -19,7 +21,12 @@ export const deleteManyHandler = async (
 ) => {
   const { ids } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
 
   const rowsToDelete = options?.audit
     ? await model.findMany({

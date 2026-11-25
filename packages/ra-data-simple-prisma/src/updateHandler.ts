@@ -50,6 +50,8 @@ export type UpdateOptions<Args extends UpdateArgs = UpdateArgs> = Args & {
   audit?: AuditOptions;
   primaryKey?: string;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
 };
 
 export const reduceData = (data, options: UpdateOptions) => {
@@ -187,7 +189,12 @@ export const updateHandler = async <Args extends UpdateArgs>(
 ) => {
   const { id } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
   const data = reduceData(req.params.data, options);
 
   if (options?.debug) {

@@ -1,6 +1,6 @@
 import { stringify } from "deverything";
 import { extractOrderBy } from "./extractOrderBy";
-import { extractSkipTake } from "./extractSkipTake";
+import { extractRequiredSkipTake } from "./extractRequiredSkipTake";
 import { extractWhere } from "./extractWhere";
 import { GetListArgs, GetListOptions } from "./getListHandler";
 import { getModel } from "./getModel";
@@ -13,7 +13,12 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: GetListOptions<Args>,
 ) => {
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
   const primaryKey = options?.primaryKey ?? "id";
 
   let queryArgs: {
@@ -37,6 +42,7 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   // FILTER STAGE
   const requestWhere = extractWhere(req, {
     filterMode: options?.filterMode,
+    filterableFields: options?.filterableFields,
   });
 
   if (options?.debug) {
@@ -49,7 +55,9 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
   };
 
   // PAGINATION STAGE
-  const { skip, take } = extractSkipTake(req);
+  const { skip, take } = extractRequiredSkipTake(req, {
+    maxPerPage: options?.maxPerPage,
+  });
   queryArgs.findManyArg.skip = skip;
   queryArgs.findManyArg.take = take + 1; // +1 to check for next page
 
@@ -66,7 +74,9 @@ export const getInfiniteListHandler = async <Args extends GetListArgs>(
     requestSort &&
     !options?.orderBy // because they are mutually exclusive
   ) {
-    queryArgs.findManyArg.orderBy = extractOrderBy(req);
+    queryArgs.findManyArg.orderBy = extractOrderBy(req, {
+      sortableFields: options?.sortableFields,
+    });
 
     const { field } = requestSort;
 

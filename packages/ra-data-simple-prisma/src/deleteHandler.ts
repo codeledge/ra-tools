@@ -17,6 +17,8 @@ export type DeleteOptions = {
   audit?: AuditOptions;
   primaryKey?: string;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
 };
 
 // NOTE: generic type W is not used in this function yet
@@ -26,7 +28,12 @@ export const deleteHandler = async <W extends DeleteArgs>(
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: DeleteOptions,
 ) => {
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
   const { id } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
 

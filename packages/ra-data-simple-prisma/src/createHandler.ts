@@ -31,6 +31,8 @@ export type CreateOptions<Args extends CreateArgs = CreateArgs> = Args & {
   debug?: boolean;
   primaryKey?: string;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
 };
 
 export const createHandler = async <Args extends CreateArgs>(
@@ -38,7 +40,12 @@ export const createHandler = async <Args extends CreateArgs>(
   prismaClient: PrismaClientOrDynamicClientExtension,
   options?: CreateOptions<Omit<Args, "data">>, // omit data so the Prisma.ModelCreateArgs can be passed in, without complaining about the data property missing
 ) => {
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
   const { data } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
 

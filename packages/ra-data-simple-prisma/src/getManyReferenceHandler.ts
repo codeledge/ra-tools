@@ -1,8 +1,9 @@
 import { extractOrderBy } from "./extractOrderBy";
-import { extractSkipTake } from "./extractSkipTake";
+import { extractRequiredSkipTake } from "./extractRequiredSkipTake";
 import { extractWhere, FilterMode } from "./extractWhere";
 import { getModel, type ResourceToModelMap } from "./getModel";
 import { GetManyReferenceRequest } from "./Http";
+import { setSafePath } from "./lib/safePath";
 import { mapPrimaryKeyToId } from "./mapPrimaryKeyToId";
 import { PrismaClientOrDynamicClientExtension } from "./PrismaClientTypes";
 
@@ -18,9 +19,17 @@ export type GetManyReferenceOptions<
   debug?: boolean;
   primaryKey?: string;
   resourceToModelMap?: ResourceToModelMap;
+  /** Resource this route serves; requests naming another resource are rejected. */
+  resource?: string;
   transformRow?: (data: any) => any | Promise<any>;
   transformRows?: (rows: any[]) => any[] | Promise<any[]>;
   filterMode?: FilterMode;
+  /** Field paths the client may filter on; unset allows every field. */
+  filterableFields?: string[];
+  /** Field paths the client may sort on; unset allows every field. */
+  sortableFields?: string[];
+  /** Largest perPage a client may request (default 1000). */
+  maxPerPage?: number;
 };
 
 export const getManyReferenceHandler = async <
@@ -32,14 +41,32 @@ export const getManyReferenceHandler = async <
 ) => {
   const { id, target } = req.params;
   const primaryKey = options?.primaryKey ?? "id";
-  const model = getModel(req, prismaClient, options?.resourceToModelMap);
-  const orderBy = extractOrderBy(req);
-
-  const where = extractWhere(req, {
-    filterMode: options?.filterMode,
+  const model = getModel(
+    req,
+    prismaClient,
+    options?.resourceToModelMap,
+    options?.resource,
+  );
+  const orderBy = extractOrderBy(req, {
+    sortableFields: options?.sortableFields,
   });
 
-  const { skip, take } = extractSkipTake(req);
+  const requestWhere = extractWhere(req, {
+    filterMode: options?.filterMode,
+    filterableFields: options?.filterableFields,
+  });
+
+  // The reference scope must never be overridden by the request filter, so
+  // the two are combined with AND instead of being shallow-merged.
+  const scope = {};
+  setSafePath(scope, target, id, "getManyReferenceHandler");
+  const where = Object.keys(requestWhere).length
+    ? { AND: [scope, requestWhere] }
+    : scope;
+
+  const { skip, take } = extractRequiredSkipTake(req, {
+    maxPerPage: options?.maxPerPage,
+  });
 
   // GET DATA
 
@@ -48,12 +75,12 @@ export const getManyReferenceHandler = async <
       include: options?.include,
       select: options?.select,
       omit: options?.omit,
-      where: { [target]: id, ...where },
+      where,
       orderBy,
       skip,
       take,
     }),
-    model.count({ where: { [target]: id, ...where } }),
+    model.count({ where }),
   ]);
 
   // TRANSFORM

@@ -317,6 +317,7 @@ describe("createHandler - resourceToModelMap", () => {
       req,
       prismaClient,
       resourceToModelMap,
+      undefined,
     );
   });
 });

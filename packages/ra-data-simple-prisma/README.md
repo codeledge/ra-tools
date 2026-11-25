@@ -45,8 +45,16 @@ tracing UI-only packages into the function.
 import { defaultHandler } from "ra-data-simple-prisma/server";
 import { prismaClient } from "../prisma/client"; // <= Your prisma client instance
 
+// Only expose the resources the admin actually needs.
+const ADMIN_RESOURCES = new Set(["post", "tag", "comment"]);
+
 export default async function handler(req, res) {
-  const result = await defaultHandler(req.body, prismaClient);
+  const resource = String(req.query.resource);
+  if (!ADMIN_RESOURCES.has(resource)) return res.status(404).end();
+
+  // `resource` binds the handler to the route: a body naming another
+  // resource is rejected instead of being used to pick the Prisma model.
+  const result = await defaultHandler(req.body, prismaClient, { resource });
   res.json(result);
 }
 
@@ -57,9 +65,19 @@ import { defaultHandler } from "ra-data-simple-prisma/server";
 import { prismaClient } from "../prisma/client"; // <= Your prisma client instance
 import { NextResponse } from "next/server";
 
-const handler = async (req: Request) => {
+const ADMIN_RESOURCES = new Set(["post", "tag", "comment"]);
+
+const handler = async (
+  req: Request,
+  { params }: { params: Promise<{ resource: string }> },
+) => {
+  const { resource } = await params;
+  if (!ADMIN_RESOURCES.has(resource)) {
+    return NextResponse.json({ message: "Not found" }, { status: 404 });
+  }
+
   const body = await req.json();
-  const result = await defaultHandler(body, prismaClient);
+  const result = await defaultHandler(body, prismaClient, { resource });
   return NextResponse.json(result);
 };
 
@@ -82,9 +100,14 @@ import { json, type ActionFunctionArgs } from "@remix-run/node";
 import { defaultHandler, type RaPayload } from "ra-data-simple-prisma/server";
 import { prisma } from "../your/prisma/client";
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+const ADMIN_RESOURCES = new Set(["post", "tag", "comment"]);
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const resource = params["*"] ?? "";
+  if (!ADMIN_RESOURCES.has(resource)) throw new Response(null, { status: 404 });
+
   const body = (await request.json()) as RaPayload;
-  const result = await defaultHandler(body, prisma);
+  const result = await defaultHandler(body, prisma, { resource });
 
   return json(result);
 };
@@ -93,6 +116,40 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 If the route also needs to support `GET` requests from other clients, export a
 separate `loader` and parse its input from the URL rather than calling
 `request.json()`.
+
+### Security
+
+The request body is fully client-controlled. These options keep the server in charge:
+
+- **Bind each route to its resource.** Pass `resource` (to `defaultHandler`, any handler, or a `bind*Handler`). The body's `resource` must then match, otherwise an `RDSPError` is thrown. Without it, the body decides which Prisma model is queried, so a request sent to `/api/post` could read `user`. In catch-all routes, check the URL resource against your own allow-list first.
+- **Pagination is required for list queries.** `getListHandler`, `getInfiniteListHandler` and `getManyReferenceHandler` reject requests without pagination, with non-positive or non-integer `page`/`perPage`, or with `perPage` above `maxPerPage` (default `1000`, react-admin's export size). Lower it per handler with `maxPerPage`.
+- **Restrict filters and sorts.** By default any model field can be filtered and sorted, including fields hidden with `omit`/`select` (e.g. `password_hash_startsWith`). Pass `filterableFields` and `sortableFields` to the list handlers to allow only the listed field paths; this also applies to fields inside raw `OR`/`AND`/`NOT` filters. Remember to include the default sort field (usually `id`).
+- **Path safety.** Sort fields, filter keys and reference targets must be plain identifiers; `__proto__`, `prototype` and `constructor` segments are rejected.
+
+```ts
+await getListHandler<Prisma.UserFindManyArgs>(req.body, prismaClient, {
+  resource: "user",
+  omit: { password_hash: true },
+  filterableFields: ["email", "role", "organization.name"],
+  sortableFields: ["id", "email", "createdAt"],
+  maxPerPage: 200,
+});
+```
+
+Validation failures throw `RDSPError`, which has a `status` (400 for invalid input, 404 for unknown models). Map it to your HTTP response:
+
+```ts
+import { RDSPError } from "ra-data-simple-prisma/server";
+
+try {
+  return NextResponse.json(await defaultHandler(body, prismaClient, { resource }));
+} catch (error) {
+  if (error instanceof RDSPError) {
+    return NextResponse.json({ message: error.message }, { status: error.status });
+  }
+  throw error;
+}
+```
 
 ### Bind shared defaults
 
@@ -542,6 +599,8 @@ await updateHandler<Prisma.UserUpdateArgs>(req.body, prismaClient, {
 ```
 
 > **Note:** `omit` and `select` are mutually exclusive in Prisma — passing both will cause a runtime error.
+
+> **Note:** `omit` only removes fields from the response. Omitted fields can still be filtered and sorted on unless you set `filterableFields` / `sortableFields` (see [Security](#security)).
 
 ### Helpers
 

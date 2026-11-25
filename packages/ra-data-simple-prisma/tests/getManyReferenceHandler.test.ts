@@ -66,12 +66,14 @@ describe("getManyReferenceHandler", () => {
     expect(model.findMany).toHaveBeenCalledWith({
       include: { author: true },
       select: { id: true },
-      where: { postId: 7, status: "approved" },
+      where: { AND: [{ postId: 7 }, { status: "approved" }] },
       orderBy: { createdAt: "desc" },
       skip: 10,
       take: 10,
     });
-    expect(model.count).toHaveBeenCalledWith({ where: { postId: 7, status: "approved" } });
+    expect(model.count).toHaveBeenCalledWith({
+      where: { AND: [{ postId: 7 }, { status: "approved" }] },
+    });
     expect(result).toEqual({
       data: [
         { id: 1, body: "first" },
